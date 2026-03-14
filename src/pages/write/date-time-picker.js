@@ -84,8 +84,8 @@ function updateFieldLabels() {
             <div class="date-time-inline-row">
                 <div class="field-label">임종일시 <span class="required-mark">*</span></div>
                 <div class="inline-input-container">
-                    <input type="text" id="death-date" class="date-input date-time-input" required>
-                    <input type="text" id="death-time" class="time-input date-time-input" required>
+                    <input type="text" id="death-date" name="death-date" aria-label="임종 날짜" class="date-input date-time-input" required>
+                    <input type="text" id="death-time" name="death-time" aria-label="임종 시간" class="time-input date-time-input" required>
                 </div>
             </div>
             
@@ -93,8 +93,8 @@ function updateFieldLabels() {
             <div class="date-time-inline-row">
                 <div class="field-label">입관일시</div>
                 <div class="inline-input-container">
-                    <input type="text" id="coffin-date" class="date-input date-time-input">
-                    <input type="text" id="coffin-time" class="time-input date-time-input">
+                    <input type="text" id="coffin-date" name="coffin-date" aria-label="입관 날짜" class="date-input date-time-input">
+                    <input type="text" id="coffin-time" name="coffin-time" aria-label="입관 시간" class="time-input date-time-input">
                 </div>
             </div>
             
@@ -102,8 +102,8 @@ function updateFieldLabels() {
             <div class="date-time-inline-row">
                 <div class="field-label">발인일시 <span class="required-mark">*</span></div>
                 <div class="inline-input-container">
-                    <input type="text" id="departure-date" class="date-input date-time-input" required>
-                    <input type="text" id="departure-time" class="time-input date-time-input" required>
+                    <input type="text" id="departure-date" name="departure-date" aria-label="발인 날짜" class="date-input date-time-input" required>
+                    <input type="text" id="departure-time" name="departure-time" aria-label="발인 시간" class="time-input date-time-input" required>
                 </div>
             </div>
         `;
