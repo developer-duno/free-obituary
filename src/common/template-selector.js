@@ -1,6 +1,19 @@
 "use strict";
 
-const IMAGE_PATH = 'image/'; // 상수화
+const IMAGE_PATH = 'image/';
+const TEMPLATE_NAMES = {
+    1: '백국화 (흰배경)', 2: '국화 한송이 (회색)', 3: '국화 (초록배경)',
+    4: '국화 (어두운배경)', 5: '국화 (황금배경)', 6: '국화 (회색 삼각)',
+    7: '국화 리본 (베이지)', 8: '국화 수묵화 (회색)', 9: '리본 국화 (회색)',
+    10: '국화 (남색배경)', 11: '국화 수묵 (밝은회색)', 12: '십자가 설경 (기독교)',
+    13: '국화 세밀화 (회색)', 14: '근조 하늘 (일반)', 15: '추모 리본 (꽃)',
+    16: '추모 리본 (수묵)', 17: '십자가 꽃 (기독교)', 18: '소천 십자가 (기독교)',
+    19: '국화 수채화 (밝은)', 20: '근조 국화 (흰배경)', 21: '근조 국화 (흑백)',
+    22: '근조 꽃잎 (회색)', 23: '국화 선화 (흰배경)', 24: '국화 수채 (흰배경)',
+    25: '국화 판화 (회색)', 26: '백합 십자가 (기독교)', 27: '촛불 십자가 (기독교)',
+    28: '성찬 십자가 (기독교)', 29: '기도손 (기독교)', 30: '십자가 꽃 (기독교)',
+    31: '연꽃 왕생 (불교)', 32: '연꽃 명복 (불교)', 33: '부처 명복 (불교)'
+}; // 상수화
 
 export class TemplateSelector {
     constructor(customOptions = {}) {
@@ -138,7 +151,7 @@ export class TemplateSelector {
             const img = new Image();
             img.className = 'template-image';
             img.loading = 'lazy';
-            img.alt = `템플릿 ${i}`;
+            img.alt = TEMPLATE_NAMES[i] || `템플릿 ${i}`;
             img.onload = updateLoadingStatus;
             img.onerror = () => {
                 console.error(`이미지 로드 실패: ${IMAGE_PATH}${i}.jpg`);
