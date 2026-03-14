@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="장례를 마치고 감사의 인사를 전하는 감사장 작성 안내입니다.">
+    <meta property="og:title" content="감사장 | 무료 부고장">
+    <meta property="og:description" content="장례를 마치고 감사의 인사를 전하는 감사장 작성 안내입니다.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="감사장 | 무료 부고장">
+    <meta name="twitter:description" content="장례를 마치고 감사의 인사를 전하는 감사장 작성 안내입니다.">
+        <title>감사장 | 무료 부고장</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" onclick="history.back()">뒤로</button>
+            <div class="logo" onclick="location.href='index.html';">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기" onclick="toggleSidebar()">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기" onclick="toggleSidebar()">×</span>
+        <a href="write.html">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <main class="page-main">
+        <h1>감사장 작성</h1>
+        
+        <div class="section-container">
+            <form id="thanksForm" class="write-main">
+                <div class="input-group vertical">
+                    <label for="deceasedName">고인명</label>
+                    <input type="text" id="deceasedName" required>
+                </div>
+
+                <div class="input-group vertical">
+                    <label for="thanksMessage">감사 메시지</label>
+                    <textarea id="thanksMessage" rows="5" required 
+                        placeholder="예: 깊은 슬픔 속에서도 위로와 격려를 보내주신 모든 분들께 진심으로 감사드립니다."></textarea>
+                </div>
+
+                <div class="input-group vertical">
+                    <label for="familyName">유족 대표</label>
+                    <input type="text" id="familyName" required>
+                </div>
+
+                <div class="input-group vertical">
+                    <label for="date">작성일</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <button type="submit" class="btn">감사장 생성</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+
+    <script src="scripts.js" type="module"></script>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            if (sidebar) sidebar.classList.toggle("active");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var form = document.getElementById("thanksForm");
+            if (form) {
+                var dateInput = document.getElementById("date");
+                if (dateInput && !dateInput.value) {
+                    dateInput.value = new Date().toISOString().split("T")[0];
+                }
+
+                form.addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    var name = document.getElementById("deceasedName").value.trim();
+                    var msg = document.getElementById("thanksMessage").value.trim();
+                    var family = document.getElementById("familyName").value.trim();
+                    var dt = document.getElementById("date").value;
+
+                    if (!name || !msg || !family) {
+                        if (window.AppUtils) AppUtils.showToast("모든 필드를 입력해주세요.", "warning"); else alert("모든 필드를 입력해주세요.");
+                        return;
+                    }
+
+                    var result = "▶ 감사장 ◀\n\n" + "고 " + name + " 유족 일동\n\n" + msg + "\n\n" + dt + "\n" + "유족대표 " + family + " 배상";
+
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(result).then(function() {
+                            alert("감사장이 클립보드에 복사되었습니다.\n카카오톡이나 문자로 보내실 수 있습니다.");
+                        });
+                    } else {
+                        prompt("아래 텍스트를 복사해주세요:", result);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

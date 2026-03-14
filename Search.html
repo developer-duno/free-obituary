@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 부고장 생성기 - 쉽고 빠르게 부고장을 생성하세요.">
+    <meta name="keywords" content="부고장, 무료 부고장, 부고장 생성기, 부고, 고인 추모">
+    <meta property="og:title" content="무료 부고장 검색">
+    <meta property="og:description" content="작성된 부고장을 검색하세요.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:url" content="https://무료부고장.com/Search">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="무료 부고장 검색">
+    <meta name="twitter:description" content="작성된 부고장을 검색하세요.">
+    <title>무료 부고장 검색 | 작성된 부고장 확인</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- 관리자 인증용 (admin.config.sample.js 참고하여 admin.config.js 생성 후 .gitignore 추가) -->
+    <script src="admin.config.js"></script>
+    <!-- 공통 서비스·유틸 (scripts.js가 모듈로 로드하며 appServices, showLoading/hideLoading 설정) -->
+    <script src="scripts.js" type="module"></script>
+    <script src="src/pages/search-module.js" type="module"></script>
+    <!-- 레거시 인라인 스크립트용 window.obituaryDB (scripts.js 로드 후 실행되도록 defer) -->
+    <script src="src/obituary-db-adapter.js" defer></script>
+    
+    <style>
+        /* 검색 페이지 레이아웃 스타일 */
+        .search-form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .search-input-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .search-input-container {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .search-button-container {
+            flex: 0 0 auto;
+            width: 150px;
+        }
+        
+        .search-input-container input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        .search-button {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--main-brown);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .search-button:hover {
+            background-color: var(--brown-accent);
+        }
+        
+        /* 결과 스타일 */
+        .obituary-result {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            border: 1px solid #E5D6C1;
+            border-radius: 8px;
+            background-color: #FAF7F2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .result-info {
+            margin-bottom: 25px;
+        }
+        
+        .result-info p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: var(--brown-text);
+        }
+        
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .result-buttons button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .preview-btn {
+            background-color: var(--main-brown);
+            color: white;
+        }
+        
+        .manage-btn {
+            background-color: var(--medium-brown);
+            color: white;
+        }
+        
+        .preview-btn:hover, .manage-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* 반응형 레이아웃 */
+        @media (max-width: 768px) {
+            .search-input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .search-input-container, .search-button-container {
+                width: 100%;
+            }
+            
+            .result-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .result-buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기">←</button>
+            <div class="logo">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기">×</span>
+        <a href="write.html" id="sidebarWriteLink">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="search-page-main">
+        <h1>부고장 검색</h1>
+        
+        <form class="search-form" id="obituarySearchForm" onsubmit="return false;">
+            <div class="search-input-row" style="flex-direction: row; margin-bottom: 10px;">
+                <div class="search-input-container">
+                    <input type="text" name="deceased_name" id="searchKeyword" placeholder="고인명을 입력하세요" required>
+                </div>
+                <div class="search-input-container">
+                    <input type="password" name="password" id="searchPassword" placeholder="비밀번호 4자리 (관리 시 필요)" maxlength="4">
+                </div>
+            </div>
+            <div class="search-button-container" style="width: 100%;">
+                <button type="button" class="search-button" style="width: 100%;">조회하기</button>
+            </div>
+        </form>
+        
+        <div id="searchResultContainer" style="display: none;">
+            <div class="obituary-result">
+                <div class="result-info">
+                    <p><strong>고인명:</strong> <span id="resultDeceasedName"></span></p>
+                    <p><strong>발인일시:</strong> <span id="resultDepartureDate"></span></p>
+                    <p><strong>조회수:</strong> <span id="resultViewCount"></span>회</p>
+                </div>
+                <div class="result-buttons">
+                    <button class="preview-btn">부고장 미리보기</button>
+                    <button class="manage-btn">부고장 관리</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 부고장 상세 보기를 위한 모달 -->
+    <div id="obituaryModal" class="modal">
+        <div class="modal-content" style="max-width: 600px; padding: 30px; background-color: #FAF7F2; border: 1px solid var(--brown-border);">
+            <span class="close" onclick="closeObituaryModal()" style="background-color: var(--main-brown); color: white;">&times;</span>
+            <h2 style="color: var(--brown-text); font-family: 'Nanum Myeongjo', serif; text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--brown-border);">부고장 수정</h2>
+            <p style="margin-bottom: 20px; color: var(--brown-text);">부고장을 수정하기 위해 작성시 등록한 비밀번호를 입력해주세요.</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="password" id="obituaryPassword" placeholder="비밀번호 4자리" maxlength="4" style="flex: 2; padding: 10px; border: 1px solid #E5D6C1; border-radius: 8px; font-size: 16px;">
+                <div style="display: flex; gap: 10px; flex: 1;">
+                    <button onclick="verifyPassword()" style="flex: 1; background-color: var(--main-brown); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">수정</button>
+                    <button onclick="deleteObituary()" style="flex: 1; background-color: #dc3545; color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 로그인 모달 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="background-color: #FAF7F2; border: 1px solid var(--brown-border);">
+            <span class="close" onclick="closeModal()" style="background-color: var(--main-brown); color: white;">&times;</span>
+            <h2 style="color: var(--brown-text); font-family: 'Nanum Myeongjo', serif; text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--brown-border);">관리자 로그인</h2>
+            <input type="text" id="adminUsername" placeholder="아이디" style="border: 1px solid #E5D6C1; margin-bottom: 10px;">
+            <input type="password" id="adminPassword" placeholder="비밀번호" style="border: 1px solid #E5D6C1; margin-bottom: 20px;">
+            <button onclick="adminLogin()" class="submit-button" style="background-color: var(--main-brown); color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">로그인</button>
+        </div>
+    </div>
+
+    <!-- 관리자 대시보드 모달 -->
+    <div id="adminDashboardModal" class="modal">
+        <div class="modal-content" style="width: 95%; max-width: 1400px; max-height: 85vh; overflow-y: auto;">
+            <span class="close" onclick="closeAdminDashboard()">&times;</span>
+            <h2 style="color: var(--brown-text); text-align: center; margin-bottom: 20px; font-family: 'Nanum Myeongjo', serif;">관리자 대시보드</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <p style="margin-bottom: 10px;"><strong>전체 부고장 데이터: </strong><span id="totalObituaries">0</span>개</p>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="adminSearchInput" placeholder="검색어 입력" style="flex: 1; padding: 10px; border: 1px solid #E5D6C1; border-radius: 6px;">
+                    <select id="adminSearchType" style="padding: 10px; border: 1px solid #E5D6C1; border-radius: 6px; background-color: var(--very-light-brown);">
+                        <option value="deceasedName">고인명</option>
+                        <option value="funeralHallName">장례식장</option>
+                    </select>
+                    <button onclick="adminSearchObituary()" class="search-button" style="background-color: var(--main-brown); width: auto; padding: 10px 15px;">검색</button>
+                </div>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background-color: var(--light-brown);">
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--brown-border);">ID</th>
+                            <th style="padding: 12px; text-align: center; border-bottom: 2px solid var(--brown-border);">템플릿/영정</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--brown-border);">고인명</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--brown-border);">장례식장</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--brown-border);">임종일시</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--brown-border);">입관일시</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--brown-border);">발인일시</th>
+                            <th style="padding: 12px; text-align: center; border-bottom: 2px solid var(--brown-border);">조회수</th>
+                            <th style="padding: 12px; text-align: center; border-bottom: 2px solid var(--brown-border);">상세보기</th>
+                            <th style="padding: 12px; text-align: center; border-bottom: 2px solid var(--brown-border);">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminObituaryList">
+                        <!-- 여기에 부고장 목록이 동적으로 추가됩니다 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="clearAllObituaries()" style="background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">전체 데이터 초기화</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 부고장 상세 정보 모달 -->
+    <div id="obituaryDetailModal" class="modal">
+        <div class="modal-content" style="width: 95%; max-width: 1400px; max-height: 85vh; overflow-y: auto; background-color: #FAF7F2; border: 1px solid var(--brown-border);">
+            <span class="modal-close" onclick="closeObituaryDetailModal()" style="background-color: var(--main-brown); color: white;">&times;</span>
+            <h2 style="color: var(--brown-text); text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--brown-border); font-family: 'Nanum Myeongjo', serif;">부고장 상세 정보</h2>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 30px;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">기본 정보</h3>
+                    <div id="basicInfoContainer" style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; background-color: white;"></div>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">신청자 정보</h3>
+                    <div id="applicantInfoContainer" style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; background-color: white;"></div>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 30px;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">영정 사진</h3>
+                    <div style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 15px; background-color: white;">
+                        <div id="portraitContainer" style="text-align: center;">
+                            <img id="portraitImage" src="" alt="영정 사진 없음" style="max-width: 100%; max-height: 250px; border: 1px solid #E5D6C1; display: none; object-fit: contain;">
+                            <p id="noPortraitText" style="color: #888; font-style: italic;">등록된 영정 사진이 없습니다</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">선택된 템플릿</h3>
+                    <div style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 15px; background-color: white;">
+                        <div id="templateContainer" style="text-align: center;">
+                            <img id="templateImage" src="" alt="템플릿 이미지 없음" style="max-width: 100%; max-height: 250px; border: 1px solid #E5D6C1; display: none; object-fit: contain;">
+                            <p id="noTemplateText" style="color: #888; font-style: italic;">선택된 템플릿이 없습니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">유족 정보</h3>
+                <div id="bereavedInfoContainer" style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; background-color: white;"></div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">장례 정보</h3>
+                <div id="funeralInfoContainer" style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; background-color: white;"></div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">계좌 정보</h3>
+                <div id="accountInfoContainer" style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; background-color: white;"></div>
+            </div>
+            
+            <div>
+                <h3 style="margin-bottom: 15px; color: var(--brown-text); font-family: 'Nanum Myeongjo', serif;">추가 정보</h3>
+                <div id="additionalInfoContainer" style="border: 1px solid #E5D6C1; border-radius: 8px; padding: 15px; background-color: white;"></div>
+            </div>
+            
+            <div style="margin-top: 25px; text-align: center;">
+                <button onclick="closeObituaryDetailModal()" style="background-color: var(--main-brown); color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">
+                    <i class="fas fa-times-circle"></i> 닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+        <p><a href="#" onclick="openModal()">관리자 로그인</a></p>
+    </footer>
+
+    <script>
+        // XSS 방지: 사용자 입력 HTML 이스케이프 (showObituaryDetail 등에서 사용)
+        function esc(s) {
+            if (s == null || s === undefined) return '';
+            const str = String(s);
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        // 검색 함수 (obituaryDB 비동기 호환)
+        async function searchObituary() {
+            const deceasedName = document.getElementById('searchKeyword').value;
+            const password = document.getElementById('searchPassword').value;
+            
+            if (!deceasedName || !password) {
+                alert('고인명과 비밀번호를 모두 입력해주세요.');
+                return;
+            }
+            
+            if (typeof showLoading === 'function') showLoading();
+            
+            try {
+                if (!window.obituaryDB) {
+                    alert('부고 검색 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+                    if (typeof hideLoading === 'function') hideLoading();
+                    return;
+                }
+                const obituaries = await window.obituaryDB.searchByDeceasedName(deceasedName);
+                if (typeof hideLoading === 'function') hideLoading();
+                
+                if (!obituaries || obituaries.length === 0) {
+                    alert('해당하는 부고장을 찾을 수 없습니다.');
+                    return;
+                }
+
+                const obituary = obituaries[0];
+                const isValid = await window.obituaryDB.verifyPassword(obituary.id, password);
+                if (!isValid) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                    return;
+                }
+                
+                // 검색 결과 표시
+                document.getElementById('resultDeceasedName').textContent = obituary.deceasedName || '';
+                
+                // 발인일시 포맷팅
+                let departureDate = '정보 없음';
+                if (obituary.departureDate) {
+                    const date = new Date(obituary.departureDate);
+                    if (!isNaN(date.getTime())) {
+                        departureDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+                        if (obituary.departureTime) {
+                            departureDate += ` ${obituary.departureTime}`;
+                        }
+                    }
+                }
+                document.getElementById('resultDepartureDate').textContent = departureDate;
+                
+                // 조회수 표시
+                document.getElementById('resultViewCount').textContent = obituary.viewCount || '0';
+                
+                // 검색 결과 컨테이너 표시
+                document.getElementById('searchResultContainer').style.display = 'block';
+                
+                // ID를 세션 스토리지에 저장
+                sessionStorage.setItem('currentObituaryId', obituary.id);
+                
+                // 스크롤 이동
+                setTimeout(() => {
+                    document.getElementById('searchResultContainer').scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            } catch (error) {
+                console.error('부고장 검색 오류:', error);
+                alert('검색 중 오류가 발생했습니다.');
+                if (typeof hideLoading === 'function') hideLoading();
+            }
+        }
+
+        // Enter 키로 검색
+        document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchObituary();
+            }
+        });
+        
+        document.getElementById('searchPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchObituary();
+            }
+        });
+
+        // 미리보기 페이지로 이동
+        function goToPreview() {
+            const obituaryId = sessionStorage.getItem('currentObituaryId');
+            if (obituaryId) {
+                window.location.href = `preview.html?id=${obituaryId}`;
+            }
+        }
+
+        // 관리 페이지로 이동
+        function goToManage() {
+            const obituaryId = sessionStorage.getItem('currentObituaryId');
+            if (obituaryId) {
+                window.location.href = `manage.html?id=${obituaryId}`;
+            }
+        }
+
+        // 비밀번호 확인 함수 (obituaryDB 비동기 호환)
+        async function verifyPassword() {
+            const obituaryId = sessionStorage.getItem('viewObituaryId');
+            const passwordInput = document.getElementById('obituaryPassword');
+            const password = passwordInput.value;
+            
+            if (!password) {
+                alert('비밀번호를 입력해주세요.');
+                passwordInput.focus();
+                return;
+            }
+            
+            if (window.obituaryDB && obituaryId) {
+                const isValid = await window.obituaryDB.verifyPassword(obituaryId, password);
+                
+                if (isValid) {
+                    // 수정 모드 설정
+                    sessionStorage.setItem('editMode', 'true');
+                    sessionStorage.setItem('editObituaryId', obituaryId);
+                    
+                    const obituaryData = await window.obituaryDB.getObituaryById(obituaryId);
+                    if (obituaryData) {
+                        sessionStorage.setItem('obituaryData', JSON.stringify(obituaryData));
+                    }
+                    
+                    // 비밀번호 입력값 초기화 및 모달 닫기
+                    passwordInput.value = '';
+                    closeObituaryModal();
+                    
+                    // 작성 페이지로 이동
+                    window.location.href = 'write.html';
+                } else {
+                    passwordInput.value = '';
+                    alert('비밀번호가 일치하지 않습니다.');
+                    passwordInput.focus();
+                }
+            } else {
+                passwordInput.value = '';
+                alert('오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        }
+        
+        // 부고장 삭제 함수 (obituaryDB 비동기 호환)
+        async function deleteObituary() {
+            const obituaryId = sessionStorage.getItem('viewObituaryId');
+            const passwordInput = document.getElementById('obituaryPassword');
+            const password = passwordInput.value;
+            
+            if (!password) {
+                alert('비밀번호를 입력해주세요.');
+                passwordInput.focus();
+                return;
+            }
+            
+            if (window.obituaryDB && obituaryId) {
+                const isValid = await window.obituaryDB.verifyPassword(obituaryId, password);
+                
+                if (isValid) {
+                    if (confirm('정말로 이 부고장을 삭제하시겠습니까?')) {
+                        try {
+                            const result = await window.obituaryDB.deleteObituary(obituaryId, password);
+                            passwordInput.value = '';
+                            closeObituaryModal();
+                            if (result.success) {
+                                alert('부고장이 삭제되었습니다.');
+                            } else {
+                                alert(result.message || '부고장 삭제 중 오류가 발생했습니다.');
+                            }
+                        } catch (error) {
+                            alert('부고장 삭제 중 오류가 발생했습니다.');
+                            console.error('삭제 오류:', error);
+                        }
+                    }
+                } else {
+                    passwordInput.value = ''; // 비밀번호 입력값 초기화
+                    alert('비밀번호가 일치하지 않습니다.');
+                    passwordInput.focus();
+                }
+            } else {
+                passwordInput.value = ''; // 비밀번호 입력값 초기화
+                alert('오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        }
+        
+        // 모달 관련 함수
+        function openObituaryModal(obituaryId) {
+            sessionStorage.setItem('viewObituaryId', obituaryId);
+            document.getElementById('obituaryPassword').value = ''; 
+            document.getElementById('obituaryModal').style.display = 'block';
+        }
+
+        function closeObituaryModal() {
+            document.getElementById('obituaryPassword').value = '';
+            document.getElementById('obituaryModal').style.display = 'none';
+        }
+        
+        function openModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const obituaryModal = document.getElementById('obituaryModal');
+            if (event.target == obituaryModal) {
+                closeObituaryModal();
+            }
+            
+            const loginModal = document.getElementById('loginModal');
+            if (event.target == loginModal) {
+                closeModal();
+            }
+            
+            const adminDashboardModal = document.getElementById('adminDashboardModal');
+            if (event.target == adminDashboardModal) {
+                closeAdminDashboard();
+            }
+            
+            const obituaryDetailModal = document.getElementById('obituaryDetailModal');
+            if (event.target == obituaryDetailModal) {
+                closeObituaryDetailModal();
+            }
+        };
+        
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.obituaryDB && typeof window.obituaryDB.init === 'function') {
+                window.obituaryDB.init().catch(function() {});
+            }
+        });
+
+        // 관리자 인증 토큰 (시간 기반, 30분 만료 — 단순 sessionStorage 조작 방지)
+        function _generateAdminToken(password) {
+            var timestamp = Date.now();
+            return btoa(password + ':' + timestamp) + '.' + timestamp;
+        }
+
+        function _verifyAdminToken() {
+            var token = sessionStorage.getItem('adminAuthToken');
+            if (!token) return false;
+            try {
+                var parts = token.split('.');
+                if (parts.length !== 2) return false;
+                var timestamp = parseInt(parts[1], 10);
+                if (isNaN(timestamp)) return false;
+                return (Date.now() - timestamp) < 30 * 60 * 1000;
+            } catch (e) { return false; }
+        }
+
+        // 관리자 로그인 처리
+        // ※ 보안: window.__ADMIN_CONFIG__ 에 { username, password } 설정 필요 (admin.config.js 등)
+        //    실무에서는 반드시 서버 API 기반 JWT/OAuth 인증으로 대체하세요.
+        function adminLogin() {
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            
+            const config = (typeof window !== 'undefined' && window.__ADMIN_CONFIG__) || {};
+            const adminUsername = config.username || '';
+            const adminPassword = config.password || '';
+            
+            if (!adminUsername || !adminPassword) {
+                alert('관리자 설정이 없습니다. window.__ADMIN_CONFIG__ 또는 admin.config.js를 설정해주세요.\n실무 배포 시 서버 인증 API를 연동하세요.');
+                document.getElementById('adminUsername').value = '';
+                document.getElementById('adminPassword').value = '';
+                return;
+            }
+            
+            if (username === adminUsername && password === adminPassword) {
+                sessionStorage.removeItem('isAdmin');
+                sessionStorage.setItem('adminAuthToken', _generateAdminToken(password));
+                closeModal();
+                openAdminDashboard();
+            } else {
+                alert('관리자 계정 정보가 일치하지 않습니다.');
+            }
+            
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+        
+        // 관리자 대시보드 열기 (obituaryDB 비동기 호환)
+        async function openAdminDashboard() {
+            // 관리자 권한 확인
+            if (!_verifyAdminToken()) {
+                alert('관리자 권한이 필요합니다.');
+                return;
+            }
+            
+            // 대시보드 모달 표시
+            document.getElementById('adminDashboardModal').style.display = 'block';
+            
+            // 부고장 목록 로드
+            loadAllObituaries();
+        }
+        
+        // 관리자 대시보드 닫기
+        function closeAdminDashboard() {
+            document.getElementById('adminDashboardModal').style.display = 'none';
+        }
+        
+        // 모든 부고장 데이터 로드 (obituaryDB 비동기 호환)
+        async function loadAllObituaries() {
+            try {
+                if (!window.obituaryDB) {
+                    alert('데이터베이스 모듈을 찾을 수 없습니다.');
+                    return;
+                }
+                const obituaries = await window.obituaryDB.getAllObituaries();
+                const totalEl = document.getElementById('totalObituaries');
+                if (totalEl) totalEl.textContent = obituaries.length;
+                displayObituariesTable(obituaries);
+            } catch (error) {
+                console.error('부고장 데이터 로드 오류:', error);
+                alert('부고장 데이터를 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+        
+        // 부고장 목록 테이블 표시
+        function displayObituariesTable(obituaries) {
+            const tableBody = document.getElementById('adminObituaryList');
+            tableBody.innerHTML = '';
+            
+            if (!obituaries || obituaries.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="10" style="padding: 15px; text-align: center; border-bottom: 1px solid #e0e0e0;">
+                            데이터가 없습니다.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 최신순으로 정렬
+            obituaries.sort((a, b) => {
+                return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
+            });
+            
+            // 테이블에 행 추가
+            obituaries.forEach(obituary => {
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #e0e0e0';
+                row.style.transition = 'background-color 0.2s';
+                
+                // 마우스 오버 효과 추가
+                row.onmouseover = function() { this.style.backgroundColor = 'var(--very-light-brown)'; };
+                row.onmouseout = function() { this.style.backgroundColor = ''; };
+                
+                // 임종일시 포맷팅
+                let deathDate = '정보 없음';
+                if (obituary.deathDate) {
+                    const date = new Date(obituary.deathDate);
+                    if (!isNaN(date.getTime())) {
+                        deathDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+                        if (obituary.deathTime) {
+                            deathDate += ` ${obituary.deathTime}`;
+                        }
+                    }
+                }
+                
+                // 입관일시 포맷팅
+                let coffinDate = '정보 없음';
+                if (obituary.coffinDate) {
+                    const date = new Date(obituary.coffinDate);
+                    if (!isNaN(date.getTime())) {
+                        coffinDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+                        if (obituary.coffinTime) {
+                            coffinDate += ` ${obituary.coffinTime}`;
+                        }
+                    }
+                }
+                
+                // 발인일시 포맷팅
+                let departureDate = '정보 없음';
+                if (obituary.departureDate) {
+                    const date = new Date(obituary.departureDate);
+                    if (!isNaN(date.getTime())) {
+                        departureDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+                        if (obituary.departureTime) {
+                            departureDate += ` ${obituary.departureTime}`;
+                        }
+                    }
+                }
+                
+                // 템플릿 및 영정사진 미리보기
+                let imagesHtml = '';
+                if (obituary.photoData) {
+                    imagesHtml += `<img src="${obituary.photoData}" alt="영정" style="width: 40px; height: 40px; object-fit: cover; margin-right: 5px; border: 1px solid #ddd;">`;
+                } else {
+                    imagesHtml += `<span style="display: inline-block; width: 40px; height: 40px; background-color: #eee; margin-right: 5px; text-align: center; line-height: 40px; font-size: 10px; color: #888;">영정없음</span>`;
+                }
+                
+                if (obituary.selectedTemplate) {
+                    imagesHtml += `<img src="${obituary.selectedTemplate}" alt="템플릿" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #ddd;">`;
+                } else {
+                    imagesHtml += `<span style="display: inline-block; width: 40px; height: 40px; background-color: #eee; text-align: center; line-height: 40px; font-size: 10px; color: #888;">템플릿없음</span>`;
+                }
+                
+                row.innerHTML = `
+                    <td style="padding: 12px; text-align: left; white-space: nowrap;">${obituary.id || ''}</td>
+                    <td style="padding: 12px; text-align: center;">${imagesHtml}</td>
+                    <td style="padding: 12px; text-align: left; min-width: 100px;">${obituary.deceasedName || ''}</td>
+                    <td style="padding: 12px; text-align: left; min-width: 120px;">${obituary.funeralHallName || ''}</td>
+                    <td style="padding: 12px; text-align: left; min-width: 120px;">${deathDate}</td>
+                    <td style="padding: 12px; text-align: left; min-width: 120px;">${coffinDate}</td>
+                    <td style="padding: 12px; text-align: left; min-width: 120px;">${departureDate}</td>
+                    <td style="padding: 12px; text-align: center;">${obituary.viewCount || 0}</td>
+                    <td style="padding: 12px; text-align: center;">
+                        <button onclick="showObituaryDetail('${obituary.id}')" style="background-color: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; width: 100%;">상세보기</button>
+                    </td>
+                    <td style="padding: 12px; text-align: center;">
+                        <div style="display: flex; gap: 5px; justify-content: center;">
+                            <button onclick="adminPreviewObituary('${obituary.id}')" style="background-color: var(--main-brown); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">보기</button>
+                            <button onclick="adminEditObituary('${obituary.id}')" style="background-color: #555555; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">수정</button>
+                            <button onclick="adminDeleteObituary('${obituary.id}')" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">삭제</button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // 관리자 검색 기능 (obituaryDB 비동기 호환)
+        async function adminSearchObituary() {
+            const searchType = document.getElementById('adminSearchType').value;
+            const searchKeyword = document.getElementById('adminSearchInput').value.trim();
+            
+            if (!searchKeyword) {
+                loadAllObituaries();
+                return;
+            }
+            
+            try {
+                let results = [];
+                if (searchType === 'deceasedName') {
+                    results = await window.obituaryDB.searchByDeceasedName(searchKeyword);
+                } else if (searchType === 'funeralHallName') {
+                    results = await window.obituaryDB.searchByFuneralHall(searchKeyword);
+                }
+                displayObituariesTable(results);
+                const totalEl = document.getElementById('totalObituaries');
+                if (totalEl) totalEl.textContent = results.length + ' (검색결과)';
+            } catch (error) {
+                console.error('검색 오류:', error);
+                alert('검색 중 오류가 발생했습니다.');
+            }
+        }
+        
+        // 부고장 미리보기
+        function adminPreviewObituary(id) {
+            window.open(`preview.html?id=${id}`, '_blank');
+        }
+        
+        // 부고장 수정 (obituaryDB 비동기 호환)
+        async function adminEditObituary(id) {
+            try {
+                sessionStorage.setItem('editMode', 'true');
+                sessionStorage.setItem('editObituaryId', id);
+                const obituaryData = await window.obituaryDB.getObituaryById(id);
+                if (obituaryData) {
+                    sessionStorage.setItem('obituaryData', JSON.stringify(obituaryData));
+                }
+                closeAdminDashboard();
+                window.location.href = 'write.html';
+            } catch (error) {
+                console.error('수정 모드 설정 오류:', error);
+                alert('수정 모드로 전환 중 오류가 발생했습니다.');
+            }
+        }
+        
+        // 부고장 삭제 (obituaryDB 비동기 호환)
+        async function adminDeleteObituary(id) {
+            if (confirm('정말로 이 부고장을 삭제하시겠습니까?')) {
+                try {
+                    const result = await window.obituaryDB.deleteObituary(id);
+                    if (result.success) {
+                        alert('부고장이 삭제되었습니다.');
+                        loadAllObituaries();
+                    } else {
+                        alert(result.message || '부고장 삭제 중 오류가 발생했습니다.');
+                    }
+                } catch (error) {
+                    console.error('삭제 오류:', error);
+                    alert('부고장 삭제 중 오류가 발생했습니다.');
+                }
+            }
+        }
+        
+        // 전체 데이터 초기화 (obituaryDB 비동기 호환)
+        async function clearAllObituaries() {
+            if (confirm('정말로 모든 부고장 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                try {
+                    const result = await window.obituaryDB.clearDatabase();
+                    if (result) {
+                        alert('모든 부고장 데이터가 초기화되었습니다.');
+                        loadAllObituaries();
+                    } else {
+                        alert('데이터 초기화 중 오류가 발생했습니다.');
+                    }
+                } catch (error) {
+                    console.error('데이터 초기화 오류:', error);
+                    alert('데이터 초기화 중 오류가 발생했습니다.');
+                }
+            }
+        }
+        
+        // Enter 키로 관리자 로그인
+        document.getElementById('adminUsername').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('adminPassword').focus();
+            }
+        });
+        
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+        
+        // 관리자 검색 필드에서 엔터키 처리
+        document.getElementById('adminSearchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                adminSearchObituary();
+            }
+        });
+
+        // 상세 정보 모달 표시 함수 (obituaryDB 비동기 호환)
+        async function showObituaryDetail(id) {
+            try {
+                const obituary = await window.obituaryDB.getObituaryById(id);
+                if (!obituary) {
+                    alert('부고장 정보를 찾을 수 없습니다.');
+                    return;
+                }
+                
+                console.log('부고장 상세 데이터:', obituary);
+                
+                // 기본 정보 표시 (XSS 방지: esc() 적용)
+                const basicInfoContainer = document.getElementById('basicInfoContainer');
+                basicInfoContainer.innerHTML = `
+                    <p><strong>ID:</strong> ${esc(obituary.id)}</p>
+                    <p><strong>고인명:</strong> ${esc(obituary.deceasedName)}</p>
+                    <p><strong>고인 성별:</strong> ${esc(obituary.gender)}</p>
+                    <p><strong>고인 나이:</strong> ${esc(obituary.age)}</p>
+                    <p><strong>고인 직업/직함:</strong> ${esc(obituary.title)}</p>
+                    <p><strong>사망 표현:</strong> ${esc(obituary.deathExpression || '별세')}</p>
+                    <p><strong>작성일시:</strong> ${esc(formatDateTime(obituary.timestamp))}</p>
+                    <p><strong>조회수:</strong> ${esc(obituary.viewCount)}</p>
+                    <p><strong>단축 링크:</strong> ${esc(obituary.shortLink)}</p>
+                    <p><strong>비밀번호:</strong> ${esc(obituary.password || '(암호화됨)')}</p>
+                `;
+                
+                // 신청자 정보 표시 (XSS 방지: esc() 적용)
+                const applicantInfoContainer = document.getElementById('applicantInfoContainer');
+                applicantInfoContainer.innerHTML = `
+                    <p><strong>신청자 이름:</strong> ${esc(obituary.applicantName)}</p>
+                    <p><strong>신청자 연락처:</strong> ${esc(obituary.applicantPhone || obituary.applicantContact)}</p>
+                    <p><strong>신청자 이메일:</strong> ${esc(obituary.applicantEmail)}</p>
+                    <p><strong>신청자 관계:</strong> ${esc(obituary.applicantRelationship)}</p>
+                    <p><strong>작성 완료일:</strong> ${esc(formatDateTime(obituary.completedAt || obituary.timestamp))}</p>
+                    <p><strong>수정 날짜:</strong> ${esc(formatDateTime(obituary.updateTimestamp) || '없음')}</p>
+                `;
+                
+                // 영정사진 표시
+                const portraitImage = document.getElementById('portraitImage');
+                const noPortraitText = document.getElementById('noPortraitText');
+                
+                if (obituary.photoData) {
+                    portraitImage.src = obituary.photoData;
+                    portraitImage.style.display = 'block';
+                    noPortraitText.style.display = 'none';
+                } else {
+                    portraitImage.style.display = 'none';
+                    noPortraitText.style.display = 'block';
+                }
+                
+                // 템플릿 이미지 표시
+                const templateImage = document.getElementById('templateImage');
+                const noTemplateText = document.getElementById('noTemplateText');
+                
+                if (obituary.selectedTemplate) {
+                    // 템플릿이 URL 또는 경로인지 확인
+                    if (typeof obituary.selectedTemplate === 'string') {
+                        let templateSrc = obituary.selectedTemplate;
+                        
+                        // 숫자만 있는 경우 템플릿 번호로 간주
+                        if (/^\d+$/.test(templateSrc)) {
+                            templateSrc = `image/${templateSrc}.jpg`;
+                        }
+                        
+                        templateImage.src = templateSrc;
+                        templateImage.style.display = 'block';
+                        noTemplateText.style.display = 'none';
+                    } else {
+                        templateImage.style.display = 'none';
+                        noTemplateText.textContent = '올바른 템플릿 형식이 아닙니다';
+                        noTemplateText.style.display = 'block';
+                    }
+                } else {
+                    templateImage.style.display = 'none';
+                    noTemplateText.style.display = 'block';
+                }
+                
+                // 유족 정보 표시
+                const bereavedInfoContainer = document.getElementById('bereavedInfoContainer');
+                bereavedInfoContainer.innerHTML = '';
+                
+                // 유족 정보 표시 - 다양한 데이터 형식 처리
+                let mournerCount = 0;
+                
+                // 1. bereaved 배열 객체 처리
+                if (obituary.bereaved && Array.isArray(obituary.bereaved) && obituary.bereaved.length > 0) {
+                    obituary.bereaved.forEach((person, index) => {
+                        const relation = person.relation || person.relationship || '';
+                        const name = person.name || person.bereavedName || '';
+                        
+                        if (relation || name) {
+                            bereavedInfoContainer.innerHTML += `
+                                <p><strong>유족 ${index + 1}:</strong> ${esc(relation)} ${esc(name)}</p>
+                            `;
+                            mournerCount++;
+                        }
+                    });
+                }
+                
+                // 2. relationship과 bereavedName 배열 처리
+                if (!mournerCount && obituary.relationship && Array.isArray(obituary.relationship) && 
+                          obituary.bereavedName && Array.isArray(obituary.bereavedName)) {
+                    
+                    const minLength = Math.min(obituary.relationship.length, obituary.bereavedName.length);
+                    
+                    for (let i = 0; i < minLength; i++) {
+                        if (obituary.relationship[i] || obituary.bereavedName[i]) {
+                            bereavedInfoContainer.innerHTML += `
+                                <p><strong>유족 ${i + 1}:</strong> ${esc(obituary.relationship[i])} ${esc(obituary.bereavedName[i])}</p>
+                            `;
+                            mournerCount++;
+                        }
+                    }
+                }
+                
+                // 3. bereavedList 문자열 처리 (XSS 방지)
+                if (!mournerCount && obituary.bereavedList && typeof obituary.bereavedList === 'string') {
+                    bereavedInfoContainer.innerHTML = `<p>${esc(obituary.bereavedList)}</p>`;
+                    mournerCount++;
+                }
+                
+                // 4. bereavedData JSON 문자열 처리
+                if (!mournerCount && obituary.bereavedData && typeof obituary.bereavedData === 'string') {
+                    try {
+                        const bereavedData = JSON.parse(obituary.bereavedData);
+                        
+                        if (Array.isArray(bereavedData)) {
+                            bereavedData.forEach((item, index) => {
+                                if (typeof item === 'object') {
+                                    const relation = item.relation || item.relationship || '';
+                                    const name = item.name || item.bereavedName || '';
+                                    
+                                    if (relation || name) {
+                                        bereavedInfoContainer.innerHTML += `
+                                            <p><strong>유족 ${index + 1}:</strong> ${esc(relation)} ${esc(name)}</p>
+                                        `;
+                                        mournerCount++;
+                                    }
+                                } else if (typeof item === 'string') {
+                                    bereavedInfoContainer.innerHTML += `
+                                        <p><strong>유족 ${index + 1}:</strong> ${esc(item)}</p>
+                                    `;
+                                    mournerCount++;
+                                }
+                            });
+                        } else if (typeof bereavedData === 'object') {
+                            Object.keys(bereavedData).forEach((key, index) => {
+                                bereavedInfoContainer.innerHTML += `
+                                    <p><strong>${esc(key)}:</strong> ${esc(bereavedData[key])}</p>
+                                `;
+                                mournerCount++;
+                            });
+                        }
+                    } catch (error) {
+                        console.error('유족 데이터 파싱 오류:', error);
+                    }
+                }
+                
+                // 유족 정보가 없는 경우 메시지 표시
+                if (!mournerCount) {
+                    bereavedInfoContainer.innerHTML = '<p>등록된 유족 정보가 없습니다.</p>';
+                }
+                
+                // 장례 정보 표시 (XSS 방지: esc() 적용)
+                const funeralInfoContainer = document.getElementById('funeralInfoContainer');
+                funeralInfoContainer.innerHTML = `
+                    <p><strong>장례식장:</strong> ${esc(obituary.funeralHallName)}</p>
+                    <p><strong>장례식장 주소:</strong> ${esc(obituary.funeralHallAddress)}</p>
+                    <p><strong>장례식장 연락처:</strong> ${esc(obituary.funeralHallPhone)}</p>
+                    <p><strong>빈소:</strong> ${esc(obituary.room)}</p>
+                    <p><strong>임종일시:</strong> ${esc(formatDateWithTime(obituary.deathDate, obituary.deathTime))}</p>
+                    <p><strong>입관일시:</strong> ${esc(formatDateWithTime(obituary.coffinDate, obituary.coffinTime))}</p>
+                    <p><strong>발인일시:</strong> ${esc(formatDateWithTime(obituary.departureDate, obituary.departureTime))}</p>
+                    <p><strong>장지:</strong> ${esc(obituary.cemetery)}</p>
+                `;
+                
+                // 계좌 정보 표시
+                const accountInfoContainer = document.getElementById('accountInfoContainer');
+                accountInfoContainer.innerHTML = '';
+                
+                // 복수 계좌 정보 처리
+                let accountsDisplayed = false;
+                
+                // 1. accountData JSON 문자열 처리
+                if (obituary.accountData && typeof obituary.accountData === 'string') {
+                    try {
+                        const accountData = JSON.parse(obituary.accountData);
+                        
+                        if (Array.isArray(accountData) && accountData.length > 0) {
+                            accountInfoContainer.innerHTML += '<h4 style="margin-bottom: 10px;">등록된 계좌 목록</h4>';
+                            
+                            accountData.forEach((account, index) => {
+                                let accountDetails = '';
+                                
+                                if (account.mourner && typeof account.mourner === 'object') {
+                                    accountDetails += `<p><strong>계좌 ${index + 1} - ${esc(account.mourner.name)} ${esc(account.mourner.relationship)}</strong></p>`;
+                                }
+                                
+                                accountDetails += `
+                                    <p style="margin-left: 15px;"><strong>은행명:</strong> ${esc(account.bank)}</p>
+                                    <p style="margin-left: 15px;"><strong>계좌번호:</strong> ${esc(account.accountNumber)}</p>
+                                `;
+                                
+                                accountInfoContainer.innerHTML += accountDetails;
+                            });
+                            
+                            accountsDisplayed = true;
+                        }
+                    } catch (error) {
+                        console.error('계좌 정보 파싱 오류:', error);
+                    }
+                }
+                
+                // 2. 개별 계좌 필드 처리
+                if (!accountsDisplayed && (obituary.accountInfo || obituary.accountHolder || obituary.bankName)) {
+                    accountInfoContainer.innerHTML += '<h4 style="margin-bottom: 10px;">계좌 정보</h4>';
+                    
+                    if (obituary.accountInfo && typeof obituary.accountInfo === 'object') {
+                        accountInfoContainer.innerHTML += `
+                            <p><strong>예금주:</strong> ${esc(obituary.accountInfo.accountHolder)}</p>
+                            <p><strong>은행명:</strong> ${esc(obituary.accountInfo.bankName)}</p>
+                            <p><strong>계좌번호:</strong> ${esc(obituary.accountInfo.accountNumber)}</p>
+                        `;
+                        accountsDisplayed = true;
+                    } else {
+                        accountInfoContainer.innerHTML += `
+                            <p><strong>예금주:</strong> ${esc(obituary.accountHolder)}</p>
+                            <p><strong>은행명:</strong> ${esc(obituary.bankName)}</p>
+                            <p><strong>계좌번호:</strong> ${esc(obituary.accountNumber)}</p>
+                        `;
+                        accountsDisplayed = true;
+                    }
+                }
+                
+                // 계좌 정보가 없는 경우 메시지 표시
+                if (!accountsDisplayed) {
+                    accountInfoContainer.innerHTML = '<p>등록된 계좌 정보가 없습니다.</p>';
+                }
+                
+                // 추가 정보 표시
+                const additionalInfoContainer = document.getElementById('additionalInfoContainer');
+                additionalInfoContainer.innerHTML = '';
+                
+                // 상주 말씀 (XSS 방지: esc 후 줄바꿈만 <br>로 변환)
+                if (obituary.additionalInfo) {
+                    const safeText = esc(obituary.additionalInfo).replace(/\n/g, '<br>');
+                    additionalInfoContainer.innerHTML += `
+                        <h4 style="margin-bottom: 10px;">상주 말씀</h4>
+                        <p>${safeText}</p>
+                    `;
+                }
+                
+                // 기타 메타데이터
+                if (obituary.useAccount !== undefined) {
+                    additionalInfoContainer.innerHTML += `
+                        <p><strong>계좌정보 사용:</strong> ${obituary.useAccount ? '예' : '아니오'}</p>
+                    `;
+                }
+                
+                if (obituary.usePhoto !== undefined) {
+                    additionalInfoContainer.innerHTML += `
+                        <p><strong>영정사진 사용:</strong> ${obituary.usePhoto ? '예' : '아니오'}</p>
+                    `;
+                }
+                
+                // 추가 데이터가 없는 경우
+                if (additionalInfoContainer.innerHTML === '') {
+                    additionalInfoContainer.innerHTML = '<p>등록된 추가 정보가 없습니다.</p>';
+                }
+                
+                // 모달 표시
+                document.getElementById('obituaryDetailModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('부고장 상세 정보 표시 오류:', error);
+                alert('부고장 상세 정보를 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+        
+        // 상세 정보 모달 닫기 함수
+        function closeObituaryDetailModal() {
+            document.getElementById('obituaryDetailModal').style.display = 'none';
+        }
+        
+        // 날짜와 시간 포맷팅 함수
+        function formatDateWithTime(dateStr, timeStr) {
+            if (!dateStr) return '';
+            
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) return dateStr;
+                
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                
+                let result = `${year}년 ${month}월 ${day}일`;
+                
+                if (timeStr) {
+                    result += ` ${timeStr}`;
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('날짜 포맷팅 오류:', error);
+                return dateStr || '';
+            }
+        }
+        
+        // 타임스탬프 포맷팅 함수
+        function formatDateTime(timestamp) {
+            if (!timestamp) return '';
+            
+            try {
+                const date = new Date(timestamp);
+                if (isNaN(date.getTime())) return timestamp;
+                
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                const hours = date.getHours().toString().padStart(2, '0');
+                const minutes = date.getMinutes().toString().padStart(2, '0');
+                
+                return `${year}-${month}-${day} ${hours}:${minutes}`;
+            } catch (error) {
+                console.error('타임스탬프 포맷팅 오류:', error);
+                return timestamp;
+            }
+        }
+    </script>
+</body>
+</html>

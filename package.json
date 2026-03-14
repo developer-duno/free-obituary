@@ -1,0 +1,25 @@
+{
+  "name": "free-obituary",
+  "version": "1.0.0",
+  "description": "무료 부고장 생성 서비스",
+  "main": "scripts.js",
+  "scripts": {
+    "start": "node scripts.js",
+    "clean": "rm -rf node_modules",
+    "reinstall": "npm run clean && npm install"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cropperjs": "^1.5.13",
+    "jquery": "^3.6.0",
+    "select2": "^4.1.0-rc.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 부고장 생성기 - 부고장 관리">
+    <meta name="keywords" content="부고장, 무료 부고장, 부고장 관리, 부고장 수정">
+    <meta property="og:title" content="무료 부고장 관리">
+    <meta property="og:description" content="작성된 부고장을 관리하세요.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:url" content="https://무료부고장.com/manage">
+    <title>무료 부고장 관리 | 부고장 관리하기</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 공통 서비스·유틸 (scripts.js가 모듈로 로드 후 appServices 설정) -->
+    <script src="scripts.js" type="module"></script>
+    <script src="src/pages/manage-module.js" type="module"></script> 
+    
+    <style>
+        .manage-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto 40px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            border: 1px solid #E5D6C1;
+        }
+
+        .manage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E5D6C1;
+        }
+
+        .manage-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--brown-text);
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .view-count {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-section {
+            margin-bottom: 30px;
+            background-color: var(--very-light-brown);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #E5D6C1;
+        }
+
+        .info-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--brown-text);
+            text-align: center;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .info-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: var(--main-brown);
+            margin: 8px auto 0;
+        }
+
+        .info-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #E5D6C1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0e6d9;
+            align-items: flex-start;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            width: 60px;
+            color: var(--medium-brown);
+            font-weight: 600;
+            font-size: 16px;
+            font-family: 'Nanum Myeongjo', serif;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            flex: 1;
+            color: var(--brown-text);
+            font-weight: 500;
+            font-size: 16px;
+            font-family: 'Nanum Myeongjo', serif;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .manage-button {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .primary-button {
+            background-color: var(--main-brown);
+            color: white;
+        }
+
+        .primary-button:hover {
+            background-color: var(--brown-accent);
+        }
+
+        .secondary-button {
+            background-color: var(--very-light-brown);
+            color: var(--brown-text);
+            border: 1px solid var(--brown-border);
+        }
+
+        .secondary-button:hover {
+            background-color: #E5D6C1;
+        }
+
+        .warning-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .manage-button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .manage-button i {
+            font-size: 16px;
+        }
+
+        .share-button {
+            padding: 8px 12px;
+            background-color: var(--main-brown);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .share-button:hover {
+            background-color: var(--brown-accent);
+        }
+
+        .low-views {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        @media screen and (max-width: 500px) {
+            .manage-container {
+                margin: 0 0 80px;
+                padding: 20px;
+                border-radius: 0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                border-left: none;
+                border-right: none;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .manage-button {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .manage-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .view-count {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .info-section {
+                padding: 20px;
+            }
+            
+            .info-container {
+                padding: 15px;
+            }
+            
+            .info-row {
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+            }
+            
+            .info-label {
+                width: 50px;
+                font-size: 15px;
+            }
+            
+            .info-value {
+                font-size: 15px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .manage-container {
+                padding: 15px;
+            }
+        }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid #E5D6C1;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            margin: 0;
+            padding-right: 40px; /* 닫기 버튼 공간 확보 */
+            color: #333;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #666;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f0f0f0;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .modal-close:hover {
+            background: #e0e0e0;
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 15px 20px;
+            background-color: var(--very-light-brown);
+            border-top: 1px solid #E5D6C1;
+            border-radius: 0 0 15px 15px;
+            gap: 10px;
+        }
+
+        .modal-form-group {
+            margin-bottom: 16px;
+        }
+
+        .modal-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--brown-text);
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #E5D6C1;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--brown-accent);
+            box-shadow: 0 0 0 2px rgba(158, 118, 89, 0.2);
+        }
+        
+        .modal-help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* 계좌 관리 관련 스타일 */
+        .modal-subtitle {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 15px 0;
+            color: var(--brown-text);
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .modal-divider {
+            height: 1px;
+            background-color: #E5D6C1;
+            margin: 20px 0;
+        }
+
+        .account-list {
+            margin-bottom: 15px;
+        }
+
+        .account-item {
+            position: relative;
+            background-color: #f5f9ff;
+            border: 1px solid #4a90e2;
+            border-radius: 6px;
+            padding: 12px 10px 12px 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .account-action-btns {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .account-delete-btn, .account-edit-btn {
+            width: 25px;
+            height: 25px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .account-delete-btn {
+            color: #e74c3c;
+        }
+
+        .account-delete-btn:hover {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .account-edit-btn {
+            color: #3498db;
+        }
+
+        .account-edit-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .account-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            padding-right: 50px; /* 버튼 공간 확보 */
+        }
+
+        .account-detail {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .account-bank {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .account-number {
+            font-family: 'Courier New', monospace;
+        }
+
+        .account-count-info {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        #add-account-btn {
+            margin-top: 15px;
+        }
+
+        /* 한 줄 표시 스타일 */
+        .account-form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 5px;
+            align-items: flex-end;
+        }
+
+        .form-inline-item {
+            flex-grow: 1;
+            min-width: 100px;
+        }
+
+        /* 항목별 최적 너비 조정 */
+        .relation-item {
+            flex: 1.2;
+        }
+
+        .name-item {
+            flex: 1.2;
+        }
+
+        .bank-item {
+            flex: 1.5;
+        }
+
+        .account-item {
+            flex: 2;
+        }
+
+        .form-inline-item label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--brown-text);
+        }
+
+        .modal-input-inline {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #E5D6C1;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-input-inline:focus {
+            outline: none;
+            border-color: var(--brown-accent);
+            box-shadow: 0 0 0 2px rgba(158, 118, 89, 0.2);
+        }
+
+        /* 반응형 처리 */
+        @media screen and (max-width: 500px) {
+            .account-form-inline {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .form-inline-item {
+                width: 100%;
+            }
+        }
+
+        /* 계좌 항목 스타일 */
+        .account-item {
+            background-color: #f8f8f8;
+            border: 1px solid #E5D6C1;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .account-item:hover {
+            border-color: #d0b99c;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .account-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .account-item-name {
+            font-weight: 600;
+            color: var(--brown-text);
+            font-size: 15px;
+        }
+
+        .account-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .account-edit-btn, .account-delete-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #E5D6C1;
+            background-color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .account-edit-btn {
+            color: #4a90e2;
+        }
+
+        .account-edit-btn:hover {
+            background-color: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .account-delete-btn {
+            color: #e74c3c;
+        }
+
+        .account-delete-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .account-detail {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .account-bank {
+            font-weight: 600;
+            margin-right: 8px;
+            color: #555;
+        }
+
+        .account-number {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" onclick="history.back()">뒤로</button>
+            <div class="logo" onclick="location.href='index.html';">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기" onclick="AppUtils.toggleSidebar()">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기" onclick="AppUtils.toggleSidebar()">×</span>
+        <a href="write.html">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="manage-container">
+        <div class="manage-header">
+            <h1 class="manage-title">부고장 관리</h1>
+            <div class="view-count">
+                조회수: <span id="view-count-value" class="low-views">8회</span>
+                <button class="share-button" id="share-button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> 공유하기
+                </button>
+            </div>
+        </div>
+
+        <section class="info-section">
+            <h2 class="info-title">부고 정보</h2>
+            <div class="info-container">
+                <div class="info-row">
+                    <span class="info-label">빈소</span>
+                    <span class="info-value" id="funeral-info-value">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">고인</span>
+                    <span class="info-value" id="deceased-info-value">-</span>
+                </div>
+                <div id="bereaved-container">
+                    <!-- 유족 정보는 JavaScript로 동적 생성 -->
+                </div>
+                <div class="info-row">
+                    <span class="info-label">임종</span>
+                    <span class="info-value" id="death-time-value">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">입관</span>
+                    <span class="info-value" id="coffin-time-value">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">발인</span>
+                    <span class="info-value" id="departure-time-value">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">장지</span>
+                    <span class="info-value" id="cemetery-value">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">주소</span>
+                    <span class="info-value" id="address-value" style="cursor: pointer; text-decoration: underline; color: #4a90e2;">-</span>
+                </div>
+                
+                <!-- 지도 보기 버튼 추가 -->
+                <div style="text-align: center; margin-top: 15px;">
+                    <button id="view-map-btn" class="manage-button secondary-button" style="width: auto; padding: 8px 15px; display: inline-flex; font-size: 13px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg> 지도에서 장례식장 위치 보기
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="button-group">
+            <button id="preview-button" class="manage-button primary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 부고장 미리보기
+            </button>
+            <button id="edit-dates-button" class="manage-button secondary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 임종 입관 발인 수정
+            </button>
+            <button id="edit-account-button" class="manage-button secondary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/></svg> 계좌번호 수정
+            </button>
+            <button id="edit-button" class="manage-button secondary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> 부고장 수정
+            </button>
+            <button id="edit-thanks-button" class="manage-button secondary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> 감사장 수정
+            </button>
+            <button id="move-obituary-button" class="manage-button secondary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> 부고장 이동
+            </button>
+            <button id="go-etiquette-button" class="manage-button secondary-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> 상주 예절
+            </button>
+        </div>
+    </main>
+
+    <!-- 사이트 푸터 -->
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 임종/입관/발인 모달 -->
+    <div id="datesEditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">임종/입관/발인 정보 수정</h2>
+                <span class="modal-close close-dates-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- 임종일시 - 한 줄에 표시 -->
+                <div class="modal-form-group datetime-group">
+                    <label for="deathDate">임종일시</label>
+                    <div class="datetime-inputs">
+                        <input type="date" id="deathDate" class="modal-input date-input">
+                        <input type="time" id="deathTime" class="modal-input time-input">
+                    </div>
+                </div>
+                
+                <!-- 입관일시 - 한 줄에 표시 -->
+                <div class="modal-form-group datetime-group">
+                    <label for="coffinDate">입관일시</label>
+                    <div class="datetime-inputs">
+                        <input type="date" id="coffinDate" class="modal-input date-input">
+                        <input type="time" id="coffinTime" class="modal-input time-input">
+                    </div>
+                </div>
+                
+                <!-- 발인일시 - 한 줄에 표시 -->
+                <div class="modal-form-group datetime-group">
+                    <label for="departureDate">발인일시</label>
+                    <div class="datetime-inputs">
+                        <input type="date" id="departureDate" class="modal-input date-input">
+                        <input type="time" id="departureTime" class="modal-input time-input">
+                    </div>
+                </div>
+            </div>
+            <!-- 기존 버튼 레이아웃 유지 -->
+            <div class="modal-footer centered-buttons">
+                <button type="button" class="btn btn-secondary modal-wide-button close-dates-modal">취소</button>
+                <button type="button" class="btn btn-primary modal-wide-button" id="save-dates-button">저장</button>
+            </div>
+        </div>
+    </div>
+
+<!-- 계좌 정보 모달 -->
+<div id="accountEditModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">계좌번호 정보 수정</h2>
+            <span class="modal-close close-account-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <!-- 계좌 목록 표시 영역 -->
+            <div id="account-list-container">
+                <h3 class="modal-subtitle">등록된 계좌 목록</h3>
+                <div id="account-list" class="account-list">
+                    <!-- 계좌 목록은 자바스크립트로 동적 생성됩니다 -->
+                </div>
+                <div class="account-count-info" id="account-count-info">등록된 계좌: 0/10개</div>
+            </div>
+            
+            <div class="modal-divider"></div>
+            
+            <!-- 계좌 추가 폼 (한 줄에 표시) -->
+            <h3 class="modal-subtitle">계좌 추가</h3>
+            <div class="account-form-inline">
+                <div class="form-inline-item relation-item">
+                    <label for="relationship-select">상주 관계</label>
+                    <select id="relationship-select" class="modal-input-inline">
+                        <option value="" disabled selected>관계</option>
+                        <!-- 상주 관계 옵션은 자바스크립트로 동적 생성됩니다 -->
+                    </select>
+                </div>
+                <div class="form-inline-item name-item">
+                    <label for="name-select">상주 이름</label>
+                    <select id="name-select" class="modal-input-inline" disabled>
+                        <option value="" disabled selected>이름</option>
+                        <!-- 상주 이름 옵션은 자바스크립트로 동적 생성됩니다 -->
+                    </select>
+                </div>
+                <div class="form-inline-item bank-item">
+                    <label for="bank-select">은행명</label>
+                    <select id="bank-select" class="modal-input-inline">
+                        <option value="" disabled selected>은행 선택</option>
+                        <option value="KB국민은행">KB국민은행</option>
+                        <option value="신한은행">신한은행</option>
+                        <option value="우리은행">우리은행</option>
+                        <option value="하나은행">하나은행</option>
+                        <option value="NH농협은행">NH농협은행</option>
+                        <option value="IBK기업은행">IBK기업은행</option>
+                        <option value="SC제일은행">SC제일은행</option>
+                        <option value="카카오뱅크">카카오뱅크</option>
+                        <option value="토스뱅크">토스뱅크</option>
+                        <option value="케이뱅크">케이뱅크</option>
+                        <option value="우체국">우체국</option>
+                        <option value="새마을금고">새마을금고</option>
+                        <option value="신협">신협</option>
+                    </select>
+                </div>
+                <div class="form-inline-item account-item">
+                    <label for="account-number-input">계좌번호</label>
+                    <input type="text" id="account-number-input" class="modal-input-inline" placeholder="숫자만 입력">
+                </div>
+            </div>
+
+            <button id="add-account-btn" class="manage-button secondary-button" style="width: 100%; margin-top: 10px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> 계좌 추가
+            </button>
+            
+            <div class="modal-help-text">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> 계좌번호는 자동으로 포맷됩니다. 최대 10개까지 계좌를 등록할 수 있습니다.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="close-account-modal manage-button secondary-button">취소</button>
+            <button id="saveAccountBtn" class="manage-button primary-button">저장</button>
+        </div>
+    </div>
+</div>
+
+    <!-- 비밀번호 입력 모달 (삭제 확인용) -->
+    <div id="password-confirm-modal" class="modal-preview" style="display: none;">
+        <div class="modal-overlay" data-modal-id="password-confirm-modal"></div>
+        <div class="modal-content-preview">
+            <span class="close-modal-button" data-modal-target="password-confirm-modal">&times;</span>
+            <h3 class="modal-title-preview">부고 삭제 확인</h3>
+            <p class="modal-text-preview">부고를 삭제하시려면 비밀번호를 입력해주세요. 이 작업은 되돌릴 수 없습니다.</p>
+            <div class="input-group vertical" style="margin-bottom: 15px;">
+                <label for="delete-password-input" class="form-label">비밀번호</label>
+                <input type="password" id="delete-password-input" class="form-input" placeholder="등록된 비밀번호">
+            </div>
+            <div class="modal-button-group">
+                <button id="confirm-delete-button" class="modal-button primary">삭제</button>
+                <button id="cancel-delete-button" class="modal-button secondary" data-modal-target="password-confirm-modal">취소</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html> 

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="무료 부고장 생성기 - 쉽고 빠르게 부고장을 생성하세요.">
+        <meta name="keywords" content="부고장, 무료 부고장, 부고장 생성기, 부고, 고인 추모">
+        <meta property="og:title" content="무료 부고장 생성기">
+        <meta property="og:description" content="쉽고 빠르게 부고장을 생성하세요.">
+        <meta property="og:image" content="thumbnail.jpg">
+        <meta property="og:url" content="https://무료부고장.com/index">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="무료 부고장 생성기">
+        <meta name="twitter:description" content="쉽고 빠르게 부고장을 생성하세요.">
+        <title>무료 부고장 생성기 | 쉽고 빠르게 부고장 만들기</title>
+        <link rel="stylesheet" href="styles.css">
+        <!-- TODO: styles.css @import와 중복 — 하나만 유지 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+        <style>
+            /* 페이지 특정 스타일만 유지 */
+            /* 장점 목록 스타일 */
+            .benefits-list {
+                list-style: none;
+                padding: 0;
+                margin: 20px 0 0;
+            }
+            
+            .benefits-list li {
+                margin-bottom: 16px;
+                padding-left: 28px;
+                position: relative;
+                font-size: 16px;
+            }
+            
+            .benefits-list li:last-child {
+                margin-bottom: 0;
+            }
+            
+            .benefits-list li:before {
+                content: "✓";
+                position: absolute;
+                left: 0;
+                color: #555;
+                font-weight: 700;
+            }
+            
+            .benefits-list strong {
+                font-weight: 700;
+                color: #333;
+            }
+            
+            /* 이미지 스타일 */
+            .obituary-image {
+                width: 100%;
+                border-radius: 12px;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+            
+            /* 소개 텍스트 스타일 */
+            .intro-text {
+                font-size: 16px;
+                line-height: 1.7;
+                color: #555;
+                margin-bottom: 0;
+            }
+            
+            /* 템플릿 모달 스타일 */
+            .modal-scroll-container {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1050;
+                overflow-y: auto;
+            }
+            
+            .modal-content {
+                background-color: #fff;
+                margin: 20px auto;
+                padding: 30px;
+                border-radius: 15px;
+                width: 90%;
+                max-width: 550px;
+                position: relative;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            }
+            
+            .modal-title {
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 25px;
+                text-align: center;
+            }
+            
+            .modal-close {
+                position: absolute;
+                right: 20px;
+                top: 15px;
+                color: #aaa;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            
+            .modal-close:hover {
+                color: #333;
+            }
+            
+            .template-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+                margin-top: 20px;
+            }
+            
+            .template-item {
+                border: 1px solid #eaeaea;
+                border-radius: 8px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+            
+            .template-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            .template-item.selected {
+                border: 2px solid #5271C2;
+            }
+            
+            .template-image {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+            
+            #loading-indicator {
+                text-align: center;
+                padding: 20px;
+                color: #555;
+            }
+            
+            .modal-open {
+                overflow: hidden;
+            }
+            
+            @media screen and (max-width: 480px) {
+                .template-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+            
+            .usage-steps {
+                padding: 20px 0;
+            }
+            
+            .step-item {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 30px;
+                padding: 15px;
+                background: #f8f9fa;
+                border-radius: 10px;
+            }
+            
+            .step-number {
+                width: 40px;
+                height: 40px;
+                background: #5271C2;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                margin-right: 20px;
+                flex-shrink: 0;
+            }
+            
+            .step-content h3 {
+                margin: 0 0 10px 0;
+                font-size: 18px;
+                color: #333;
+            }
+            
+            .step-content p {
+                margin: 0;
+                color: #666;
+            }
+            
+            .faq-container {
+                padding: 20px 0;
+            }
+            
+            .faq-item {
+                margin-bottom: 25px;
+                padding: 15px;
+                background: #f8f9fa;
+                border-radius: 10px;
+            }
+            
+            .faq-item h3 {
+                margin: 0 0 10px 0;
+                font-size: 16px;
+                color: #333;
+            }
+            
+            .faq-item p {
+                margin: 0;
+                color: #666;
+            }
+        </style>
+    </head>
+
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" style="visibility: hidden;">뒤로</button>
+            <div class="logo">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기">×</span>
+        <a href="write.html" id="sidebarWriteLinkIndex">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="main-content">
+        <!-- 소개 섹션 -->
+        <section class="section-container">
+            <h1 class="section-title">당신의 마음을 전하는<br>무료부고장 서비스</h1>
+            <p class="intro-text">
+                갑작스러운 일로 힘든 시간을 보내고 계신 여러분께 진심 어린 위로를 전합니다. 
+                무료부고장 서비스를 통해 고인의 마지막 길을 정성스럽게 알릴 수 있도록 
+                도와드리겠습니다.
+            </p>
+        </section>
+
+        <!-- 메인 버튼 섹션 수정 -->
+        <section class="section-container" style="padding: 10px;">
+            <div class="main-buttons-container">
+                <!-- 샘플보기 버튼 -->
+                <a href="#" class="container-button sample-button" id="sample-button" style="width: 100%; font-size: 32px; font-weight: 800; margin-bottom: 10px;">샘플보기</a>
+                
+                <!-- 작성/검색 버튼을 감싸는 컨테이너 -->
+                <div style="display: flex; gap: 20px; width: 100%;">
+                    <a href="#" class="container-button" id="write-button" style="flex: 1;">
+                        <span style="font-size: 28px; font-weight: 800;">부고<br>작성</span>
+                    </a>
+                    <a href="Search.html" class="container-button" style="flex: 1;">
+                        <span style="font-size: 28px; font-weight: 800;">부고<br>검색</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 이용 방법 섹션 -->
+        <section class="section-container">
+            <h2 class="section-title">이용 방법</h2>
+            <div class="usage-steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>템플릿 선택</h3>
+                        <p>다양한 디자인 중에서 원하시는 템플릿을 선택하세요.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>정보 입력</h3>
+                        <p>고인과 장례 관련 정보를 입력하세요.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>미리보기 확인</h3>
+                        <p>작성된 부고장을 검토하고 필요한 수정을 진행하세요.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>공유하기</h3>
+                        <p>카카오톡이나 문자로 간편하게 공유하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ 섹션 -->
+        <section class="section-container">
+            <h2 class="section-title">자주 묻는 질문 (FAQ)</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3>Q. 서비스 이용은 무료인가요?</h3>
+                    <p>A. 네, 모든 서비스는 완전 무료로 제공됩니다.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q. 부고장을 수정할 수 있나요?</h3>
+                    <p>A. 네, 작성 완료 후에도 언제든지 수정이 가능합니다.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q. 모바일에서도 이용 가능한가요?</h3>
+                    <p>A. 네, PC와 모바일 모두 최적화되어 있어 편리하게 이용하실 수 있습니다.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Q. 작성한 부고장은 얼마나 보관되나요?</h3>
+                    <p>A. 부고장은 작성일로부터 3개월간 보관됩니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-container text-center">
+            <a href="#" class="container-button main-write-button">무료 부고장 작성하기</a>
+        </section>
+    </div>
+
+    <!-- 사이트 푸터 -->
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 템플릿 선택 모달 추가 -->
+    <div id="template-modal" class="modal-scroll-container" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="template-modal-close-button">&times;</span>
+            <h2 class="modal-title">부고장 디자인 선택</h2>
+            <div id="template-loading-indicator" style="text-align: center; padding: 15px;">
+                <div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #666; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <p style="font-size: 14px; margin-top: 10px;">디자인 로딩 중...</p>
+            </div>
+            <div class="template-grid" id="template-grid"></div>
+        </div>
+    </div>
+
+    <!-- 외부 스크립트 참조 -->
+    <script src="scripts.js" type="module"></script>
+
+    <!-- 샘플 버튼 스크립트 수정 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 샘플 버튼에 이벤트 리스너 추가
+            const sampleButton = document.getElementById('sample-button');
+            const templateModal = document.getElementById('template-modal');
+            
+            if (sampleButton && templateModal) {
+                sampleButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    templateModal.style.display = 'block';
+                    document.body.classList.add('modal-open');
+                    // 템플릿 그리드 초기화
+                    initTemplateGrid();
+                });
+            }
+            
+            // 모달 닫기 버튼에 이벤트 리스너 추가
+            const closeBtn = document.querySelector('.modal-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    templateModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                });
+            }
+            
+            // 모달 외부 클릭 시 닫기
+            templateModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    templateModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                }
+            });
+
+            // 템플릿 그리드 초기화 함수
+            function initTemplateGrid() {
+                const templateGrid = document.querySelector('.template-grid');
+                const loadingIndicator = document.getElementById('template-loading-indicator');
+                
+                if (!templateGrid || !loadingIndicator) return;
+                
+                // 기존 내용 초기화
+                templateGrid.innerHTML = '';
+                loadingIndicator.style.display = 'block';
+                
+                // 템플릿 개수 (1부터 33까지)
+                const totalTemplates = 33;
+                
+                // 각 템플릿에 대한 아이템 생성
+                for (let i = 1; i <= totalTemplates; i++) {
+                    const templateItem = document.createElement('div');
+                    templateItem.className = 'template-item';
+                    templateItem.setAttribute('data-template', i);
+                    
+                    const img = new Image();
+                    img.className = 'template-image';
+                    img.src = `image/${i}.jpg`;
+                    img.alt = `템플릿 ${i}`;
+                    img.loading = 'lazy';
+                    
+                    // 이미지 로드 완료 시
+                    img.onload = function() {
+                        loadingIndicator.style.display = 'none';
+                    };
+                    
+                    // 이미지 로드 실패 시
+                    img.onerror = function() {
+                        this.src = 'image/default.jpg'; // 기본 이미지로 대체
+                    };
+                    
+                    templateItem.appendChild(img);
+                    
+                    // 클릭 이벤트 추가
+                    templateItem.addEventListener('click', function() {
+                        const templateNumber = this.getAttribute('data-template');
+                        if (templateNumber) {
+                            // 템플릿 번호 저장
+                            sessionStorage.setItem('selectedTemplate', templateNumber);
+                            // 샘플 페이지로 이동
+                            window.location.href = 'sample.html?template=' + templateNumber;
+                            // 모달 닫기
+                            templateModal.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                        }
+                    });
+                    
+                    templateGrid.appendChild(templateItem);
+                }
+            }
+        });
+    </script>
+
+    <!-- 사이드바 스크립트 -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+    <!-- 인덱스 페이지 전용 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var writeButton = document.getElementById('write-button');
+            var mainWriteButton = document.querySelector('.main-write-button');
+            
+            function goToWrite(e) {
+                e.preventDefault();
+                window.location.href = 'write.html';
+            }
+            
+            if (writeButton) writeButton.addEventListener('click', goToWrite);
+            if (mainWriteButton) mainWriteButton.addEventListener('click', goToWrite);
+        });
+    </script>
+</body>
+</html>  

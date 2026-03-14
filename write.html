@@ -1,0 +1,2513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 부고장 생성기 - 쉽고 빠르게 부고장을 생성하세요.">
+    <meta name="keywords" content="부고장, 무료 부고장, 부고장 생성기, 부고, 고인 추모">
+    <meta property="og:title" content="무료 부고장 생성기">
+    <meta property="og:description" content="쉽고 빠르게 부고장을 생성하세요.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:url" content="https://무료부고장.com/write">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>무료 부고장 생성 | 부고장 작성 및 수정</title>
+    
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Cropper.js 라이브러리 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+    <!-- 공통 서비스·유틸 (scripts.js가 모듈로 로드, write-module에서 template-selector 사용) -->
+    <script src="scripts.js" type="module"></script>
+    
+    <!-- 페이지 특정 스타일 -->
+    <style>
+        /* 부제목 스타일 추가 */
+        h2 {
+            text-align: center !important;
+            margin: 30px 0 15px !important;
+        }
+
+        /* 버튼 컨테이너 스타일 수정 */
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin: 5px 0 20px;
+        }
+
+        .button-container .btn {
+            flex: 1;
+            font-size: 14px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .bereaved-entry {
+                gap: 8px;
+            }
+            
+            .bereaved-entry select,
+            .bereaved-entry input {
+                font-size: 14px;
+                padding: 10px 8px;
+            }
+            
+            .button-container {
+                gap: 8px;
+            }
+            
+            .button-container .btn {
+                font-size: 13px;
+                padding: 8px;
+            }
+            
+            .button-icon {
+                font-size: 14px;
+                margin-right: 4px;
+            }
+        }
+
+        /* 완료하기 버튼 스타일 */
+        .styled-button {
+            margin: 0 auto !important;
+            display: block !important;
+        }
+    
+        /* Select2 모바일 최적화 스타일 */
+        .select2-container {
+                width: 100% !important;
+        }
+        
+        .select2-container--default .select2-selection--single {
+            height: 50px !important;
+            padding: 10px !important;
+            border: 1px solid #ddd !important;
+            border-radius: 8px !important;
+            background-color: #fff !important;
+        }
+        
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 30px !important;
+            color: #333 !important;
+            font-size: 16px !important;
+        }
+        
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 48px !important;
+        }
+        
+        .select2-dropdown {
+            border: 1px solid #ddd !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+        }
+        
+        .select2-results__option {
+            padding: 15px !important;
+            font-size: 16px !important;
+            border-bottom: 1px solid #eee !important;
+        }
+        
+        .select2-results__option:last-child {
+            border-bottom: none !important;
+        }
+        
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #f5f5f5 !important;
+            color: #333 !important;
+        }
+        
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background-color: #eee !important;
+        }
+
+        /* 직접 입력 textarea 스타일 */
+        .guide-text-textarea {
+            width: 100% !important;
+            min-height: 120px !important;
+            padding: 15px !important;
+            border: 1px solid #ddd !important;
+            border-radius: 8px !important;
+            font-size: 16px !important;
+            margin-top: 15px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 직접 입력 체크박스 컨테이너 */
+        .direct-input-container {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+        }
+
+        .direct-input-container input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .direct-input-container label {
+            font-size: 16px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .select2-container .select2-selection--single {
+                font-size: 16px !important;
+            }
+            
+            .select2-dropdown {
+                font-size: 16px !important;
+            }
+            
+            .select2-results__option {
+                padding: 15px !important;
+            }
+
+            .guide-text-textarea {
+                font-size: 16px !important;
+            }
+        }
+
+        /* 영정 사진 관련 스타일 */
+        .hidden {
+            display: none !important;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .mobile-upload-button {
+            width: 100%;
+            padding: 15px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .mobile-upload-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .upload-icon {
+            font-size: 20px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .preview-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* 영정 사진 버튼 스타일 */
+        .photo-option-container {
+            width: 100%;
+            margin: 0;
+        }
+
+        .photo-option-button {
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .photo-option-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .photo-icon {
+            font-size: 20px;
+        }
+
+        .photo-text {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .template-select-button {
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .template-select-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .template-icon {
+            font-size: 20px;
+        }
+
+        .template-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+        }
+
+        .template-modal-content {
+            position: relative;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* 모달 스크롤 컨테이너 추가 */
+        .modal-scroll-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10000;
+        }
+
+        /* 템플릿 그리드 항목 스타일 개선 */
+        .template-item {
+            position: relative;
+            aspect-ratio: 1/1; /* 1:1 비율로 변경 */
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .template-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .template-image {
+            width: 100%; 
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .template-error-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #777;
+            background: #f8f8f8;
+            font-size: 14px;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .template-item.selected {
+            border: 3px solid #4a90e2;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #4a90e2;
+        }
+
+        @media (max-width: 480px) {
+            .template-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                padding: 8px;
+            }
+            
+            .template-modal-content {
+                width: 95%;
+                padding: 12px;
+            }
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #666;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .image-editor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 11000;
+            overflow: auto;
+        }
+
+        .editor-content {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            z-index: 11001;
+        }
+
+        .cropper-container {
+            z-index: 11002 !important;
+        }
+
+        /* 상주 정보 한 줄 표시 스타일 */
+        .bereaved-entry {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        
+        .bereaved-entry select {
+            flex: 1; /* 관계 선택 필드는 1 비율 */
+            min-width: 0;
+        }
+        
+        .bereaved-entry input {
+            flex: 2; /* 이름 입력 필드는 2 비율 */
+            min-width: 0;
+        }
+        
+        /* 모바일 화면에서도 한 줄 유지하면서 비율 최적화 */
+        @media (max-width: 480px) {
+            .bereaved-entry {
+                flex-direction: row;
+                gap: 8px; /* 모바일에서는 간격 줄임 */
+            }
+            
+            .bereaved-entry select {
+                flex: 1;
+                font-size: 14px;
+                padding: 10px 8px;
+            }
+            
+            .bereaved-entry input {
+                flex: 2; 
+                font-size: 14px;
+                padding: 10px 8px;
+            }
+        }
+
+        /* 고인 정보 한 줄 표시 스타일 */
+        .deceased-info-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .deceased-info-row input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .deceased-info-row input[type="number"] {
+            flex: 0.5;  /* 연세 입력란은 더 작게 */
+        }
+
+        /* 모바일 화면에서도 한 줄 유지 */
+        @media (max-width: 480px) {
+            .deceased-info-row {
+                flex-direction: row;
+            }
+            
+            .deceased-info-row input {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+
+        /* 날짜/시간 입력 컨테이너 스타일 */
+        .date-time-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .date-input-wrapper {
+            flex: 3;  /* 날짜가 3/4 차지 */
+        }
+
+        .time-input-wrapper {
+            flex: 1;  /* 시간이 1/4 차지 */
+        }
+
+        .date-time-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+
+        /* flatpickr 커스텀 스타일 */
+        .flatpickr-calendar {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .flatpickr-day.selected {
+            background: #4a90e2 !important;
+            border-color: #4a90e2 !important;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 480px) {
+            .date-time-container {
+                gap: 8px;
+            }
+            
+            .date-time-input {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
+        /* 시간 선택기 커스텀 스타일 */
+        .time-picker-custom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .time-picker-custom.show {
+            transform: translateY(0);
+        }
+
+        .time-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .time-picker-content {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .time-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .time-value {
+            font-size: 20px;
+            padding: 10px;
+            margin: 2px 0;
+            width: 60px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .time-value.selected {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        /* 시간 입력 필드 스타일 */
+        .time-input-wrapper {
+            position: relative;
+        }
+
+        .time-display {
+            width: 100%;
+            padding: 12px;
+                                border: 1px solid #ddd;
+                                border-radius: 8px;
+            font-size: 16px;
+            background-color: #fff;
+                                cursor: pointer;
+            text-align: center;
+        }
+
+        .time-display:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        @media (max-width: 480px) {
+            .time-display {
+                        font-size: 14px;
+                padding: 10px;
+            }
+            
+            .time-value {
+                font-size: 18px;
+                padding: 8px;
+            }
+        }
+
+        .message-type-wrap {
+            margin: 8px 0;
+            padding: 4px;
+        }
+
+        .message-type-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            padding: 2px;
+        }
+
+        .msg-btn {
+            width: 100%;
+            padding: 6px 4px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            background: #f8f8f8;
+            font-size: 12px;
+            color: #666;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .msg-btn.active {
+            background: #4a90e2;
+            color: #fff;
+            border-color: #4a90e2;
+        }
+
+        @media (max-width: 480px) {
+            .message-type-grid {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+                gap: 4px;
+            }
+            
+            .msg-btn {
+                padding: 5px 3px;
+                font-size: 11px;
+            }
+        }
+
+        .date-time-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .date-half {
+            flex: 2;
+            margin: 0;
+        }
+
+        .time-half {
+            flex: 1;
+            margin: 0;
+        }
+
+        .date-time-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .date-time-group {
+                gap: 6px;
+            }
+            
+            .date-time-input {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+
+        /* 기존 스타일 유지 */
+        .message-type-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            padding: 2px;
+        }
+
+        /* 선택된 메시지 스타일 */
+        .selected-message {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        /* 직접 입력 텍스트영역 스타일 */
+        .custom-message {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* 메시지 선택 모달 스타일 */
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .message-modal-content {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .message-modal.active .message-modal-content {
+            transform: translateY(0);
+        }
+
+        .message-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .message-modal-header h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            color: #666;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message-option {
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .message-option:hover {
+            background: #f0f0f0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .message-modal-content {
+                padding: 15px;
+            }
+            
+            .message-option {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+
+        .mourner-info {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .account-info {
+            color: #666;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        
+        .delete-account {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #ff5555;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .delete-account:hover {
+            opacity: 1;
+            background-color: rgba(255, 85, 85, 0.1);
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .input-row .input-group {
+            flex: 1;
+        }
+        
+        .input-group.vertical {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+        .input-group.vertical label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .form-select, .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #fff;
+            transition: all 0.2s ease;
+        }
+        
+        .form-select:focus, .form-input:focus {
+            border-color: #777;
+            box-shadow: 0 0 0 2px rgba(119, 119, 119, 0.2);
+            outline: none;
+        }
+        
+        .save-account-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: #555;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        .save-account-btn:hover {
+            background: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .save-account-btn:active {
+            transform: translateY(0);
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+        
+        .no-account-message {
+            padding: 15px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+        }
+        
+        /* 토스트 메시지 스타일 */
+        .toast-message {
+            animation: fadeInUp 0.3s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        
+        /* 모바일 최적화 공통 스타일 */
+        @media (max-width: 480px) {
+            /* 기본 입력 행 스타일 */
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            /* 모달 스타일 */
+            .modal-content {
+                width: 95%;
+                margin: 40% auto 0;
+                padding: 20px;
+            }
+            
+            /* 폼 요소 스타일 */
+            .form-select, .form-input {
+                padding: 12px 10px;
+                font-size: 15px;
+            }
+            
+            /* 저장 버튼 스타일 */
+            .save-account-btn {
+                height: 48px;
+                font-size: 15px;
+            }
+            
+            /* 옵션 그룹 하이라이트 */
+            optgroup {
+                font-weight: 700;
+                background-color: #f5f5f5;
+                border-radius: 4px;
+            }
+            
+            option {
+                padding: 8px;
+            }
+            
+            /* 가로 레이아웃 유지 - 상주 정보 및 계좌 정보 모달 */
+            .bereaved-entry,
+            #account-modal .input-row,
+            .mourner-select-row,
+            .account-input-row,
+            .deceased-info-row {
+                flex-direction: row;
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+            
+            /* 모달 레이블 최적화 */
+            .modal-body .input-group label {
+                font-size: 13px;
+                margin-bottom: 4px;
+            }
+            
+            /* 입력 필드 최적화 */
+            .modal-body .form-select,
+            .modal-body .form-input,
+            .bereaved-entry select,
+            .bereaved-entry input,
+            .deceased-info-row input {
+                font-size: 14px;
+                padding: 10px 8px;
+            }
+            
+            /* 1:2 비율 유지 */
+            .relationship-field,
+            .bank-field,
+            .bereaved-entry select {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .name-field,
+            .account-number-field,
+            .bereaved-entry input {
+                flex: 2;
+                min-width: 0;
+            }
+        }
+
+        /* 계좌 정보 모달 스타일 */
+        .mourner-select-row,
+        .account-input-row {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .relationship-field,
+        .bank-field {
+            flex: 1; /* 관계와 은행은 1/3 비율로 설정 (1:2 비율) */
+        }
+
+        .name-field,
+        .account-number-field {
+            flex: 2; /* 이름과 계좌번호는 2/3 비율로 설정 (1:2 비율) */
+        }
+
+        /* 부고글 미리보기 섹션 숨김 */
+        .preview-section {
+            display: none !important;
+        }
+
+        /* 스타일 옵션 탭 컨테이너 */
+        .style-option-container {
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        /* 탭 스타일 */
+        .style-option-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .option-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #f8f8f8;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option-tab.active {
+            background: #fff;
+            color: #333;
+            border-bottom: 2px solid #4a90e2;
+        }
+        
+        /* 컨텐츠 영역 */
+        .style-option-content {
+            padding: 20px;
+        }
+        
+        .style-option {
+            display: none;
+        }
+        
+        .style-option.active {
+            display: block;
+        }
+        
+        /* 선택된 템플릿 및 영정사진 미리보기 스타일 동일하게 맞춤 */
+        .selected-template-preview,
+        .preview-content {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        /* 모바일 대응 */
+        @media (max-width: 480px) {
+            .style-option-content {
+                padding: 15px;
+            }
+            
+            .option-tab {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* 기존 스타일은 유지하고 새로운 스타일 추가 */
+        
+        /* 스타일 옵션 컨테이너 */
+        .style-options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        /* 각 스타일 옵션 박스 */
+        .style-option-box {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+        }
+        
+        .style-option-box h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+        }
+        
+        /* 모바일 대응 */
+        @media (max-width: 480px) {
+            .style-option-box {
+                padding: 15px;
+            }
+            
+            .style-option-box h3 {
+                font-size: 16px;
+            }
+        }
+
+        /* 디자인/영정사진 탭 컨테이너 */
+        .style-option-container {
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* 탭 네비게이션 */
+        .style-option-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+
+        .option-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #f8f8f8;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-tab.active {
+            background: #fff;
+            color: #333;
+            border-bottom: 2px solid #4a90e2;
+        }
+
+        /* 컨텐츠 영역 */
+        .style-option-content {
+            padding: 20px;
+        }
+
+        .style-option {
+            display: none;
+        }
+
+        .style-option.active {
+            display: block;
+        }
+
+        /* 미리보기 영역 공통 스타일 */
+        .selected-template-preview,
+        .preview-content {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* 버튼 공통 스타일 */
+        .option-button {
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .option-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 아이콘 공통 스타일 */
+        .option-icon {
+            font-size: 20px;
+        }
+
+        .option-text {
+            color: #333;
+        }
+
+        /* 미리보기 버튼 컨테이너 */
+        .preview-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 480px) {
+            .style-option-content {
+                padding: 15px;
+            }
+            
+            .option-tab {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .option-button {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            .option-icon {
+                font-size: 18px;
+            }
+        }
+
+        /* 입력란 기본 스타일 */
+        input, select, textarea {
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        /* 내용이 입력된 필드 스타일 - 필수/선택 모두 적용 */
+        input:not([value=""]):not(:placeholder-shown),
+        select:not([value=""]):not(:first-child),
+        textarea:not(:placeholder-shown):not(:empty),
+        .filled-field {
+            border-color: #4a90e2 !important;
+            background-color: #f5f9ff !important;
+        }
+        
+        /* 포커스된 필드 스타일 - 더 강조 */
+        input:focus, 
+        select:focus,
+        textarea:focus,
+        .form-select:focus,
+        .form-input:focus {
+            border-color: #4a90e2 !important;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2) !important;
+            outline: none !important;
+            background-color: #f0f7ff !important;
+        }
+        
+        /* 선택된 옵션 스타일 */
+        select option:checked,
+        select option:selected {
+            background-color: #4a90e2 !important;
+            color: white !important;
+        }
+        
+        /* 선택 완료된 드롭다운 스타일 */
+        select:has(option:checked:not([value=""])),
+        select.has-value {
+            border-color: #4a90e2 !important;
+            background-color: #f5f9ff !important;
+        }
+
+        /* 폼 필드 및 장례식장 검색 컨테이너 통합 스타일 */
+        .form-group,
+        .search-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        /* 검색 결과 컨테이너 스타일 */
+        #searchResults {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        /* 검색 결과 항목 스타일 */
+        .search-result-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-result-item:hover {
+            background-color: #f5f9ff;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 읽기 전용 필드 통합 스타일 */
+        .readonly-field {
+            background-color: #f8f8f8 !important;
+            color: #555 !important;
+            cursor: default !important;
+            border-color: #ddd !important;
+        }
+
+        /* 입력된 읽기 전용 필드 강조 스타일 */
+        .readonly-field:not([value=""]):not(:placeholder-shown) {
+            background-color: #f0f7ff !important;
+            border-color: #4a90e2 !important;
+        }
+
+        /* 불필요한 중첩 제거 - funeral-hall-name과 같은 불필요한 래퍼 클래스 */
+        .funeral-hall-search {
+            margin-bottom: 15px;
+        }
+
+        /* 모바일 최적화 스타일 */
+        @media (max-width: 480px) {
+            #searchResults {
+                max-height: 180px;
+            }
+            
+            .search-result-item {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* 라벨이 있는 입력 행 스타일 */
+        .input-row-labeled {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        .field-label {
+            width: 70px;
+            text-align: right;
+            padding-right: 10px;
+            font-size: 14px;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .field-input {
+            flex: 1;
+            position: relative;
+        }
+
+        /* 읽기 전용 필드 스타일 유지 */
+        .readonly-field {
+            background-color: #f8f8f8 !important;
+            color: #555 !important;
+            cursor: default !important;
+            border-color: #ddd !important;
+        }
+
+        /* 검색 결과 위치 조정 */
+        #searchResults {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 480px) {
+            .field-label {
+                width: 60px;
+                font-size: 13px;
+            }
+        }
+
+        /* 세로 배치 날짜 시간 그룹 스타일 */
+        .date-time-vertical-group {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px !important; /* 더 작은 값으로 설정 */
+            width: 100% !important;
+            margin-bottom: 30px !important;
+        }
+
+        /* 각 항목의 margin 완전히 제거 */
+        .date-time-item {
+            width: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            margin: 0 !important; /* 모든 margin 제거 */
+            padding: 0 !important; /* padding도 제거 */
+        }
+
+        /* 내부 요소들의 margin도 확인 */
+        .date-time-fields, 
+        .form-group.date-half, 
+        .form-group.time-half {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 입력 필드의 여백은 유지 */
+        .date-time-input {
+            margin: 0 !important;
+        }
+
+        /* 필수 표시 마크 스타일 */
+        .required-mark {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 18px;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        /* 날짜/시간 입력 필드 컨테이너 */
+        .date-time-fields {
+            display: flex;
+            gap: 10px;
+            flex: 1; /* 남은 공간 차지 */
+        }
+
+        .date-half {
+            flex: 2;
+        }
+
+        .time-half {
+            flex: 1;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 480px) {
+            .date-time-vertical-group {
+                gap: 6px; /* 모바일에서 더 좁게 */
+            }
+            
+            .date-time-label {
+                font-size: 15px;
+                width: 80px;
+                margin-right: 10px;
+            }
+            
+            .date-time-fields {
+                gap: 6px;
+            }
+        }
+
+        /* 기존 스타일은 유지하고 아래 부분만 덮어쓰기 */
+        
+        /* 상주 말씀 섹션 스타일 개선 */
+        .message-type-wrap {
+            margin: 10px 0 20px;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+        }
+
+        .message-type-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 8px;
+        }
+
+        .msg-btn {
+            width: 100%;
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            background: #f0f0f0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.4;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .msg-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+
+        .msg-btn.active {
+            background: #3366cc;
+            color: #fff;
+            border-color: #3366cc;
+            box-shadow: 0 3px 6px rgba(51, 102, 204, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* 모바일 대응 최적화 */
+        @media (max-width: 768px) {
+            .message-type-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+            }
+            
+            .msg-btn {
+                padding: 10px 8px;
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .message-type-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+            
+            .msg-btn {
+                padding: 10px 5px;
+                font-size: 13px;
+                min-height: 40px;
+            }
+        }
+        
+        /* 초소형 모바일 대응 */
+        @media (max-width: 360px) {
+            .message-type-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+            }
+            
+            .msg-btn {
+                padding: 8px 4px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+        }
+        
+        /* 선택된 메시지와 직접 입력창 스타일 개선 */
+        .selected-message {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-line;
+            border: 1px solid #e0e0e0;
+        }
+
+        .custom-message {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            min-height: 120px;
+            resize: vertical;
+            background-color: #fcfcfc;
+        }
+        
+        .custom-message:focus {
+            border-color: #3366cc;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(51, 102, 204, 0.2);
+        }
+
+
+        /* 복사 아이콘 숨김 */
+        .copy-icon {
+            display: none !important;
+        }
+
+        /* 선택란(드롭다운) 모바일 최적화 스타일 */
+        .responsive-select, 
+        #gender, 
+        #death-expression,
+        .relationship-select,
+        .secondary-relation-select {
+            width: 100%;
+            height: auto;
+            min-height: 46px;
+            padding: 12px 32px 12px 12px;
+            font-size: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            transition: all 0.3s ease;
+        }
+
+        /* 포커스 효과 */
+        .responsive-select:focus,
+        #gender:focus, 
+        #death-expression:focus,
+        .relationship-select:focus,
+        .secondary-relation-select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+            outline: none;
+        }
+
+        /* 2차 옵션 선택란 특별 스타일 */
+        .secondary-relation-select {
+            width: 100%;
+            margin: 8px 0;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 480px) {
+            /* 고인 정보 행의 선택란 최적화 */
+            .deceased-info-row select,
+            #gender, 
+            #death-expression {
+                font-size: 14px;
+                padding: 10px 28px 10px 10px;
+                background-size: 14px;
+                background-position: right 8px center;
+            }
+            
+            /* 표현 방식 선택란 특별 처리 */
+            #death-expression {
+                padding-right: 28px; /* 화살표 공간 확보 */
+            }
+            
+            /* 상주 정보 선택란 최적화 */
+            .bereaved-entry select,
+            .relationship-select,
+            .secondary-relation-select {
+                font-size: 14px;
+                padding: 10px 28px 10px 10px;
+                background-size: 14px;
+                min-height: 44px;
+            }
+            
+            /* 선택항목에 대한 스타일 */
+            select option {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+
+        /* 작은 모바일 화면 최적화 */
+        @media (max-width: 360px) {
+            /* 선택란 글꼴 크기 축소 */
+            .deceased-info-row select,
+            #gender, 
+            #death-expression,
+            .bereaved-entry select,
+            .relationship-select,
+            .secondary-relation-select {
+                font-size: 13px;
+                padding: 8px 24px 8px 8px;
+            }
+            
+            /* 좁은 화면에서 선택란 간격 축소 */
+            .deceased-info-row {
+                gap: 5px;
+            }
+            
+            .bereaved-entry {
+                gap: 5px;
+            }
+            
+            /* 선택항목 글꼴 크기 축소 */
+            select option {
+                font-size: 13px;
+                padding: 6px;
+            }
+        }
+
+        /* 상주 관계 선택란 선택된 상태 스타일 */
+        .relationship-select:not([value=""]):not(:first-child),
+        .secondary-relation-select:not([value=""]):not(:first-child) {
+            background-color: #f5f9ff;
+            border-color: #4a90e2;
+        }
+
+        /* 고인 정보 섹션 모바일 최적화 */
+        @media (max-width: 480px) {
+            .deceased-info-row {
+                flex-wrap: nowrap;
+                gap: 6px;
+            }
+            
+            /* 성별 선택란 너비 비율 조정 */
+            #gender {
+                flex: 0.8;
+                min-width: 0;
+            }
+            
+            /* 표현방식 선택란 너비 비율 조정 */
+            #death-expression {
+                flex: 1.2;
+                min-width: 0;
+            }
+        }
+
+        /* 2차 옵션이 표시될 때 UI 개선 */
+        .secondary-relation-select:not([style*="display: none"]) {
+            animation: fadeIn 0.3s ease;
+            margin-top: 8px;
+            display: block !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 약관 전문보기 모달 스타일 */
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            overflow: auto;
+        }
+
+        .terms-modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .terms-modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terms-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .terms-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.2s;
+        }
+
+        .terms-modal-close:hover {
+            color: #333;
+        }
+
+        .terms-modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .terms-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .terms-content h4 {
+            margin: 20px 0 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .terms-content p {
+            margin: 0 0 15px;
+        }
+
+        .terms-content ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .terms-content li {
+            margin-bottom: 8px;
+        }
+
+        .terms-modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .terms-modal-confirm-btn {
+            padding: 10px 25px;
+            background-color: #777777;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .terms-modal-confirm-btn:hover {
+            background-color: #555555;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 480px) {
+            .terms-modal-content {
+                width: 95%;
+                margin: 40px auto;
+            }
+            
+            .terms-modal-header h3 {
+                font-size: 16px;
+            }
+            
+            .terms-content {
+                font-size: 13px;
+            }
+            
+            .terms-content h4 {
+                font-size: 15px;
+            }
+            
+            .terms-modal-body {
+                padding: 15px;
+                max-height: 70vh;
+            }
+        }
+
+    
+
+        /* 하단 고정 제출 버튼 */
+        .fixed-bottom-submit {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: #fff;
+            padding: 12px 16px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+        }
+        .fixed-bottom-submit .submit-button {
+            width: 100%;
+            max-width: var(--container-max, 500px);
+            height: 56px;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 !important;
+        }
+        .write-main {
+            padding-bottom: 90px;
+        }
+
+    </style>
+
+    <!-- Select2 CSS (중복 JS 제거됨) -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker.js@3.1.0/dist/timepicker.min.css">
+</head>
+
+<body>
+    <!-- 헤더 섹션 - 수정: 고정 헤더 및 가로폭 제한 구조 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" onclick="history.back()">뒤로</button>
+            <div class="logo" onclick="location.href='index.html';">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기" onclick="toggleSidebar()">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기" onclick="toggleSidebar()">×</span>
+        <a href="write.html">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <!-- 사이드바 스크립트 직접 추가 -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+
+    <!-- 메인 컨테이너 -->
+    <main class="write-main">
+        <form id="obituaryForm">
+            <p class="form-description" style="color: #ff0000; font-weight: bold;">*는 필수 입력 항목</p>
+
+            <!-- STEP 1. 부고 디자인 선택 -->
+            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 20px 0 8px 0;">STEP 1. 부고 디자인 선택</p>
+            <h2>부고장 디자인*</h2>
+            <div class="selected-template-preview">
+                <img id="selected-template-image" src="image/1.jpg" alt="선택된 템플릿" style="max-width: 100%; height: auto; border-radius: 8px; display: block;">
+            </div>
+            <p style="font-size: 0.9em; color: #555; margin: 8px 0;">배경 디자인을 선택해 주세요. 나중에 변경 가능합니다.</p>
+            <button type="button" id="template-select-btn" class="option-button">
+                <span class="option-text">부고장 디자인 선택/수정*</span>
+            </button>
+            <input type="hidden" id="selected-template-hidden" name="selectedTemplate" value="">
+
+            <!-- STEP 2. 고인 정보 -->
+            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 2. 고인 정보</p>
+            <h2>고인 정보*</h2>
+            <div class="form-group deceased-info-row">
+                <input type="text" id="deceased-name" name="deceased-name" placeholder="고인 성함 (예: 홍길동)" required tabindex="1" enterkeyhint="next" style="flex: 1.5;">
+                <input type="number" id="deceased-age" name="deceased-age" placeholder="향년" required tabindex="2" inputmode="numeric" min="0" max="150" enterkeyhint="next" style="flex: 0.5;">
+                <select id="gender" name="gender" required style="flex: 0.4;" tabindex="3">
+                    <option value="male" selected>남성</option>
+                    <option value="female">여성</option>
+                </select>
+                <select id="death-expression" name="death-expression" required style="flex: 0.4;" tabindex="4">
+                    <option value="별세" selected>별세</option>
+                    <option value="영면">영면</option>
+                    <option value="서거">서거</option>
+                    <option value="타계">타계</option>
+                    <option value="운명">운명</option>
+                    <option value="작고">작고</option>
+                    <option value="소천">소천</option>
+                    <option value="선종">선종</option>
+                    <option value="입적">입적</option>
+                    <option value="귀천">귀천</option>
+                    <option value="귀주">귀주</option>
+                    <option value="열반">열반</option>
+                    <option value="귀적">귀적</option>
+                    <option value="면천">면천</option>
+                    <option value="유명">유명</option>
+                    <option value="세상">세상</option>
+                    <option value="천수">천수</option>
+                    <option value="소생">소생</option>
+                    <option value="순직">순직</option>
+                    <option value="순국">순국</option>
+                    <option value="산화">산화</option>
+                </select>
+            </div>
+            <p style="font-size: 0.85em; color: #666; margin: -4px 0 8px 0;">종교/상황에 맞는 표현을 선택하시면 부고 문구에 반영됩니다.</p>
+            <div class="form-group">
+                <input type="text" id="deceased-title" name="deceased-title" placeholder="직함 예)전 OO고등학교 교장 (선택)" tabindex="5" enterkeyhint="next" style="width: 100%;">
+            </div>
+
+            <!-- STEP 3. 영정 사진 -->
+            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 3. 영정 사진 (선택)</p>
+            <h2>영정 사진</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">사진이 없어도 부고장 작성은 가능합니다.</p>
+            <div class="photo-option-container">
+                <button type="button" id="add-photo-btn" class="option-button">
+                    <span class="photo-icon">+</span>
+                    <span class="photo-text">영정 사진 등록하기</span>
+                </button>
+            </div>
+            <input type="hidden" id="use-photo" name="usePhoto" value="">
+            <div id="photo-upload" class="hidden" style="margin-top: 15px;">
+                <div class="mobile-upload-container">
+                    <input type="file" id="photo" name="photo" accept="image/*" style="display: none;">
+                    <button type="button" id="upload-trigger" class="option-button">
+                        <span class="option-icon">📷</span>
+                        <span class="option-text">사진 촬영 또는 선택</span>
+                    </button>
+                    <p id="photo-guide" style="font-size: 0.8em; color: #666; margin-top: 5px; text-align: center;">* 10MB 이하의 이미지 파일만 업로드 가능합니다.</p>
+                </div>
+            </div>
+            <div id="photo-preview" class="hidden" style="margin-top: 15px;">
+                <div class="preview-content">
+                    <img id="uploaded-photo" src="" alt="영정 사진" class="preview-image">
+                    <div class="preview-buttons" style="margin-top: 10px; text-align: center;">
+                        <button type="button" id="edit-photo-btn" class="btn btn-gray" style="margin-right: 10px; display: none;">사진 편집하기</button>
+                        <button type="button" id="delete-photo-btn" class="btn btn-gray">사진 삭제하기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4. 임종/입관/발인 일시 -->
+            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 4. 장례 일정</p>
+            <h2>임종/입관/발인</h2>
+            <p style="font-size: 0.85em; color: #666; margin: -4px 0 12px 0;">의료진/장례식장 안내를 기준으로 입력해 주세요. 발인일시는 부고에 핵심으로 표시됩니다.</p>
+            <div class="date-time-vertical-group">
+                <div class="date-time-item">
+                    <div class="date-time-label">임종일시 <span class="required-mark">*</span></div>
+                    <div class="date-time-fields">
+                        <div class="form-group date-half"><input type="text" id="death-date" name="death-date" class="date-time-input" placeholder="날짜 선택" required></div>
+                        <div class="form-group time-half"><input type="text" id="death-time" name="death-time" class="date-time-input" placeholder="시간 선택" required></div>
+                    </div>
+                </div>
+                <div class="date-time-item">
+                    <div class="date-time-label">입관일시</div>
+                    <div class="date-time-fields">
+                        <div class="form-group date-half"><input type="text" id="coffin-date" name="coffin-date" class="date-time-input" placeholder="날짜 선택"></div>
+                        <div class="form-group time-half"><input type="text" id="coffin-time" name="coffin-time" class="date-time-input" placeholder="시간 선택"></div>
+                    </div>
+                </div>
+                <div class="date-time-item">
+                    <div class="date-time-label">발인일시 <span class="required-mark">*</span></div>
+                    <div class="date-time-fields">
+                        <div class="form-group date-half"><input type="text" id="departure-date" name="departure-date" class="date-time-input" placeholder="날짜 선택" required></div>
+                        <div class="form-group time-half"><input type="text" id="departure-time" name="departure-time" class="date-time-input" placeholder="시간 선택" required></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5. 장례식장 정보 -->
+            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 5. 장례식장 정보</p>
+            <h2>장례식장*</h2>
+            <div class="search-container input-row-labeled">
+                <label class="field-label" style="font-size: 14px; color: #555;">장례식장 검색</label>
+                <div class="field-input" style="display: flex; align-items: center;">
+                    <input type="text" id="searchInput" placeholder="지역 또는 장례식장 이름 2글자 이상 입력" tabindex="6" enterkeyhint="search" style="flex: 1; padding: 10px 12px; line-height: 1.5;">
+                    <div id="searchResults" style="position: absolute; top: 100%; left: 0; right: 0;"></div>
+                </div>
+            </div>
+            <div class="form-group input-row-labeled">
+                <label class="field-label">명칭</label>
+                <div class="field-input">
+                    <input type="text" id="funeral-hall-name" name="funeral-hall-name" placeholder="장례식장 이름 (검색 후 자동 입력)" readonly class="readonly-field" required>
+                </div>
+            </div>
+            <div class="form-group input-row-labeled">
+                <label class="field-label">주소</label>
+                <div class="field-input">
+                    <input type="text" id="funeral-hall-address" name="funeral-hall-address" placeholder="장례식장 주소 (검색 후 자동 입력)" readonly class="readonly-field" required>
+                </div>
+            </div>
+            <div class="form-group input-row-labeled">
+                <label class="field-label">전화번호</label>
+                <div class="field-input">
+                    <input type="text" id="funeral-hall-phone" name="funeral-hall-phone" placeholder="대표번호 (선택)" readonly class="readonly-field">
+                </div>
+            </div>
+            <div class="form-group input-row-labeled">
+                <label class="field-label">빈소</label>
+                <div class="field-input">
+                    <input type="text" id="funeral-hall-room" name="funeral-hall-room" placeholder="빈소 (예: 1층 101호)" required tabindex="7" enterkeyhint="next">
+                </div>
+            </div>
+
+            <!-- STEP 6. 장지 정보 -->
+            <h2>장지 장소</h2>
+            <div class="form-group">
+                <input type="text" id="cemetery" name="cemetery" placeholder="장지 정보 입력 예) 1차: 추모화장장 2차: 납골당 (선택)" tabindex="8" enterkeyhint="next">
+            </div>
+
+            <!-- STEP 7. 상주 정보 -->
+            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 6. 상주 및 인사말</p>
+            <h2>상주 정보*</h2>
+            <p style="font-size: 0.9em; color: #555; margin-bottom: 12px;">대표 상주 한 분만 입력하셔도 작성 가능합니다. 필요시 상주를 추가하세요.</p>
+            <div id="bereaveds-list">
+                <div class="bereaved-entry">
+                    <select name="relationship[]" class="relationship-select" required>
+                        <option value="" disabled selected>상주</option>
+                        <option value="배우자">배우자</option>
+                        <option value="아들">아들</option>
+                        <option value="딸">딸</option>
+                        <option value="며느리">며느리</option>
+                        <option value="사위">사위</option>
+                        <option value="손자">손자</option>
+                        <option value="손녀">손녀</option>
+                        <option value="외손자">외손자</option>
+                        <option value="외손녀">외손녀</option>
+                        <option value="기타">기타</option>
+                        <option value="직접기재">직접기재</option>
+                    </select>
+                    <select class="secondary-relation-select" name="secondaryRelation[]" style="display:none; margin-top:5px;">
+                        <option value="" disabled selected>기타 선택</option>
+                        <option value="아버지">아버지</option>
+                        <option value="어머니">어머니</option>
+                        <option value="조부">조부</option>
+                        <option value="조모">조모</option>
+                        <option value="외조부">외조부</option>
+                        <option value="외조모">외조모</option>
+                        <option value="형">형</option>
+                        <option value="누나">누나</option>
+                        <option value="오빠">오빠</option>
+                        <option value="언니">언니</option>
+                        <option value="동생">동생</option>
+                        <option value="형제">형제</option>
+                        <option value="자매">자매</option>
+                        <option value="친척">친척</option>
+                        <option value="조카">조카</option>
+                        <option value="사촌">사촌</option>
+                        <option value="육촌">육촌</option>
+                        <option value="팔촌">팔촌</option>
+                        <option value="당숙">당숙</option>
+                        <option value="당숙모">당숙모</option>
+                        <option value="고모">고모</option>
+                        <option value="이모">이모</option>
+                        <option value="외숙모">외숙모</option>
+                        <option value="고모부">고모부</option>
+                        <option value="이모부">이모부</option>
+                        <option value="외숙부">외숙부</option>
+                        <option value="처남">처남</option>
+                        <option value="처형">처형</option>
+                        <option value="동서">동서</option>
+                        <option value="시누이">시누이</option>
+                        <option value="올케">올케</option>
+                        <option value="시아버지">시아버지</option>
+                        <option value="시어머니">시어머니</option>
+                        <option value="장인">장인</option>
+                        <option value="장모">장모</option>
+                        <option value="증손자">증손자</option>
+                        <option value="증손녀">증손녀</option>
+                        <option value="외증손자">외증손자</option>
+                        <option value="외증손녀">외증손녀</option>
+                        <option value="고종사촌">고종사촌</option>
+                        <option value="외종사촌">외종사촌</option>
+                        <option value="친구">친구</option>
+                        <option value="지인">지인</option>
+                        <option value="직장동료">직장동료</option>
+                        <option value="상사">상사</option>
+                        <option value="부하직원">부하직원</option>
+                        <option value="선배">선배</option>
+                        <option value="후배">후배</option>
+                        <option value="동창">동창</option>
+                        <option value="동문">동문</option>
+                        <option value="학부모">학부모</option>
+                        <option value="이웃">이웃</option>
+                        <option value="군대전우">군대전우</option>
+                        <option value="동호회원">동호회원</option>
+                        <option value="사회봉사자">사회봉사자</option>
+                        <option value="임차인">임차인</option>
+                        <option value="임대인">임대인</option>
+                        <option value="은사">은사</option>
+                        <option value="제자">제자</option>
+                        <option value="스승">스승</option>
+                        <option value="멘토">멘토</option>
+                        <option value="멘티">멘티</option>
+                        <option value="주치의">주치의</option>
+                        <option value="간병인">간병인</option>
+                        <option value="요양보호사">요양보호사</option>
+                        <option value="의사">의사</option>
+                        <option value="간호사">간호사</option>
+                        <option value="사회복지사">사회복지사</option>
+                        <option value="법률대리인">법률대리인</option>
+                        <option value="경영자">경영자</option>
+                        <option value="교회신도">교회신도</option>
+                    </select>
+                    <input type="text" class="custom-relationship-input" name="customRelationship[]" placeholder="관계 직접 입력" style="display:none; margin-top:5px;">
+                    <input type="text" name="bereavedName[]" placeholder="이름 (필수) 2명 이상은 띄어쓰기로 구분" required tabindex="9" enterkeyhint="next">
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="button" id="add-bereaved" class="btn btn-gray">
+                    <span class="button-icon">+</span> 상주 추가하기
+                </button>
+                <button type="button" id="remove-bereaved" class="btn btn-gray">
+                    <span class="button-icon">-</span> 상주 삭제하기
+                </button>
+            </div>
+
+            <!-- STEP 8. 상주 말씀 -->
+            <h2>상주 말씀</h2>
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                <p style="font-size: 0.9em; color: #555; margin: 0;">상황에 맞는 버튼을 누르면 예문이 채워집니다.</p>
+                <button type="button" id="ai-message-btn" class="option-button" style="flex: 0 0 auto; max-width: 220px; padding: 10px 14px;">
+                    <span class="option-icon">&#10024;</span>
+                    <span class="option-text">AI가 상주 말씀 추천</span>
+                </button>
+            </div>
+            <div class="message-type-wrap">
+                <div class="message-type-grid">
+                    <button type="button" class="msg-btn" data-type="일반">일반</button>
+                    <button type="button" class="msg-btn" data-type="격식">격식</button>
+                    <button type="button" class="msg-btn" data-type="기독교">기독교</button>
+                    <button type="button" class="msg-btn" data-type="천주교">천주교</button>
+                    <button type="button" class="msg-btn" data-type="불교">불교</button>
+                    <button type="button" class="msg-btn" data-type="가족장">가족장</button>
+                    <button type="button" class="msg-btn" data-type="무빈소">무빈소</button>
+                    <button type="button" class="msg-btn" data-type="해외">해외</button>
+                    <button type="button" class="msg-btn" data-type="간소장">간소장</button>
+                    <button type="button" class="msg-btn active" data-type="직접">직접</button>
+                </div>
+            </div>
+            <div id="selected-message" class="selected-message">부고 소식을 전하게 되어 마음이 무겁습니다.
+개별적으로 연락드리지 못한 점 너그러이 양해 부탁드리며,
+아래와 같이 장례 일정을 안내드립니다.</div>
+            <textarea id="custom-message" class="custom-message" placeholder="직접 작성할 말씀을 입력해주세요.">부고 소식을 전하게 되어 마음이 무겁습니다.
+개별적으로 연락드리지 못한 점 너그러이 양해 부탁드리며,
+아래와 같이 장례 일정을 안내드립니다.</textarea>
+
+            <input type="hidden" id="message-type" name="message-type" value="">
+            <input type="hidden" id="message-content-hidden" name="message-content-hidden" value="">
+
+            <div id="message-modal" class="message-modal">
+                <div class="message-modal-content">
+                    <div class="message-modal-header">
+                        <h3>상주 말씀 선택</h3>
+                        <button type="button" class="modal-close">&times;</button>
+                    </div>
+                    <div class="message-list"></div>
+                </div>  
+            </div>
+
+            <!-- 추가 안내사항 -->
+            <div class="form-group">
+                <textarea id="additional-info" name="additional-info" placeholder="추가 안내사항이 있으면 입력해 주세요. (선택)" rows="3" style="width: 100%; resize: vertical;"></textarea>
+            </div>
+
+            <!-- STEP 9. 부의금 계좌 -->
+            <div class="account-section" id="account-section-wrap">
+                <h2 style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;" id="account-section-toggle" aria-expanded="false">
+                    <span>부의금 계좌 <span style="font-size: 0.75em; font-weight: normal; color: #666;">(선택)</span></span>
+                    <span id="account-section-arrow" style="transition: transform 0.2s;">&#9660;</span>
+                </h2>
+                <p style="font-size: 0.85em; color: #666; margin: -4px 0 8px 0;">부의금을 계좌로 안내할 때만 열어 주세요.</p>
+                <div class="account-container" id="account-section-body" style="display: none;">
+                    <div id="account-list"></div>
+                    <button type="button" class="add-account-btn">+ 계좌 추가</button>
+                </div>
+            </div>
+            <div id="account-modal" class="modal" style="display: none;">
+                <div class="modal-content" style="max-width: 400px;">
+                    <div class="modal-header" style="padding: 15px 20px;">
+                        <h3>계좌 정보 입력</h3>
+                        <span class="modal-close">&times;</span>
+                    </div>
+                    <div class="modal-form">
+                        <div class="form-group">
+                            <label for="relationship-select">상주 선택</label>
+                            <select id="relationship-select">
+                                <option value="" disabled selected>상주를 선택해주세요</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name-select">이름 선택</label>
+                            <select id="name-select" disabled>
+                                <option value="" disabled selected>이름을 선택해주세요</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bank-select">은행 선택</label>
+                            <select id="bank-select">
+                                <option value="" disabled selected>은행을 선택해주세요</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-number">계좌번호</label>
+                            <input type="text" id="account-number" placeholder="'-' 포함 계좌번호 입력">
+                        </div>
+                        <button type="button" class="save-account-btn">저장</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 10. 비밀번호 + 약관 -->
+            <p class="step-header" style="font-size: 1em; font-weight: 600; color: #555; margin: 24px 0 8px 0;">마무리</p>
+            <h2>비밀번호 설정*</h2>
+            <div class="form-group" style="width: 66.7%; margin: 0 auto;">  
+                <input type="password" id="password" name="password" placeholder="숫자 4자리 (수정/삭제 시 필요)" maxlength="4" pattern="[0-9]{4}" required inputmode="numeric" tabindex="10" enterkeyhint="done">
+            </div>
+            <p style="font-size: 0.85em; color: #666; text-align: center; margin: -6px 0 16px 0;">나중에 부고장 수정/삭제할 때 꼭 필요합니다. 안전한 곳에 메모해 두세요.</p>
+
+            <h2>서비스 이용약관 동의*</h2>  
+            <div class="form-group terms-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px auto;">  
+                <div style="margin: 0 0 15px 0; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left;">
+                    <span style="padding-left: 20px; flex: 1;">신청 및 수정 과정 중 본인식별 및 부정이용방지를 위해 개인정보를 수집 이용합니다.</span>
+                    <button type="button" id="view-full-terms" class="view-terms-button">개인정보 수집/이용 약관 전문보기</button>
+                </div>
+                <label class="checkbox-label" style="display: inline-flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <span style="font-size: 14px; color: #333; margin-right:10px;">동의합니다</span>
+                    <input type="checkbox" id="agree-terms" name="agreeTerms" style="width: 22px; height: 22px;">
+                </label>
+            </div>
+
+            <!-- 하단 고정 버튼 영역 확보 -->
+            <div style="height: 80px;"></div>
+        </form>
+    </main>
+
+    <!-- 하단 고정 제출 버튼 -->
+    <div class="fixed-bottom-submit">
+        <button type="submit" form="obituaryForm" id="submit-button" class="styled-button submit-button">
+            <span style="font-size: 24px; margin-right: 8px;">&#10003;</span>
+            작성 완료
+        </button>
+    </div>
+
+    <!-- 사이트 푸터 -->
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 로딩 인디케이터 -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        </div>
+
+    <!-- 토스트 메시지 -->
+    <div id="toast-message" style="display: none;"></div>
+
+    <!-- 시간 선택기 모달 (date-time-picker.js) -->
+    <div id="timePickerModal" class="time-picker-modal">
+        <div class="time-picker-header">
+            <span class="time-picker-title">시간 선택</span>
+            <button type="button" class="cancel-btn">×</button>
+        </div>
+        <div class="time-picker-content">
+            <div class="time-columns">
+                <div class="time-column hours-column">
+                    <div class="column-label">시</div>
+                    <div class="time-scroll" id="hoursScroll"></div>
+                </div>
+                <div class="time-column minutes-column">
+                    <div class="column-label">분</div>
+                    <div class="time-scroll" id="minutesScroll"></div>
+                </div>
+            </div>
+            <div class="time-picker-actions">
+                <button type="button" class="confirm-btn">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 사진 편집 모달 (photo-editor.js 호환) -->
+    <div id="image-editor" class="image-editor-modal" style="display: none;">
+        <div class="editor-content">
+            <button type="button" id="close-editor" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+            <h2 style="margin-top:0; margin-bottom: 15px; font-size: 18px;">영정 사진 편집</h2>
+            <div id="cropper-container" style="width: 100%; max-height: 400px; margin-bottom: 15px; background: #eee; overflow: hidden;">
+                <img id="image-to-crop" src="#" alt="편집할 이미지" style="max-width: 100%; display: block;">
+            </div>
+            <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 12px;">
+                <button type="button" id="rotate-left" class="btn btn-gray" style="padding: 8px 16px;">↺ 좌회전</button>
+                <button type="button" id="rotate-right" class="btn btn-gray" style="padding: 8px 16px;">↻ 우회전</button>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap;">
+                <button type="button" class="aspect-ratio-btn btn btn-gray" data-ratio="NaN" style="padding: 6px 12px; font-size: 13px;">자유</button>
+                <button type="button" class="aspect-ratio-btn btn btn-gray" data-ratio="0.75" style="padding: 6px 12px; font-size: 13px;">3:4</button>
+                <button type="button" class="aspect-ratio-btn btn btn-gray" data-ratio="1" style="padding: 6px 12px; font-size: 13px;">1:1</button>
+                <button type="button" class="aspect-ratio-btn btn btn-gray" data-ratio="0.667" style="padding: 6px 12px; font-size: 13px;">2:3</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;">
+                <button type="button" id="apply-crop" class="styled-button positive-button" style="flex:1;">적용</button>
+                <button type="button" id="cancel-crop" class="styled-button" style="flex:1; background-color: #ccc;">취소</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 템플릿 선택 모달 (TemplateSelector가 관리) -->
+    <div id="template-modal" class="modal-scroll-container" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="template-modal-close-button">&times;</span> <!-- ID 확인 -->
+            <h2 class="modal-title">부고장 디자인 선택</h2>
+            <div id="template-loading-indicator" style="text-align: center; padding: 15px;">
+                <!-- 로딩 스피너 HTML -->
+        </div>
+            <div class="template-grid" id="template-grid"></div> <!-- ID 확인 -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var accHead = document.getElementById('account-section-toggle');
+            var accBody = document.getElementById('account-section-body');
+            var accArrow = document.getElementById('account-section-arrow');
+            if (accHead && accBody) {
+                accHead.addEventListener('click', function() {
+                    var open = accBody.style.display !== 'none';
+                    accBody.style.display = open ? 'none' : 'block';
+                    accArrow.style.transform = open ? '' : 'rotate(180deg)';
+                    accHead.setAttribute('aria-expanded', !open);
+                });
+            }
+            var aiBtn = document.getElementById('ai-message-btn');
+            if (aiBtn) {
+                aiBtn.addEventListener('click', function() {
+                    var name = (document.getElementById('deceased-name') && document.getElementById('deceased-name').value) || '고인';
+                    var expr = (document.getElementById('death-expression') && document.getElementById('death-expression').selectedOptions[0]) ? document.getElementById('death-expression').selectedOptions[0].text : '별세';
+                    var depDate = (document.getElementById('departure-date') && document.getElementById('departure-date').value) || '';
+                    var depTime = (document.getElementById('departure-time') && document.getElementById('departure-time').value) || '';
+                    var hall = (document.getElementById('funeral-hall-name') && document.getElementById('funeral-hall-name').value) || '장례식장';
+                    var room = (document.getElementById('funeral-hall-room') && document.getElementById('funeral-hall-room').value) || '';
+                    var line1 = '부고 소식을 전하게 되어 마음이 무겁습니다.';
+                    var line2 = '개별적으로 연락드리지 못한 점 너그러이 양해 부탁드리며, 아래와 같이 장례 일정을 안내드립니다.';
+                    if (name && name !== '고인') line1 = name + '님의 ' + expr + ' 소식을 전하게 되어 마음이 무겁습니다.';
+                    if (hall || depDate) line2 = (hall ? hall + (room ? ' ' + room : '') + '에서' : '') + (depDate ? ' ' + depDate + (depTime ? ' ' + depTime : '') + ' 발인 예정입니다.' : ' 장례를 치르오니, 아래 일정을 참고해 주시기 바랍니다.');
+                    var text = line1 + '\n' + line2;
+                    var sel = document.getElementById('selected-message');
+                    var custom = document.getElementById('custom-message');
+                    if (sel) sel.textContent = text;
+                    if (custom) custom.value = text;
+                    try { if (window.AppUtils && window.AppUtils.showToast) window.AppUtils.showToast('AI가 입력하신 정보로 상주 말씀을 추천했습니다.'); } catch (e) {}
+                });
+            }
+        });
+    </script>
+    <!-- 외부 라이브러리 (동기, body 하단 배치로 성능+순서 보장) -->
+    <!-- TODO: 각 CDN 리소스에 integrity="sha384-..." crossorigin="anonymous" 속성 추가 (공급망 공격 방지) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ko.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timepicker.js@3.1.0/dist/timepicker.min.js"></script>
+
+    <!-- 페이지 모듈 -->
+    <script src="src/pages/write/write-module.js" type="module"></script>
+</body>
+</html>

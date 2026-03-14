@@ -1,0 +1,2483 @@
+/* 최적화된 스타일시트 - 모든 페이지에서 공통으로 사용하는 스타일 */
+
+/* 글꼴 및 기본 스타일 - 사이드바와 동일한 폰트 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Nanum+Myeongjo:wght@400;700&display=swap');
+
+/* 갈색 테마 색상 변수 */
+:root {
+    /* === 갈색 테마 색상 === */
+    --main-brown: #5D4037;
+    --medium-brown: #8D6E63;
+    --light-brown: #BCAAA4;
+    --very-light-brown: #F5F1E8;
+    --brown-accent: #6D4C41;
+    --brown-text: #3E2723;
+    --brown-border: #A1887F;
+    --beige-light: #F8F4EA;
+    --gold-accent: #B8860B;
+    --light-text: #F8F4EA;
+
+    /* === preview.html 호환 변수 (통일) === */
+    --primary-brown: #8D6E63;
+    --dark-brown: #333333;
+    --text-brown: #222222;
+    --accent-brown: #A1887F;
+    --bg-brown: #EFEBE9;
+
+    /* === 간격 스케일 === */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+
+    /* === 테두리 반경 === */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+
+    /* === 그림자 === */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 4px 15px rgba(0, 0, 0, 0.15);
+
+    /* === 글꼴 크기 === */
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-xl: 20px;
+
+    /* === 컨테이너 === */
+    --container-max: 500px;
+    --container-tablet: 680px;
+}
+
+/* 기본 리셋 스타일 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif; /* 모든 요소에 동일한 폰트 적용 */
+}
+
+body, 
+.container,
+.write-main, 
+.page-main, 
+.search-page-main, 
+.main-content,
+.manage-container,
+.info-container,
+.form-description,
+.modal-content,
+p, span, div, 
+input, select, textarea, 
+button {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+}
+
+/* 쓰기페이지와 관리페이지 본문 요소 통일 */
+.manage-container .info-value,
+.manage-container .info-label,
+.write-main .info-row .info-value,
+.write-main .info-row .info-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+}
+
+/* 폼 요소 글씨체 통일 */
+.option-text,
+.option-button,
+.form-group label,
+.bereaved-entry select,
+.bereaved-entry input,
+.form-control,
+.info-section .info-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+}
+
+/* 모달 내용 글씨체 통일 */
+.modal-content h2,
+.modal-title,
+.template-modal h2,
+.edit-modal-title,
+.edit-modal-content {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500;
+}
+
+/* 특별 요소는 명조체 유지 */
+.deceased-name,
+#bereavedList .label,
+#bereavedList .value,
+#additional-info,
+.account-label,
+.account-value,
+.deceased-name-large,
+.section-title,
+.section-subtitle,
+body[data-template="3"] .obituary-header,
+body[data-template="5"] .obituary-header,
+.obituary-table .deceased-name {
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 관리페이지 특별 요소는 명조체 유지 */
+.manage-title,
+.manage-container .info-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 500; /* 사이드바와 동일한 굵기 */
+    line-height: 1.8;
+    background-color: var(--very-light-brown);
+    color: var(--brown-text);
+    margin: 0;
+    padding: 0;
+    padding-top: 70px; /* 헤더 높이(60px) + 여백(10px) */
+    padding-bottom: 80px;
+    min-height: 100vh;
+}
+
+/* 링크 스타일 */
+a {
+    color: #1e3a8a;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #2563eb;
+}
+
+/* 버튼 공통 스타일 */
+button {
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+    border-radius: 0 0 10px 10px;
+    width: 100%;
+    height: 60px; /* 헤더 높이 고정 */
+}
+
+/* 헤더 컨테이너 스타일 */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    height: 60px;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+}
+
+/* 로고 스타일 */
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--brown-text);
+    cursor: pointer;
+}
+
+/* 네비게이션 버튼 공통 스타일 */
+.nav-button {
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    position: relative;
+    z-index: 5;
+}
+
+/* 뒤로가기 버튼 특정 스타일 */
+.back-button {
+    position: absolute;
+    left: 15px;
+}
+
+/* 메뉴 버튼 특정 스타일 */
+.menu-button {
+    position: absolute;
+    right: 15px;
+}
+
+/* 메뉴 버튼 스타일 */
+.toggle-button {
+    position: absolute; /* 절대 위치로 변경 */
+    right: 15px; /* 오른쪽 여백 */
+    background-color: #f0f0f0;
+    color: #000000;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+/* 모바일 대응 */
+
+
+/* A2: 접근성 - 키보드 포커스 인디케이터 */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--primary-brown, #5D4037);
+    outline-offset: 2px;
+}
+
+/* box-shadow 포커스가 있는 요소는 outline 제거 */
+.account-item:focus-within,
+#account-modal select:focus,
+#account-modal input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+}
+
+@media screen and (max-width: 500px) {
+    .header-container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .logo {
+        font-size: 20px;
+    }
+    
+    .toggle-button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .back-button {
+        left: 10px;
+    }
+    
+    .menu-button {
+        right: 10px;
+    }
+}
+
+/* 모바일 대응 */
+@media screen and (max-width: 360px) {
+    .header-container {
+        padding: 0 10px;
+    }
+    
+    .nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .logo {
+        font-size: 18px;
+    }
+}
+
+/* 사이드바 수정 스타일 */
+.sidebar {
+    position: fixed;
+    top: 60px;
+    right: -300px;
+    width: 280px;
+    height: calc(100% - 60px);
+    background-color: #ffffff;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.15);
+    transition: right 0.3s ease;
+    z-index: 200;
+    padding: 25px 15px;
+    box-sizing: border-box;
+    border-radius: 12px 0 0 12px;
+    overflow-y: auto;
+    padding-top: 60px; /* 추가: 닫기 버튼 공간 확보 */
+}
+
+.sidebar.active {
+    right: 0;
+}
+
+/* 닫기 버튼 위치 조정 */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 26px;
+    cursor: pointer;
+    color: var(--brown-text);
+    width: 44px;
+    height: 44px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #F0E6D9;
+    border-radius: 50%;
+    z-index: 10; /* 확실히 다른 요소 위에 표시 */
+}
+
+.close-btn:hover {
+    background-color: #E5D6C1;
+}
+
+/* 사이드바 내의 메뉴 항목 간격 조정 */
+.sidebar a {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* 사이드바 로고 제거 관련 */
+.sidebar .logo {
+    display: none; /* 로고 숨김 */
+}
+
+/* 사이드바 내의 메뉴 항목 스타일 개선 */
+.sidebar a {
+    display: block;
+    margin: 12px 0;
+    color: var(--brown-text);
+    text-decoration: none;
+    font-size: 16px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background-color: #F8F4EA;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    font-weight: 500;
+    text-align: center;
+}
+
+.sidebar a:hover {
+    color: var(--brown-text);
+    background-color: #F0E6D9;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+/* 현재 페이지 표시를 위한 스타일 */
+.sidebar a.active {
+    background-color: #E5D6C1;
+    font-weight: bold;
+    border-left: 3px solid var(--main-brown);
+    padding-left: 17px;
+}
+
+/* 메뉴 아이콘 스타일 */
+.menu-icon {
+    display: inline-block;
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+/* 메인 컨테이너 공통 스타일 */
+.container,
+.write-main,
+.page-main,
+.search-page-main,
+.main-content {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 40px; /* 상단 마진 제거 */
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    border: 1px solid #e0e0e0;
+}
+
+/* 메인 콘텐츠 영역 패딩 조정 */
+.main-content {
+    padding: 20px;
+}
+
+/* 푸터 스타일 */
+.site-footer {
+    text-align: center;
+    padding: 25px;
+    background-color: #ffffff;
+    color: var(--brown-text);
+    margin-top: 40px;
+    border-top: 1px solid #E5D6C1;
+    border-radius: 10px 10px 0 0;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.site-footer p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.site-footer a {
+    color: var(--medium-brown);
+    text-decoration: none;
+    padding: 5px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.site-footer a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #666;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f0f0f0;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.modal-close:hover {
+    background: #e0e0e0;
+    color: #333;
+    transform: scale(1.1);
+}
+
+/* 모달 헤더에 상대 위치 추가 */
+.modal-header {
+    position: relative;
+    padding: 20px 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+    font-size: 20px;
+    margin: 0;
+    padding-right: 40px; /* 닫기 버튼 공간 확보 */
+    color: #333;
+}
+
+/* 폼 요소 스타일 */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: var(--beige-light);
+    background-color: var(--main-brown);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: var(--brown-accent);
+}
+
+.btn-secondary {
+    background-color: #F0E6D9;
+    color: var(--brown-text);
+    border: 1px solid var(--brown-border);
+}
+
+.btn-secondary:hover {
+    background-color: #E5D6C1;
+}
+
+/* 하단 고정 버튼 스타일 */
+.fixed-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    height: 60px; /* 하단 버튼 높이 통일 */
+}
+
+.fixed-button {
+    flex: 1;
+    padding: 0; /* 패딩 제거하고 height로 통일 */
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 100%; /* 버튼 높이를 컨테이너 높이와 동일하게 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fixed-button.send {
+    background-color: var(--main-brown);
+}
+
+.fixed-button.send:hover {
+    background-color: var(--brown-accent);
+}
+
+.fixed-button.flowers {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #d1d5db;
+}
+
+.fixed-button.flowers:hover {
+    background-color: #f3f4f6;
+    color: #1a202c;
+}
+
+/* 메인 페이지 컨테이너 버튼 스타일 */
+.container-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    color: #333;
+    text-align: center;
+    padding: 0;
+    height: 160px;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #eaeaea;
+}
+
+.container-button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* 메인 버튼 스타일 */
+.main-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+/* 컨테이너 공통 스타일 */
+.section-container {
+    background-color: #FFF;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    margin-bottom: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #E5D6C1;
+}
+
+.section-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 템플릿별 디자인 테마 */
+:root {
+  --template-1-color: #5271C2;
+  --template-2-color: #3A4D7C;
+  --template-3-color: #4F4F4F;
+  --template-4-color: #555555;
+  --template-5-color: #435069;
+}
+
+/* 각 템플릿별 스타일 */
+body[data-template="1"] .obituary-header {
+  background: linear-gradient(135deg, var(--template-1-color) 0%, #8CAAE6 100%);
+  color: white;
+}
+
+body[data-template="2"] .obituary-header {
+  background: linear-gradient(135deg, var(--template-2-color) 0%, #6E84B5 100%);
+  color: white;
+}
+
+body[data-template="3"] .obituary-header {
+  font-family: 'Nanum Myeongjo', serif;
+  border-bottom: 2px solid var(--template-3-color);
+  color: var(--template-3-color);
+}
+
+body[data-template="4"] .obituary-header {
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+body[data-template="5"] .obituary-header {
+  background-color: var(--template-5-color);
+  color: white;
+  font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 공통 스타일 */
+.obituary-header {
+  padding: 25px 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.obituary-header h1 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.obituary-content {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+/* 토스트 알림 */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 2000;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.toast.hide {
+  opacity: 0;
+}
+
+/* 로딩 인디케이터 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--main-brown);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 오류 메시지 스타일 */
+.error-message {
+  color: #ff3333;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+/* 무효 입력 스타일 */
+.invalid {
+  border-color: #ff3333 !important;
+  background-color: rgba(255, 51, 51, 0.05) !important;
+}
+
+/* 섹션 제목 스타일 */
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--main-brown);
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: -0.5px;
+  font-family: 'Nanum Myeongjo', serif;
+}
+
+.section-title::after {
+  content: '';
+    display: block;
+  width: 50px;
+  height: 2px;
+  background-color: var(--main-brown);
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+/* 부가 설명 텍스트 스타일 */
+.intro-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 0;
+}
+
+/* 장점 목록 스타일 */
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+
+.benefits-list li {
+  margin-bottom: 16px;
+  padding-left: 28px;
+  position: relative;
+  font-size: 16px;
+}
+
+.benefits-list li:last-child {
+  margin-bottom: 0;
+}
+
+.benefits-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #555;
+  font-weight: 700;
+}
+
+.benefits-list strong {
+  font-weight: 700;
+  color: #333;
+}
+
+/* 이미지 스타일 */
+.obituary-image {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* 픽스드 헤더 버튼 */
+.header-button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--brown-text);
+  background-color: #F0E6D9;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  height: 37px;
+  line-height: 17px;
+  box-sizing: border-box;
+}
+
+.header-button:hover {
+  background-color: #E5D6C1;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+/* 픽스트 헤더 컨테이너 */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  padding: 15px;
+  height: 70px;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+/* 모바일 최적화 */
+@media screen and (max-width: 500px) {
+    .container,
+    .write-main,
+    .page-main,
+    .search-page-main,
+    .main-content {
+        width: 100%;
+        margin: 0 0 80px; /* 상단 마진 제거 */
+        padding: 20px;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border-left: none;
+        border-right: none;
+  }
+
+  /* 헤더 컨테이너 모바일 스타일 */
+  .header-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 15px;
+  }
+
+    /* 하단 고정 버튼 모바일 스타일 */
+    .fixed-buttons,
+    .fixed-bottom-buttons {
+    width: 100%;
+    max-width: 100%;
+        padding: 10px 15px;
+    }
+
+    /* 사이드바 모바일 스타일 */
+    .sidebar {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .container-button {
+        height: 140px;
+    }
+    
+    .sample-button {
+        font-size: 28px !important;
+    }
+    
+    .container-button span {
+        font-size: 24px !important;
+    }
+}
+
+/* 작은 모바일 화면 최적화 */
+@media screen and (max-width: 360px) {
+    .container,
+    .write-main,
+    .page-main,
+    .search-page-main,
+    .main-content {
+    padding: 15px;
+    }
+
+    /* 폰트 사이즈 조정 */
+    .section-title {
+        font-size: 20px;
+    }
+
+    .intro-text {
+        font-size: 14px;
+    }
+
+  .container-button {
+        height: 120px;
+    }
+    
+    .sample-button {
+        font-size: 24px !important;
+    }
+    
+    .container-button span {
+        font-size: 20px !important;
+  }
+}
+
+/* 공통 스타일 요소 추가 */
+
+/* 폼 설명 텍스트 */
+.form-description {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* 경고 메시지 */
+.warning-message {
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #555555;
+    text-align: center;
+}
+
+/* 모달 스타일 통합 */
+.share-modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 200;
+    background-color: rgba(0,0,0,0.7);
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.share-modal.active {
+    transform: translateY(0);
+}
+
+.share-modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+}
+
+.share-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.share-options {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.share-icon {
+    width: 50px;
+    height: 50px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.share-icon:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: #888;
+    cursor: pointer;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 199;
+}
+
+/* 편집 모달 스타일 */
+.edit-modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.edit-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.edit-modal-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.edit-modal-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.edit-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.edit-modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    flex: 1;
+}
+
+.edit-modal-button.primary {
+    background-color: var(--main-brown);
+    color: white;
+}
+
+.edit-modal-button.cancel {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* 테이블 공통 스타일 */
+.table-common {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-common th {
+    background-color: #E5D6C1;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--brown-text);
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.table-common td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    color: #444444;
+}
+
+.table-common tr:hover {
+    background-color: #f9fafb;
+}
+
+/* 부고장 테이블 스타일 */
+.obituary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.obituary-table th {
+    background-color: #E5D6C1;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--brown-text);
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.obituary-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    color: #444444;
+}
+
+.obituary-table tr:hover {
+    background-color: #f9fafb;
+}
+
+.obituary-table .deceased-name {
+    font-weight: 600;
+    color: var(--brown-text);
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 검색 폼 스타일 */
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.search-input-container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.search-form select {
+    width: 120px;
+    min-width: 120px;
+    padding: 10px;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.search-form input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 15px;
+    height: 44px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.search-form button {
+    width: 100%;
+    height: 44px;
+    background-color: #555555;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+/* 하단 고정 버튼 */
+.fixed-bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    background-color: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.bottom-button {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    background-color: var(--main-brown);
+    color: var(--beige-light);
+}
+
+.bottom-button:hover {
+    background-color: var(--brown-accent);
+}
+
+.share-button {
+    background-color: #777777;
+    color: white;
+}
+
+.share-button:hover {
+    background-color: #999999;
+}
+
+.edit-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.edit-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* 정보 표시 섹션 스타일 */
+.info-section {
+    margin-bottom: 30px;
+}
+
+.info-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #444;
+    text-align: center;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.info-label {
+    width: 90px;
+    text-align: right;
+    margin-right: 20px;
+    color: var(--medium-brown);
+    font-weight: 700;
+}
+
+.info-value {
+    flex: 1;
+    color: var(--brown-text);
+    font-weight: 600;
+}
+
+/* 구분선 */
+.divider {
+    height: 1px;
+    background-color: #E5D6C1;
+    margin: 35px auto;
+}
+
+/* 데이터 없음 메시지 */
+.no-data {
+    padding: 40px;
+    text-align: center;
+    color: #555555;
+    font-size: 18px;
+}
+
+/* 추가 정보 상자 */
+.additional-info {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 15px;
+    color: var(--brown-text);
+    line-height: 1.8;
+    white-space: pre-line;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 10px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #444444;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover,
+.pagination a.active {
+    background-color: var(--main-brown);
+    color: white;
+    border-color: var(--main-brown);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .search-page-main,
+    .preview-container,
+    .page-main {
+        width: 95%;
+        padding: 25px;
+    }
+    
+    .search-input-container {
+        gap: 8px;
+    }
+    
+    .search-form select {
+        width: 100px;
+        min-width: 100px;
+        font-size: 14px;
+    }
+    
+    .search-form input[type="text"] {
+        font-size: 14px;
+    }
+    
+    .search-form button {
+        font-size: 14px;
+    }
+    
+    .info-row {
+        flex-direction: column;
+    }
+    
+    .info-label {
+        width: 100%;
+        text-align: left;
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    
+    .bottom-buttons {
+        width: 100%;
+        max-width: none;
+        padding: 10px;
+    }
+    
+    .bottom-button {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-form select {
+        width: 90px;
+        min-width: 90px;
+        font-size: 13px;
+        padding: 8px;
+    }
+    
+    .search-form input[type="text"] {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+    
+    .search-form button {
+        font-size: 13px;
+    }
+}
+
+/* 이미지 관련 공통 스타일 */
+.portrait-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.portrait {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.template-image-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.template-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 부고 메시지 스타일 */
+.obituary-message {
+    font-size: 16px;
+    line-height: 1.8;
+    white-space: pre-line;
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--brown-text);
+    font-weight: 700;
+}
+
+/* 고인 정보 스타일 */
+.deceased-info {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px 1fr;  /* 별세 표현과 성별 선택 너비 60px로 축소 */
+    gap: 10px;
+    align-items: start;
+}
+
+/* 별세 표현 선택 */
+#death-expression {
+    width: 60px;  /* 너비 60px로 축소 */
+}
+
+/* 성별 선택 */
+#gender {
+    width: 60px;  /* 너비 60px로 축소 */
+}
+
+/* 이름과 직함 입력란 */
+#deceased-name,
+#title {
+    width: 100%;  /* 남은 공간 전체 사용 */
+}
+
+@media (max-width: 768px) {
+    .deceased-info {
+        grid-template-columns: 60px 1fr 60px 1fr;  /* 모바일에서도 동일한 비율 유지 */
+    }
+    
+    #death-expression,
+    #gender {
+        width: 60px;  /* 모바일에서도 60px 유지 */
+    }
+}
+
+/* 계좌 정보 스타일 */
+.account-section {
+    margin: 30px 0;
+    padding: 25px;
+    background: #F8F4EA;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #E5D6C1;
+}
+
+.account-container {
+    margin-top: 20px;
+}
+
+/* 계좌 추가 버튼 */
+.add-account-btn {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-account-btn:hover {
+    background-color: #e9ecef;
+    transform: translateY(-1px);
+}
+
+.add-account-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 계좌 항목 스타일 수정 */
+.account-item {
+    position: relative;
+    padding: 20px;
+    margin: 10px 0;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* 기본 상태에서도 filled-field 스타일 적용 */
+.account-item.filled-field {
+    border-color: var(--medium-brown);
+    background-color: #FAF5EE;
+}
+
+.account-item:hover, 
+.account-item:focus-within {
+    border-color: var(--main-brown);
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.2);
+    background-color: #F7F0E5;
+}
+
+.account-item:focus-within {
+    border-color: var(--main-brown);
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.2);
+    outline: none;
+    background-color: #F7F0E5;
+}
+
+/* 나머지 스타일은 유지 */
+.account-item-content {
+    padding-right: 35px;
+}
+
+.account-item-name {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.account-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-info-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+}
+
+.account-bank {
+    font-size: 18px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.account-number {
+    font-size: 20px;
+    font-weight: 600;
+    color: #212529;
+    cursor: pointer;
+}
+
+.account-delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+    transition: background-color 0.2s ease;
+    z-index: 10;
+}
+
+.account-delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* 계좌 모달 스타일 */
+#account-modal .modal-content {
+    max-width: 400px;
+    margin: 10% auto;
+}
+
+#account-modal .modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#account-modal .modal-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+#account-modal .modal-body {
+    padding: 20px;
+}
+
+#account-modal .input-row {
+    margin-bottom: 20px;
+}
+
+#account-modal .input-group {
+    margin-bottom: 15px;
+}
+
+#account-modal label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #495057;
+}
+
+#account-modal select,
+#account-modal input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.2s ease;
+}
+
+#account-modal select:focus,
+#account-modal input:focus {
+    border-color: var(--brown-border);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.2);
+}
+
+.save-account-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--main-brown);
+    color: var(--beige-light);
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-account-btn:hover {
+    background-color: var(--brown-accent);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .account-section {
+        margin: 20px 0;
+        padding: 20px;
+    }
+
+    .account-info-wrapper {
+        gap: 10px;
+    }
+
+    .account-bank {
+        font-size: 16px;
+    }
+
+    .account-number {
+        font-size: 18px;
+    }
+
+    #account-modal .modal-content {
+        margin: 15% 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .account-section {
+        padding: 15px;
+    }
+
+    .account-item {
+    padding: 15px;
+    }
+
+    .account-bank,
+    .account-number {
+        font-size: 15px;
+    }
+}
+
+/* 유족 정보 텍스트 색상 */
+#bereavedList .label {
+    color: var(--medium-brown);
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+}
+
+#bereavedList .value {
+    color: var(--brown-text);
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 600;
+}
+
+/* 추가 안내사항(상주말씀) 스타일 */
+#additional-info {
+    color: var(--brown-text);
+    font-family: 'Nanum Myeongjo', serif;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+/* 고인 정보 스타일 */
+.deceased-name {
+    color: var(--brown-text);
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+}
+
+/* 장례정보 라벨 스타일 */
+.info-row .label {
+    color: var(--medium-brown);
+    font-weight: 700;
+}
+
+.info-row .value {
+    color: var(--brown-text);
+    font-weight: 600;
+}
+
+/* 아코디언 스타일 (FAQ) */
+.accordion-header {
+    background-color: #F0E6D9;
+    border-color: #E5D6C1;
+}
+
+.accordion-header:hover {
+    background-color: #E5D6C1;
+}
+
+.accordion-header.active {
+    background-color: var(--main-brown);
+    color: var(--beige-light);
+}
+
+/* 테이블 스타일 */
+.table-common th,
+.obituary-table th {
+    background-color: #E5D6C1;
+    color: var(--brown-text);
+}
+
+/* 로딩 스피너 색상 */
+.loading-spinner {
+    border-top-color: var(--main-brown);
+}
+
+/* 계좌정보 세부 스타일 */
+.account-label {
+    color: var(--medium-brown);
+    font-weight: 700;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+.account-value {
+    color: var(--brown-text);
+    font-weight: 600;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 특별한 강조 요소 */
+.deceased-name-large {
+    color: var(--brown-text);
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+}
+
+/* 장례식장 정보 스타일 */
+#mortuary, #funeralHome, #departureDate, #coffinDate {
+    font-family: 'Nanum Myeongjo', serif;
+    color: var(--brown-text);
+}
+
+/* 이름 옆 직함 스타일 */
+.deceased-title-inline {
+    color: var(--medium-brown);
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 상주말씀 옵션 버튼 스타일 수정 */
+.message-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.message-option {
+    padding: 12px 15px;
+    background-color: #F8F4EA;
+    border: 1px solid #E5D6C1;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--brown-text);
+}
+
+.message-option:hover {
+    background-color: #F0E6D9;
+    border-color: var(--medium-brown);
+}
+
+/* 선택된 옵션 버튼 스타일 */
+.message-option.selected {
+    background-color: #FAF5EE;
+    border: 2px solid var(--main-brown);
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.1);
+    font-weight: 600;
+}
+
+/* 하단 작성완료 버튼 스타일 수정 */
+.submit-button {
+    background-color: var(--main-brown);
+    color: var(--beige-light);
+    border: none;
+    border-radius: 8px;
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.submit-button:hover {
+    background-color: var(--brown-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 드롭다운 메뉴 갈색 테마 조정 */
+select {
+    border: 1px solid #E5D6C1;
+    background-color: #F8F4EA;
+    color: var(--brown-text);
+}
+
+select:focus {
+    border-color: var(--medium-brown);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.1);
+}
+
+/* 텍스트 에리어 갈색 테마 조정 */
+textarea {
+    border: 1px solid #E5D6C1;
+    background-color: #F8F4EA;
+    color: var(--brown-text);
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+textarea:focus {
+    border-color: var(--medium-brown);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.1);
+}
+
+/* 상주말씀 섹션 제목 스타일 */
+.section-subtitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--main-brown);
+    margin-bottom: 15px;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+/* 하단 고정 버튼 컨테이너 */
+.fixed-bottom-container {
+        position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+        display: flex;
+        justify-content: center;
+}
+
+/* 진행 상태 표시기 수정 */
+.progress-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.progress-step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #F0E6D9;
+    color: var(--brown-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    font-weight: 600;
+    position: relative;
+}
+
+.progress-step.active {
+    background-color: var(--main-brown);
+    color: var(--beige-light);
+}
+
+.progress-step.completed {
+    background-color: var(--medium-brown);
+    color: var(--beige-light);
+}
+
+.progress-step:not(:last-child):after {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 2px;
+    background-color: #E5D6C1;
+}
+
+.progress-step.completed:not(:last-child):after {
+    background-color: var(--medium-brown);
+}
+
+/* 상주말씀 옵션 버튼 스타일 (msg-btn 클래스 사용) */
+.msg-btn {
+    padding: 12px 15px;
+    background-color: #F8F4EA;
+    border: 1px solid #E5D6C1;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--brown-text);
+}
+
+.msg-btn:hover {
+    background-color: #F0E6D9;
+    border-color: var(--medium-brown);
+}
+
+/* 선택된 옵션 버튼 스타일 */
+.msg-btn.active {
+    background-color: #FAF5EE;
+    border: 2px solid var(--main-brown);
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.1);
+    font-weight: 600;
+}
+
+/* 메시지 타입 그리드 스타일 */
+.message-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* 전문보기 버튼 스타일 */
+#view-full-terms {
+    padding: 8px 15px;
+    background-color: #F0E6D9;
+    border: 1px solid #E5D6C1;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--brown-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+#view-full-terms:hover {
+    background-color: #E5D6C1;
+    border-color: var(--medium-brown);
+}
+
+/* 약관 모달 스타일 */
+.terms-modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+        width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.terms-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.terms-modal-header {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.terms-modal-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--brown-text);
+    text-align: center;
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+.terms-modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.terms-modal-close:hover {
+    color: var(--brown-text);
+}
+
+.terms-modal-body {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.terms-modal-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.terms-modal-confirm-btn {
+    padding: 10px 25px;
+    background-color: var(--main-brown);
+    color: var(--beige-light);
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.terms-modal-confirm-btn:hover {
+    background-color: var(--brown-accent);
+}
+
+/* 템플릿 모달 공통 스타일 */
+.modal-scroll-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1050;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 550px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.modal-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.template-item {
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.template-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+.template-item.selected {
+    border: 2px solid #5271C2;
+}
+
+.template-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#loading-indicator {
+    text-align: center;
+    padding: 20px;
+    color: #555;
+}
+
+.modal-open {
+    overflow: hidden;
+}
+
+@media screen and (max-width: 480px) {
+    .template-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 관리자 페이지 날짜 정보 스타일 */
+.date-info-row {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.date-info-row:last-child {
+    border-bottom: none;
+}
+
+.date-info-row .info-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.date-info-row .info-value {
+    font-family: 'Nanum Myeongjo', serif;
+    color: #333;
+}
+
+/* 편집 버튼 */
+.date-edit-btn {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 13px;
+    color: #3366cc;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.date-edit-btn:hover {
+    background-color: #e7f3ff;
+    text-decoration: underline;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 480px) {
+    .date-info-row .info-label,
+    .date-info-row .info-value {
+        font-size: 14px;
+    }
+}
+
+/* 날짜/시간 한 줄 표시 스타일 */
+.datetime-group {
+    margin-bottom: 20px;
+}
+
+.datetime-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.datetime-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.datetime-inputs .date-input {
+    flex: 2;
+}
+
+.datetime-inputs .time-input {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* 모바일 환경 대응 */
+@media (max-width: 480px) {
+    .datetime-inputs {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .datetime-inputs .date-input,
+    .datetime-inputs .time-input {
+        width: 100%;
+    }
+}
+
+/* 정보 행 스타일 전면 재설정 */
+section.info-section .info-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #eee !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+}
+
+section.info-section .info-label {
+    font-weight: 600 !important;
+    color: #555 !important;
+    width: 80px !important;
+    min-width: 80px !important;
+    flex-shrink: 0 !important;
+    margin-right: 10px !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+}
+
+section.info-section .info-value {
+    flex: 1 !important;
+    text-align: left !important;
+    word-break: break-word !important;
+    padding-right: 10px !important;
+    color: #333 !important;
+}
+
+/* 주소 정보는 특별 처리 (클릭 가능하므로) */
+section.info-section #addressInfo {
+    cursor: pointer !important;
+    text-decoration: underline !important;
+    color: #4a90e2 !important;
+}
+
+/* 유족 정보 컨테이너 처리 */
+#bereaved-container {
+    width: 100% !important;
+}
+
+#bereaved-container .info-row {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* 모바일 환경에서의 레이아웃 조정 - 유지 */
+@media (max-width: 480px) {
+    section.info-section .info-row {
+        padding-bottom: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    section.info-section .info-label {
+        min-width: 65px !important;
+        width: 65px !important;
+        font-size: 14px !important;
+        margin-right: 8px !important;
+    }
+    
+    section.info-section .info-value {
+        font-size: 14px !important;
+    }
+}
+
+
+/* === 토스트 메시지 === */
+.toast-message-base {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: var(--shadow-md);
+    max-width: 90vw;
+    text-align: center;
+    word-break: keep-all;
+}
+.toast-info { background-color: rgba(0, 0, 0, 0.8); }
+.toast-success { background-color: rgba(56, 142, 60, 0.9); }
+.toast-error { background-color: rgba(211, 47, 47, 0.9); }
+.toast-warning { background-color: rgba(245, 124, 0, 0.9); }
+
+/* === 빈 상태 === */
+.empty-state {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    color: var(--medium-brown);
+}
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: var(--space-md);
+    opacity: 0.6;
+}
+.empty-state-text {
+    font-size: var(--text-base);
+    line-height: 1.6;
+}
+
+/* === 태블릿 반응형 === */
+@media screen and (min-width: 501px) and (max-width: 768px) {
+    .page-main,
+    .write-main,
+    .search-page-main,
+    .main-content,
+    .manage-container {
+        max-width: var(--container-tablet);
+        padding: var(--space-lg);
+    }
+
+    .section-container {
+        max-width: var(--container-tablet);
+    }
+
+    .header-container {
+        max-width: var(--container-tablet);
+    }
+}
+
+/* === 소형 모바일 최적화 === */
+@media screen and (max-width: 360px) {
+    .page-main,
+    .write-main {
+        padding: var(--space-sm);
+    }
+
+    .section-title {
+        font-size: var(--text-base);
+    }
+}

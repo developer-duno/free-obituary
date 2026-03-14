@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="조문 예절, 상주 예절, 부의금 안내 등 장례 관련 예절 정보를 제공합니다.">
+    <meta property="og:title" content="상주 예절 | 무료 부고장">
+    <meta property="og:description" content="조문 예절, 상주 예절, 부의금 안내 등 장례 관련 예절 정보를 제공합니다.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="상주 예절 | 무료 부고장">
+    <meta name="twitter:description" content="조문 예절, 상주 예절, 부의금 안내 등 장례 관련 예절 정보를 제공합니다.">
+        <title>상주 예절 | 무료 부고장</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .accordion-section {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #f8f8f8;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: #f0f0f0;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 0 20px;
+        }
+
+        .accordion-content.active {
+            max-height: 2000px;
+            padding: 20px;
+            transition: max-height 0.5s ease-in, padding 0.3s ease-in;
+        }
+
+        .accordion-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .etiquette-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .etiquette-list li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .etiquette-list ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .sub-section {
+            margin-top: 20px;
+        }
+
+        .sub-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        /* 템플릿 모달 스타일 - 인덱스 페이지 스타일로 변경 */
+        .modal-scroll-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .template-item {
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .template-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .template-item.selected {
+            border: 2px solid #5271C2;
+        }
+        
+        .template-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        #loading-indicator {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+        
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        @media screen and (max-width: 480px) {
+            .template-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" onclick="history.back()">뒤로</button>
+            <div class="logo" onclick="location.href='index.html';">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기" onclick="toggleSidebar()">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기" onclick="toggleSidebar()">×</span>
+        <a href="write.html">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <main class="page-main">
+        <h1>상주 예절 안내</h1>
+
+        <!-- 상가용어 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>상가용어 알아보기</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <ul class="etiquette-list">
+                        <li><strong>상주(喪主)</strong> - 장례를 주관하는 사람</li>
+                        <li><strong>빈소(殯所)</strong> - 장례식장에서 시신을 모시는 장소</li>
+                        <li><strong>문상(問喪)</strong> - 상가를 방문하여 조문하는 것</li>
+                        <li><strong>발인(發靷)</strong> - 장지로 향하기 위해 빈소를 떠나는 것</li>
+                        <li><strong>상복(喪服)</strong> - 상주가 입는 검은색 옷</li>
+                        <li><strong>부의금(賻儀金)</strong> - 조문객이 내는 조의금</li>
+                        <li><strong>염(殮)</strong> - 시신을 깨끗이 닦고 수의를 입히는 것</li>
+                        <li><strong>입관(入棺)</strong> - 시신을 관에 모시는 것</li>
+                        <li><strong>영정(影幀)</strong> - 고인의 사진</li>
+                        <li><strong>호상(護喪)</strong> - 상주를 도와 장례를 돕는 사람</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 상주역할 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>상주의 역할</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>기본 자세</h3>
+                        <ul class="etiquette-list">
+                            <li>항상 정중하고 예의 바른 태도 유지</li>
+                            <li>조문객에게 깊은 감사의 마음 표현</li>
+                            <li>고인을 기리는 마음가짐으로 예를 갖춤</li>
+                            <li>장례 절차와 일정을 숙지</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>조문객 응대</h3>
+                        <ul class="etiquette-list">
+                            <li>조문객이 오시면 일어나서 맞이하기</li>
+                            <li>조문객의 인사에 공수하여 답례</li>
+                            <li>문상 시간과 관계없이 정중히 응대</li>
+                            <li>영정 앞에서 조문객과 함께 묵념</li>
+                            <li>조문객 돌아갈 때 정중히 배웅</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>행정 업무</h3>
+                        <ul class="etiquette-list">
+                            <li>장례 절차 전반에 대한 결정과 진행을 주관</li>
+                            <li>장례식장 및 장지 선정</li>
+                            <li>부의금과 조문록 관리</li>
+                            <li>장례 비용 관리 및 정산</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 일자별 장례절차 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>일자별 장례절차</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>임종일</h3>
+                        <ul class="etiquette-list">
+                            <li>사망진단서 발급</li>
+                            <li>장례식장 선정 및 예약</li>
+                            <li>빈소 마련</li>
+                            <li>상주 및 유족 연락</li>
+                            <li>장례 일정 협의</li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-section">
+                        <h3>장례 1일차</h3>
+                        <ul class="etiquette-list">
+                            <li>상주 및 유가족 상복 착용</li>
+                            <li>영정 준비</li>
+                            <li>부고 발송</li>
+                            <li>조문객 응대 준비</li>
+                            <li>제단 설치 확인</li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-section">
+                        <h3>장례 2~3일차</h3>
+                        <ul class="etiquette-list">
+                            <li>조문객 응대</li>
+                            <li>장지 선정 및 발인 준비</li>
+                            <li>상황에 따른 식사 제공</li>
+                            <li>부의금 관리</li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-section">
+                        <h3>발인일</h3>
+                        <ul class="etiquette-list">
+                            <li>발인제 진행</li>
+                            <li>장지 이동</li>
+                            <li>안치 및 봉인</li>
+                            <li>상주 및 유족 인사</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 상주복장 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>상주복장</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>기본 복장</h3>
+                        <ul class="etiquette-list">
+                            <li>검정색 상복 착용</li>
+                            <li>남자 상주: 검정색 넥타이 착용</li>
+                            <li>여자 상주: 검정색 치마나 바지 착용</li>
+                            <li>신발: 검정색 구두나 단정한 신발</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>주의사항</h3>
+                        <ul class="etiquette-list">
+                            <li>장신구 착용 금지</li>
+                            <li>단정하고 깔끔한 복장 유지</li>
+                            <li>화려한 색상이나 무늬 피하기</li>
+                            <li>정갈한 모습 유지</li>
+                            <li>상주 완장 착용</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 사망 후 관련신고 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>사망 후 관련신고</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>필수 신고 절차</h3>
+                        <ul class="etiquette-list">
+                            <li><strong>사망진단서 발급</strong>
+                                <ul>
+                                    <li>병원 또는 의사에게 발급 받음</li>
+                                </ul>
+                            </li>
+                            <li><strong>사망신고 (1개월 이내)</strong>
+                                <ul>
+                                    <li>신고 장소: 주민센터</li>
+                                    <li>필요서류: 사망진단서, 신고인 신분증</li>
+                                    <li>주민등록 말소는 사망신고 시 자동 처리됨</li>
+                                </ul>
+                            </li>
+                            <li><strong>화장허가서 발급</strong>
+                                <ul>
+                                    <li>발급 장소: 주민센터</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-section">
+                        <h3>재산 및 상속 관련</h3>
+                        <ul class="etiquette-list">
+                            <li><strong>사망자 재산 조회</strong>
+                                <ul>
+                                    <li>정부24 '안심상속 서비스' 이용</li>
+                                </ul>
+                            </li>
+                            <li><strong>상속인 확인</strong>
+                                <ul>
+                                    <li>가족관계등록부로 확인</li>
+                                </ul>
+                            </li>
+                            <li><strong>명의 변경</strong>
+                                <ul>
+                                    <li>부동산, 예금, 차량 등 상속 처리</li>
+                                </ul>
+                            </li>
+                            <li><strong>상속세 신고</strong>
+                                <ul>
+                                    <li>사망 후 6개월 이내</li>
+                                    <li>재산 5억 초과 시 세금 신고 필요</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-section">
+                        <h3>기타 신고사항</h3>
+                        <ul class="etiquette-list">
+                            <li>금융기관 사망신고</li>
+                            <li>연금수급자 사망신고</li>
+                            <li>건강보험 자격상실 신고</li>
+                            <li>각종 공과금 정리</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 장례식장 예절 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>장례식장 예절</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>조문객 예절</h3>
+                        <ul class="etiquette-list">
+                            <li>적절한 조문 시간 준수 (오전 9시 ~ 오후 9시 권장)</li>
+                            <li>정중한 인사와 묵념</li>
+                            <li>상주와 유족에게 위로의 말씀 전달</li>
+                            <li>음주 상태로 조문 금지</li>
+                            <li>큰 소리로 대화하거나 웃는 행동 자제</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>부의금 예절</h3>
+                        <ul class="etiquette-list">
+                            <li>깨끗한 봉투에 정성스럽게 준비</li>
+                            <li>조의금 봉투에 이름과 소속 명확히 기재</li>
+                            <li>부의금은 양손으로 공손히 전달</li>
+                            <li>상주나 유족이 확인할 수 있도록 접수처에 전달</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>헌화 및 분향 예절</h3>
+                        <ul class="etiquette-list">
+                            <li>헌화는 영정 왼쪽에서 오른쪽으로 진행</li>
+                            <li>분향은 세 번으로 하되 정중히 진행</li>
+                            <li>절은 남자는 두 번, 여자는 한 번이 일반적</li>
+                            <li>영정 앞에서 묵념하며 고인을 추모</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 장례 음식 예절 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>장례 음식 예절</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>음식 접대 예절</h3>
+                        <ul class="etiquette-list">
+                            <li>상주와 유족은 조문객에게 식사 대접 권유</li>
+                            <li>조문객은 공수하여 감사 인사 후 식사</li>
+                            <li>음식은 조용히 정갈하게 먹기</li>
+                            <li>장시간 식사자리에 머무는 것은 삼가</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>상가 음식 준비</h3>
+                        <ul class="etiquette-list">
+                            <li>조문객 수를 고려한 적절한 양 준비</li>
+                            <li>간소하되 정갈한 음식 준비</li>
+                            <li>음식 낭비 되지 않도록 관리</li>
+                            <li>식사 시간대별 준비 상태 점검</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 종교별 장례 예절 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>종교별 장례 예절</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>불교 장례</h3>
+                        <ul class="etiquette-list">
+                            <li>영가를 위한 불경 독경</li>
+                            <li>삼배로 예를 표함</li>
+                            <li>극락왕생을 기원하는 마음으로 조문</li>
+                            <li>장례 기간 중 법요식 진행 가능</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>기독교 장례</h3>
+                        <ul class="etiquette-list">
+                            <li>찬송가와 기도로 예배 진행</li>
+                            <li>목사님의 집례로 발인예배 진행</li>
+                            <li>헌화 후 묵념으로 조문</li>
+                            <li>부활의 소망을 나누는 위로의 말씀</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>천주교 장례</h3>
+                        <ul class="etiquette-list">
+                            <li>십자성호와 주기도문으로 시작</li>
+                            <li>성수 예식으로 기도</li>
+                            <li>연도소리에 맞춰 기도 진행</li>
+                            <li>장례미사 집전 가능</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 현대식 장례 변화 섹션 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>현대식 장례 변화</h2>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="etiquette-section">
+                    <div class="sub-section">
+                        <h3>간소화 경향</h3>
+                        <ul class="etiquette-list">
+                            <li>장례 기간 단축 (2~3일로 변화)</li>
+                            <li>화장 선호 증가</li>
+                            <li>전자 부고 및 온라인 조문록 활용</li>
+                            <li>장례식장 중심의 의례 진행</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>디지털 조문</h3>
+                        <ul class="etiquette-list">
+                            <li>온라인 부고 전달</li>
+                            <li>모바일 조의금 송금</li>
+                            <li>화상 조문 서비스 활용</li>
+                            <li>온라인 추모관 운영</li>
+                        </ul>
+                    </div>
+                    <div class="sub-section">
+                        <h3>친환경 장례</h3>
+                        <ul class="etiquette-list">
+                            <li>친환경 수목장 선택</li>
+                            <li>생분해성 장례용품 사용</li>
+                            <li>일회용품 사용 최소화</li>
+                            <li>친환경 제례용품 활용</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+
+    <script src="scripts.js" type="module"></script>
+    <script>
+        // 사이드바 토글 함수 정의
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+            }
+        }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            // 모든 아코디언 닫기
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.classList.remove('active');
+                if (h.nextElementSibling) { // 다음 요소가 있는지 확인
+                    h.nextElementSibling.classList.remove('active');
+                }
+            });
+            
+            // 클릭된 아코디언 토글
+            if (!isActive) {
+                header.classList.add('active');
+                if (content) { // content 요소가 있는지 확인
+                    content.classList.add('active');
+                }
+            }
+        }
+
+        // 페이지 로드 시 첫 번째 섹션 자동 열기
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstAccordion = document.querySelector('.accordion-header');
+            if (firstAccordion) {
+                // toggleAccordion(firstAccordion); // 자동 열림 기능은 사용자의 의도에 따라 유지하거나 제거할 수 있습니다.
+            }
+            
+            if (templateModal) {
+                templateModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        templateModal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                    }
+                });
+            }
+        });
+        
+    </script></div>
+</body>
+</html> 

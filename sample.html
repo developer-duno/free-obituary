@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 부고장 생성기 - 쉽고 빠르게 부고장을 생성하세요.">
+    <meta name="keywords" content="부고장, 무료 부고장, 부고장 생성기, 부고, 고인 추모">
+    <title>부고장 샘플</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Nanum+Myeongjo:wght@400;700&display=swap">
+    <script src="scripts.js" type="module" defer></script>
+    <script src="src/common/template-selector.js" type="module" defer></script>
+    <style>
+        /* 페이지 특정 스타일만 유지 */
+        .template-image-container {
+            text-align: center;
+            margin-bottom: 25px;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .template-image {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .portrait-container {
+            text-align: center;
+            margin: 25px auto;
+            width: 220px;
+            height: 220px;
+        }
+
+        .portrait {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .obituary-text {
+            font-size: 19px;
+            line-height: 1.8;
+            white-space: pre-line;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-brown);
+            font-weight: 700;
+            max-width: 440px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 19px;
+            margin-bottom: 10px;
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--dark-brown);
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0px;
+            font-size: 17px;
+            max-width: 480px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 5px;
+        }
+
+        .label {
+            width: 90px;
+            text-align: right;
+            margin-right: 10px;
+            color: var(--accent-brown);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .value {
+            width: calc(100% - 110px);
+            text-align: left;
+            color: var(--text-brown);
+            font-weight: 700;
+            word-break: keep-all;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--light-brown);
+            margin: 25px auto;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .map-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .map-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--primary-brown);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .info-text {
+            white-space: pre-line;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #444;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .account-section {
+            text-align: center;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: var(--bg-brown);
+            border-radius: 8px;
+            max-width: 440px;
+        }
+
+        .account-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .account-info {
+            display: none;
+        }
+
+        .account-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .account-label {
+            width: 70px;
+            font-weight: 800;
+            font-size: 17px;
+            color: var(--text-brown);
+            text-align: right;
+            margin-right: 15px;
+        }
+
+        .account-value {
+            text-align: left;
+            font-size: 17px;
+            color: var(--dark-brown);
+            font-weight: 700;
+        }
+        
+        /* 하단 버튼 스타일 */
+        .fixed-bottom-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            z-index: 1000;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 0;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .bottom-button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .send-button {
+            background-color: var(--dark-brown);
+            color: white;
+        }
+
+        .flower-button {
+            background-color: var(--light-brown);
+            color: var(--dark-brown);
+        }
+
+        .bottom-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* 모달 스타일 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+        }
+
+        .modal-container {
+            display: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            z-index: 2001;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal-container.active {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            color: var(--accent-brown);
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--dark-brown);
+        }
+
+        .share-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .share-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .share-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-icon img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .share-name {
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* 비활성화된 버튼 스타일 추가 */
+        .bottom-button.disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .bottom-button.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 고인 정보 스타일 수정 */
+        .deceased-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px auto;
+            flex-wrap: wrap;
+            max-width: 440px;
+        }
+
+        .deceased-info-item {
+            display: flex;
+            align-items: center;
+            font-size: 19px;
+            color: #333;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .deceased-info-item:not(:last-child):not(:empty) ~ .deceased-info-item:not(:empty)::before {
+            content: "|";
+            position: absolute;
+            left: -15px;
+            color: #ccc;
+        }
+        
+        /* 상단 헤더 스타일 수정 */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(93, 64, 55, 0.15);
+            padding: 15px;
+            z-index: 1000;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 0;
+            margin: 0 auto;
+            box-sizing: border-box;
+            height: 70px; /* 헤더 높이 명시 */
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* 추가 안내사항 스타일 */
+        #additional-info {
+            max-width: 440px;
+            margin-left: auto;
+            margin-right: auto;
+            word-break: keep-all;
+            line-height: 1.8;
+        }
+
+        /* 모바일 대응 */
+        @media screen and (max-width: 500px) {
+            .info-row,
+            .section,
+            .account-section,
+            .deceased-info,
+            .divider,
+            #additional-info,
+            .obituary-text {
+                max-width: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .label {
+                width: 80px;
+                margin-right: 10px;
+            }
+
+            .value {
+                width: calc(100% - 90px);
+            }
+
+            .info-row {
+                font-size: 16px;
+            }
+
+            .obituary-text,
+            .section-title,
+            .deceased-info-item {
+                font-size: 18px;
+            }
+
+            .account-label,
+            .account-value,
+            .account-button {
+                font-size: 16px;
+            }
+
+            .template-image-container {
+                max-width: 340px;
+            }
+            
+            .portrait-container {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        .last-prayer {
+            display: block;
+            font-size: 22px;
+            font-weight: 800;
+            margin-top: 30px;
+            letter-spacing: 0.05em;
+            color: #222;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        @media screen and (max-width: 500px) {
+            .obituary-text {
+                font-size: 18px;
+                padding: 0 15px;
+            }
+            .last-prayer {
+                font-size: 20px;
+            }
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            background-color: #f5f5f5;
+            color: #333;
+                margin: 0;
+            padding: 0;
+            padding-top: 70px;
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        .page-main {
+            width: 100%;          /* 모바일 대응을 위한 100% 너비 */
+            max-width: 500px;     /* PC에서의 최대 너비 제한 */
+            margin: 20px auto 80px;
+            padding: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            border: 1px solid #e0e0e0;
+        }
+
+        @media screen and (max-width: 500px) {
+            .page-main {
+                margin: 10px 0 80px;
+                padding: 20px;
+                border-radius: 0;    /* 모바일에서는 모서리 둥글기 제거 */
+            }
+        }
+
+        /* 모달 스타일 추가 */
+        .modal-scroll-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+                width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--light-brown);
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: var(--accent-brown);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .template-item {
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .template-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(93, 64, 55, 0.2);
+        }
+
+        .template-item.selected {
+            border: 2px solid var(--primary-brown) !important;
+        }
+
+        .template-image {
+                width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @media screen and (max-width: 480px) {
+            .template-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 날짜와 서거 문구 스타일 */
+        .death-notice {
+            text-align: center;
+            margin: 15px auto 15px;
+            max-width: 440px;
+            line-height: 1.5;
+            color: var(--text-brown);
+            font-weight: 600;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        .death-date {
+            font-size: 19px;
+            margin-bottom: 3px;
+        }
+
+        .death-message {
+            font-size: 19px;
+        }
+
+        #deathExpression {
+            font-weight: 700;
+        }
+
+        @media screen and (max-width: 500px) {
+            .death-notice {
+                padding: 0 15px;
+            }
+            
+            .death-date, .death-message {
+                font-size: 18px;
+            }
+        }
+
+        /* 고인 이름 - 크게 표시 */
+        .deceased-name-large {
+            font-size: 26px;
+            font-weight: 800;
+            color: #222;
+            margin-bottom: 5px;
+            font-family: 'Nanum Myeongjo', serif;
+            text-align: center;
+        }
+
+        /* 성별과 나이 - 작고 가늘게 괄호로 묶어서 표시 */
+        .deceased-info-small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #666;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        /* 기존 deceased-info 스타일 수정 */
+        .deceased-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px auto;
+            max-width: 440px;
+        }
+
+        .deceased-info-item {
+            font-size: 18px;
+            color: #333;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 500px) {
+            .deceased-name-large {
+                font-size: 24px;
+            }
+            
+            .deceased-info-small {
+                font-size: 13px;
+            }
+            
+            .deceased-info-item {
+                font-size: 16px;
+            }
+        }
+
+        /* 고인 정보 메인 라인 스타일 */
+        .deceased-main-line {
+            font-size: 22px;
+            color: var(--dark-brown);
+            margin-bottom: 3px;
+            text-align: center;
+            line-height: 1.3;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        /* 고인 이름 스타일 */
+        .deceased-name {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--dark-brown);
+        }
+
+        /* 성별과 나이 스타일 */
+        .deceased-gender-age {
+            font-size: 16px;
+            font-weight: 400;
+            color: #555;
+            margin: 0 4px;
+        }
+
+        /* 인라인 타이틀 스타일 (4자 이하일 때) */
+        .deceased-title-inline {
+            font-weight: 700;
+            color: #444;
+            font-size: 20px;
+        }
+
+        /* 블록 타이틀 스타일 (5자 이상일 때) */
+        .deceased-title-block {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-brown);
+            margin-top: 8px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-family: 'Nanum Myeongjo', serif;
+        }
+
+        @media screen and (max-width: 500px) {
+            .deceased-main-line {
+                font-size: 20px;
+            }
+            
+            .deceased-name {
+                font-size: 22px;
+            }
+            
+            .deceased-gender-age {
+                font-size: 15px;
+            }
+            
+            .deceased-title-block {
+                font-size: 20px;
+            }
+        }
+
+        .coffin-date-row {
+            text-align: right;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            max-width: 440px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 20px;
+        }
+        
+        .coffin-date {
+            font-size: 14px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        @media screen and (max-width: 500px) {
+            .coffin-date-row {
+                padding-right: 15px;
+            }
+        }
+
+        .funeral-address-row {
+            text-align: left;
+            margin: 0 auto 15px;
+            max-width: 440px;
+            padding-left: 115px;
+        }
+        
+        .funeral-address {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .map-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px auto;
+            max-width: 440px;
+        }
+        
+        .map-button, .copy-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--primary-brown);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            margin: 5px 0;
+            cursor: pointer;
+            flex: 1;
+            max-width: 120px;
+            text-align: center;
+        }
+        
+        .copy-button {
+            background-color: var(--accent-brown);
+        }
+        
+        @media screen and (max-width: 500px) {
+            .funeral-address-row {
+                padding-right: 15px;
+            }
+        }
+
+        /* 기본 색상 변수 - 원래 갈색 톤으로 복원 */
+        :root {
+            --primary-brown: #8D6E63;     /* 기본 갈색 - 유지 */
+            --dark-brown: #333333;        /* 진한 색상 - 검은색으로 변경 (제목용) */
+            --light-brown: #D7CCC8;       /* 연한 갈색 - 유지 */
+            --text-brown: #222222;        /* 텍스트 색상 - 검은색으로 변경 */
+            --accent-brown: #A1887F;      /* 강조 갈색 - 유지 */
+            --bg-brown: #EFEBE9;          /* 배경 연한 갈색 - 유지 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-header">
+        <div class="header-container">
+            <button class="bottom-button flower-button" id="view-other-samples">다른 샘플 선택</button>
+            <button class="bottom-button send-button" onclick="createObituary()">부고장 작성하기</button>
+        </div>
+    </div>
+
+    <div class="page-main">
+        <div class="template-image-container">
+            <img id="templateImage" class="template-image" src="image/1.jpg" alt="부고장 템플릿" onerror="this.src='image/1.jpg'">
+        </div>
+
+        <div class="obituary-text" id="mainText">가시는 길
+깊은 애도와 명복을 빌어주시길
+진심으로 바랍니다.</div>
+        
+        <div class="portrait-container" id="portrait-container">
+            <img id="portrait" class="portrait" src="" alt="고인 영정사진" onerror="this.src='image/sample.webp'">
+        </div>
+
+        <div class="deceased-info">
+            <div class="deceased-main-line">
+                <span class="deceased-name" id="deceasedName"></span>
+                <span class="deceased-gender-age" id="genderAge"></span>
+                <span class="deceased-title-inline" id="titleInline"></span>
+            </div>
+            <div class="deceased-title-block" id="titleBlock"></div>
+        </div>
+
+        <!-- 새로 추가하는 부분: 날짜와 서거 문구 섹션 -->
+        <div class="death-notice">
+            <div class="death-date" id="formattedDeathDate"></div>
+            <div class="death-message">
+                <span id="deathExpression"></span>하셨음을 삼가 알려드립니다.
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">유가족 정보</div>
+            <div id="bereavedList"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">상주말씀</div>
+            <div id="additional-info"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="section-title">부고정보</div>
+            <div class="info-row">
+                <span class="label">빈소</span>
+                <span class="value" id="mortuary"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">발인일시</span>
+                <span class="value" id="departureDate"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">입관일시</span>
+                <span class="value" id="coffinDate"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">장지</span>
+                <span class="value" id="cemetery"></span>
+            </div>
+            <div class="info-row" style="display: none;">
+                <span class="label">장례식장</span>
+                <span class="value" id="funeralHome"></span>
+            </div>
+            <div class="info-row">
+                <span class="label">주소</span>
+                <span class="value" id="funeralAddress"></span>
+            </div>
+        </div>
+
+        <div class="map-buttons">
+            <a href="#" class="map-button" id="mapButton" target="_blank">위치보기</a>
+            <a href="#" class="copy-button" onclick="copyFuneralAddress(); return false;">주소복사</a>
+        </div>
+
+        <div class="account-section" id="account-section-container">
+            <div class="account-button" onclick="toggleAccount()">마음 전하는 곳</div>
+            <div class="account-info" id="account-info">
+                <div class="account-row">
+                    <span class="account-label">예금주</span>
+                    <span class="account-value" id="accountHolder"></span>
+                </div>
+                <div class="account-row">
+                    <span class="account-label">은행</span>
+                    <span class="account-value" id="bankName"></span>
+                </div>
+                <div class="account-row">
+                    <span class="account-label">계좌번호</span>
+                    <span class="account-value" id="accountNumber"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-bottom-buttons">
+        <button class="bottom-button send-button disabled" onclick="showSampleMessage()">부고 보내기</button>
+        <button class="bottom-button flower-button disabled" onclick="showSampleMessage()">근조화환보내기</button>
+    </div>
+
+    <!-- 슬라이드 업 모달 -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeShareModal()"></div>
+    <div class="modal-container" id="modal-container">
+        <div class="modal-close" onclick="closeShareModal()">×</div>
+        <div class="modal-title">부고를 보내실 수단을 선택해 주세요.</div>
+        <div class="share-options">
+            <div class="share-button" onclick="shareKakao()">
+                <div class="share-icon">
+                    <img src="image/icon-kakao.png" alt="카카오톡" onerror="this.src='https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png'">
+                </div>
+                <div class="share-name">카카오톡</div>
+            </div>
+            <div class="share-button" onclick="shareSMS()">
+                <div class="share-icon">
+                    <img src="image/icon-sms.png" alt="문자" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0NDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNCAxMGMwLTQuNDEgMy41OS04IDgtOHM4IDMuNTkgOCA4LTMuNTkgOC04IDhoLTUuMzVsLTQuMDYgNC4wNkEuOTk3Ljk5NyAwIDAgMSAxIDIxdi01YzAtMi4yMS43OS00LjIzIDIuMS01LjgzQzEuNzkgOC40IDEgNi44NiAxIDV6Ii8+PC9zdmc+'">
+                </div>
+                <div class="share-name">문자</div>
+            </div>
+            <div class="share-button" onclick="copyLink()">
+                <div class="share-icon">
+                    <img src="image/icon-link.png" alt="링크" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM0NDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTAgMTNhNSA1IDAgMCAwIDcuNTQuNTRsMyAzYTUgNSAwIDAgMS03LjA3IDcuMDdsLTEuNzItMS43MmE1IDUgMCAwIDEgMC03LjA3bDMtM2E1IDUgMCAwIDAgLjU0IDcuNTRNMTUgM2E1IDUgMCAwIDEgNy4wNyA3LjA3bC0zIDNhNSA1IDAgMCAxLTcuNTQtLjU0bDMtM2E1IDUgMCAwIDEgLjU0LTcuNTQiLz48L3N2Zz4='">
+                </div>
+                <div class="share-name">링크</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 템플릿 선택 모달 -->
+    <div id="template-modal" class="modal-scroll-container">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2 class="modal-title">부고장 디자인 선택</h2>
+            <div id="template-loading-indicator" style="text-align: center; padding: 15px;">
+                <div style="width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #666; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <p style="font-size: 14px; margin-top: 10px;">디자인 로딩 중...</p>
+            </div>
+            <div class="template-grid"></div>
+        </div>
+    </div>
+
+    <!-- 템플릿 핸들러를 위한 필수 요소 -->
+    <div style="display: none;">
+        <img id="selected-template-image" src="" alt="선택된 템플릿" style="max-width: 100%; height: auto; border-radius: 8px; display: none;">
+        <div id="template-placeholder" style="padding: 40px; background: #f8f8f8; border-radius: 8px; text-align: center; color: #666;">
+            부고장 디자인을 선택해주세요
+        </div>
+        <div id="image-editor" style="display: none;"></div>
+        <button id="template-select-btn" style="display: none;"><span class="template-text">부고장 디자인 선택하기</span></button>
+        <button id="close-editor" style="display: none;"></button>
+        <button id="edit-photo-btn" style="display: none;"></button>
+    </div>
+
+    <script>
+        // 샘플 데이터 - 남자/여자 버전
+        const sampleData = {
+            male: {
+                template: '1',
+                deceasedName: "김철수",
+                age: "75",
+                title: "前 ○○기업 대표이사",
+            portrait: "image/sample1.webp",
+                deathDate: "2024년 3월 15일",
+                deathTime: "오전 8시",
+                deathType: "별세",
+                departureDate: "2024년 3월 17일",
+                departureTime: "오전 9시",
+            coffinDate: "2024년 3월 16일",
+            coffinTime: "오전 10시",
+            funeralHome: "서울대학교병원 장례식장",
+                funeralAddress: "서울특별시 종로구 대학로 101",
+            funeralPhone: "02-2072-2091",
+            room: "3호실",
+                cemetery: "국립현충원",
+            gender: "male",
+                obituaryText: `가시는 길
+깊은 애도와 명복을 빌어주시길
+진심으로 바랍니다.`,
+                bereaved: [
+                    { relation: "배우자", name: "이영희" },
+                { relation: "아들", name: "김민수 김민재" },
+                { relation: "며느리", name: "한미모 박미인" },
+                { relation: "딸", name: "김미영" },
+                { relation: "사위", name: "최준호" }
+                ],
+                accountInfo: {
+                    bankName: "국민은행",
+                    accountNumber: "123-45-6789",
+                accountHolder: "김민수",
+                relationship: "아들"
+                },
+                additionalInfo: "예를 갖추어 자리를 마련해야 마땅하나, 단체조문을 사양하고 가족들과 함께 고인을 잘 보내드리려 합니다.\n마음으로 따듯한 위로 부탁드리며, 고인의 명복을 빌어주시기 바랍니다."
+            },
+            female: {
+                template: '2',
+                deceasedName: "박영희",
+                age: "72",
+                title: "前 ○○고등학교 교장",
+            portrait: "image/sample2.webp",
+                deathDate: "2024년 3월 15일",
+                deathTime: "오후 3시",
+            deathType: "소천",
+                departureDate: "2024년 3월 17일",
+                departureTime: "오전 10시",
+            coffinDate: "2024년 3월 16일",
+            coffinTime: "오후 2시",
+            funeralHome: "서울아산병원 장례식장",
+                funeralAddress: "서울특별시 송파구 올림픽로 43길 88",
+            funeralPhone: "02-3010-2231",
+            room: "5호실",
+                cemetery: "천안공원묘원",
+            gender: "female",
+                obituaryText: `가시는 길
+깊은 애도와 명복을 빌어주시길
+진심으로 바랍니다.`,
+                bereaved: [
+                    { relation: "배우자", name: "최철수" },
+                { relation: "아들", name: "최준호" },
+                { relation: "며느리", name: "김미인" },
+                { relation: "딸", name: "최수진 최미란" },
+                { relation: "사위", name: "박준영 이동훈" }
+                ],
+                accountInfo: {
+                    bankName: "신한은행",
+                    accountNumber: "987-65-4321",
+                accountHolder: "최준호",
+                relationship: "아들"
+                },
+                additionalInfo: "예를 갖추어 자리를 마련해야 마땅하나, 단체조문을 사양하고 가족들과 함께 고인을 잘 보내드리려 합니다.\n마음으로 따듯한 위로 부탁드리며, 고인의 명복을 빌어주시기 바랍니다."
+            }
+        };
+
+    let currentGender = 'male';
+
+        // 샘플 데이터 표시
+        function displaySampleData() {
+        try {
+            const data = sampleData[currentGender];
+            
+            // 영정사진 표시
+            const portraitImg = document.getElementById('portrait');
+            const portraitContainer = document.getElementById('portrait-container');
+            if (data.portrait) {
+                portraitImg.src = data.portrait;
+                portraitContainer.style.display = 'block';
+            } else {
+                portraitContainer.style.display = 'none';
+            }
+            
+            // 메인 텍스트 표시 - 표현방식에 따라 텍스트 수정 (textContent로 XSS 방지)
+            const mainText = document.getElementById('mainText');
+            mainText.textContent = (data.obituaryText || '').replace('별세하셨음을', `${data.deathType || '별세'}하셨음을`);
+            
+            // 고인 이름 설정
+            document.getElementById('deceasedName').textContent = `故 ${data.deceasedName}`;
+            
+            // 성별과 나이 표시
+            const genderText = data.gender === 'male' ? '남' : '여';
+            document.getElementById('genderAge').textContent = `(${genderText}/향년 ${data.age}세)`;
+            
+            // 타이틀 처리 - 항상 별도 줄로 표시
+            const titleText = data.title || '';
+            const titleBlock = document.getElementById('titleBlock');
+            const titleInline = document.getElementById('titleInline');
+            
+            // 직함이 있으면 별도 줄로 표시
+            if (titleText) {
+                titleBlock.textContent = titleText;
+                titleBlock.style.display = 'block';
+                titleInline.style.display = 'none';
+            } else {
+                titleBlock.style.display = 'none';
+                titleInline.style.display = 'none';
+            }
+            
+            // 기본 정보 표시
+            document.getElementById('mortuary').textContent = `${data.funeralHome} ${data.room}`;
+            document.getElementById('departureDate').textContent = `${data.departureDate} ${data.departureTime}`;
+            document.getElementById('coffinDate').textContent = `${data.coffinDate} ${data.coffinTime}`;
+            document.getElementById('cemetery').textContent = data.cemetery || '미정';
+            
+            // 장례식장 관련 내용 숨기기 - 기존 코드 주석 처리
+            // document.getElementById('funeralHome').textContent = `${data.funeralHome}`;
+            
+            // 장례식장 row 숨기기 (새로 추가)
+            const funeralHomeRow = document.querySelector('.info-row:has(#funeralHome)');
+            if (funeralHomeRow) {
+                funeralHomeRow.style.display = 'none';
+            } else {
+                // 대체 방법 (위 코드가 작동하지 않을 경우)
+                const infoRows = document.querySelectorAll('.info-row');
+                for (let i = 0; i < infoRows.length; i++) {
+                    if (infoRows[i].querySelector('#funeralHome')) {
+                        infoRows[i].style.display = 'none';
+                        break;
+                    }
+                }
+            }
+            
+            // 주소는 계속 표시
+            document.getElementById('funeralAddress').textContent = data.funeralAddress;
+            
+            // 지도 버튼 URL 설정
+            const searchQuery = `${data.funeralHome} ${data.funeralAddress}`;
+            const mapUrl = `https://map.naver.com/v5/search/${encodeURIComponent(searchQuery)}`;
+            document.getElementById('mapButton').href = mapUrl;
+            
+            // 유족 정보 표시 - 관계와 이름을 함께 표시
+            const bereavedList = document.getElementById('bereavedList');
+            const esc = (s) => (s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'));
+            bereavedList.innerHTML = data.bereaved.map(person => `
+                <div class="info-row">
+                    <span class="label">${esc(person.relation)}</span>
+                    <span class="value">${esc(person.name)}</span>
+                </div>
+            `).join('');
+            
+            // 계좌 정보 표시 - 관계 정보 추가
+            document.getElementById('bankName').textContent = data.accountInfo.bankName;
+            document.getElementById('accountNumber').textContent = data.accountInfo.accountNumber;
+            document.getElementById('accountHolder').textContent = `${data.accountInfo.accountHolder} (${data.accountInfo.relationship})`;
+
+            // 추가 안내사항 표시
+            document.getElementById('additional-info').textContent = data.additionalInfo;
+
+            // 날짜 및 요일 계산
+            const deathDate = new Date(data.deathDate.replace(/년|월|일/g, '').split(' ').join('-'));
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayOfWeek = days[deathDate.getDay()];
+            
+            // 날짜와 서거 표현 추가
+            document.getElementById('formattedDeathDate').textContent = `${data.deathDate} (${dayOfWeek})`;
+            document.getElementById('deathExpression').textContent = data.deathType || '서거';
+        } catch (error) {
+            console.error("샘플 데이터 표시 중 오류 발생:", error);
+            // 기본 데이터로 폴백
+            currentGender = 'male';
+            displaySampleData();
+        }
+    }
+
+    // 계좌 정보 토글 함수
+    function toggleAccount() {
+        const accountInfo = document.getElementById('account-info');
+        accountInfo.style.display = accountInfo.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // 선택된 템플릿으로 부고장 작성하기 함수
+    function createObituary() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const templateNumber = urlParams.get('template') || '1';
+        
+        // 템플릿 번호 저장
+        sessionStorage.setItem('selectedTemplate', templateNumber);
+        
+        // 부고장 작성 페이지로 이동
+        window.location.href = `write.html?template=${templateNumber}`;
+    }
+
+    // 공유 모달 열기
+    function openShareModal() {
+        document.getElementById('modal-overlay').style.display = 'block';
+        document.getElementById('modal-container').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('modal-container').classList.add('active');
+        }, 10);
+    }
+
+    // 공유 모달 닫기
+    function closeShareModal() {
+        document.getElementById('modal-container').classList.remove('active');
+        setTimeout(() => {
+            document.getElementById('modal-overlay').style.display = 'none';
+            document.getElementById('modal-container').style.display = 'none';
+        }, 300);
+    }
+
+    // 카카오톡 공유
+    function shareKakao() {
+        alert('샘플 페이지에서는 카카오톡 공유 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        closeShareModal();
+    }
+
+    // SMS 공유
+    function shareSMS() {
+        alert('샘플 페이지에서는 SMS 공유 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        closeShareModal();
+    }
+
+    // 링크 복사
+    function copyLink() {
+        alert('샘플 페이지에서는 링크 복사 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        closeShareModal();
+    }
+
+    // 샘플 페이지 메시지 표시 함수
+    function showSampleMessage() {
+        alert('샘플 페이지에서는 부고 보내기 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+    }
+
+    /**
+     * 템플릿 모달 직접 처리 함수 (template-handler.js가 없을 때 대체용)
+     */
+    function handleTemplateModalDirectly() {
+        const modal = document.getElementById('template-modal');
+        const templateGrid = document.querySelector('.template-grid');
+        const loadingIndicator = document.getElementById('template-loading-indicator');
+        const closeBtn = modal.querySelector('.modal-close');
+        
+        // 모달 표시
+        modal.style.display = 'block';
+        document.body.classList.add('modal-open');
+        
+        // 로딩 인디케이터 표시
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+        }
+        
+        // 그리드가 비어있는 경우에만 이미지 로드
+        if (templateGrid && templateGrid.children.length === 0) {
+            // 총 33개의 템플릿을 표시
+            const totalTemplates = 33;
+            let loadedCount = 0;
+            
+            // 현재 선택된 템플릿 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentTemplate = urlParams.get('template');
+            
+            // 로딩 타임아웃 (8초 후 로딩 인디케이터 숨김)
+            setTimeout(() => {
+                if (loadingIndicator && loadingIndicator.style.display === 'block') {
+                    loadingIndicator.style.display = 'none';
+                }
+            }, 8000);
+            
+            // 각 템플릿 생성
+            for (let i = 1; i <= totalTemplates; i++) {
+                const templateItem = document.createElement('div');
+                templateItem.className = 'template-item';
+                
+                // 현재 선택된 템플릿인 경우 선택 표시
+                if (currentTemplate && parseInt(currentTemplate) === i) {
+                    templateItem.classList.add('selected');
+                    templateItem.style.border = '2px solid var(--primary-brown)';
+                }
+                
+                // 이미지 생성
+                const img = document.createElement('img');
+                img.className = 'template-image';
+                img.alt = `템플릿 ${i}`;
+                img.src = `image/${i}.jpg`;
+                
+                // 이미지 로드 완료 시
+                img.onload = function() {
+                    loadedCount++;
+                    if (loadedCount >= 5 && loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                };
+                
+                // 이미지 로드 실패 시
+                img.onerror = function() {
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5OTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxjaXJjbGUgY3g9IjguNSIgY3k9IjguNSIgcj0iMS41Ij48L2NpcmNsZT48cG9seWxpbmUgcG9pbnRzPSIyMSAxNSAxNiAxMCA1IDIxIj48L3BvbHlsaW5lPjwvc3ZnPg==';
+                    this.style.padding = '15px';
+                    
+                    loadedCount++;
+                    if (loadedCount >= 5 && loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                };
+                
+                // 이미지 클릭 이벤트
+                templateItem.appendChild(img);
+                templateItem.addEventListener('click', function() {
+                    // 이전 선택 제거
+                    const selected = templateGrid.querySelector('.selected');
+                    if (selected) {
+                        selected.classList.remove('selected');
+                        selected.style.border = '1px solid #eaeaea';
+                    }
+                    
+                    // 현재 선택
+                    this.classList.add('selected');
+                    this.style.border = '2px solid var(--primary-brown)';
+                    
+                    // 템플릿 이미지 업데이트
+                    const templateImage = document.getElementById('templateImage');
+                    if (templateImage) {
+                        templateImage.src = `image/${i}.jpg`;
+                    }
+                    
+                    // URL 파라미터 업데이트
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('template', i);
+                    window.history.pushState({}, '', newUrl);
+                    
+                    // 모달 닫기
+                    closeTemplateModalDirectly();
+                    
+                    // 페이지 데이터 새로고침
+                    displaySampleData();
+                });
+                
+                templateGrid.appendChild(templateItem);
+            }
+        } else if (loadingIndicator) {
+            // 그리드가 이미 채워져 있으면 로딩 인디케이터 숨김
+            loadingIndicator.style.display = 'none';
+        }
+        
+        // 닫기 버튼 이벤트
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeTemplateModalDirectly);
+        }
+        
+        // 모달 외부 클릭시 닫기
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeTemplateModalDirectly();
+            }
+        });
+    }
+    
+    // 직접 모달 닫기 함수
+    function closeTemplateModalDirectly() {
+        const modal = document.getElementById('template-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+    }
+
+    // 페이지 로드 시 실행 - 하나의 DOMContentLoaded 이벤트로 통합
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            // URL에서 템플릿 번호 가져오기
+            const urlParams = new URLSearchParams(window.location.search);
+            const templateNumber = urlParams.get('template');
+            
+            // 랜덤으로 성별 선택 (50% 확률)
+            currentGender = Math.random() < 0.5 ? 'male' : 'female';
+            
+            // 템플릿 이미지 설정
+            if (templateNumber) {
+            document.getElementById('templateImage').src = `image/${templateNumber}.jpg`;
+            } else {
+                // 템플릿 번호가 없는 경우 성별에 따라 기본 템플릿 설정
+                const defaultTemplate = currentGender === 'male' ? '1' : '2';
+                document.getElementById('templateImage').src = `image/${defaultTemplate}.jpg`;
+            }
+            
+            // 초기 데이터 표시
+            displaySampleData();
+            
+            // ESC 키 이벤트 리스너 (모달 닫기)
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeTemplateModalDirectly();
+                }
+            });
+            
+            // 다른 샘플 보기 버튼
+            var viewOtherSamplesBtn = document.getElementById('view-other-samples');
+            if (viewOtherSamplesBtn) {
+                viewOtherSamplesBtn.addEventListener('click', function() {
+                    handleTemplateModalDirectly();
+                });
+            }
+        } catch (error) {
+            console.error("페이지 초기화 중 오류 발생:", error);
+            // 기본 데이터로 폴백
+            document.getElementById('templateImage').src = 'image/1.jpg';
+            currentGender = 'male';
+            displaySampleData();
+        }
+    });
+
+    // 주소 복사 함수 추가
+    function copyFuneralAddress() {
+        const address = document.getElementById('funeralAddress').textContent;
+        
+        // 클립보드에 복사
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(address)
+                .then(() => {
+                    alert('주소가 복사되었습니다.');
+                })
+                .catch(err => {
+                    console.error('주소 복사 실패:', err);
+                    alert('주소 복사에 실패했습니다.');
+                });
+        } else {
+            // 레거시 복사 방식
+            const textArea = document.createElement("textarea");
+            textArea.value = address;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                alert('주소가 복사되었습니다.');
+            } catch (err) {
+                console.error('주소 복사 실패:', err);
+                alert('주소 복사에 실패했습니다.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        }
+    </script>
+</body>
+</html>

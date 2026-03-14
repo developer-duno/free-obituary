@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 부고장 서비스 이용 방법을 안내합니다. 부고장 작성, 공유, 관리까지 쉽고 빠르게.">
+    <meta property="og:title" content="이용안내 | 무료 부고장">
+    <meta property="og:description" content="무료 부고장 서비스 이용 방법을 안내합니다. 부고장 작성, 공유, 관리까지 쉽고 빠르게.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="이용안내 | 무료 부고장">
+    <meta name="twitter:description" content="무료 부고장 서비스 이용 방법을 안내합니다. 부고장 작성, 공유, 관리까지 쉽고 빠르게.">
+        <title>이용안내 | 무료 부고장</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .guide-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .guide-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .guide-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .guide-subtitle {
+            font-size: 18px;
+            color: #444;
+            margin: 20px 0 10px;
+        }
+
+        .guide-text {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .guide-step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background-color: #555;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .guide-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 10px 0;
+        }
+
+        .guide-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .guide-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #555;
+        }
+
+        .guide-notice {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #555;
+            margin: 15px 0;
+        }
+
+        .guide-notice strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .guide-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" onclick="history.back()">뒤로</button>
+            <div class="logo" onclick="location.href='index.html';">무료부고장</div>
+            <button class="nav-button menu-button" aria-label="메뉴 열기" onclick="toggleSidebar()">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" role="button" aria-label="메뉴 닫기" onclick="toggleSidebar()">×</span>
+        <a href="write.html">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+    </nav>
+
+    <main class="page-main guide-container">
+        <h1>무료부고장 이용안내</h1>
+
+        <div class="guide-section">
+            <h2 class="guide-title">서비스 소개</h2>
+            <p class="guide-text">무료부고장은 갑작스러운 일로 힘든 시간을 보내고 계신 분들을 위해 무료로 제공되는 부고장 작성 서비스입니다. 복잡한 절차 없이 쉽고 빠르게 부고장을 작성하고 공유할 수 있습니다.</p>
+            
+            <h3 class="guide-subtitle">주요 기능</h3>
+            <ul class="guide-list">
+                <li>다양한 디자인의 부고장 템플릿 제공</li>
+                <li>모바일과 PC에서 모두 편리하게 이용</li>
+                <li>카카오톡, 문자 메시지 등으로 간편한 공유</li>
+                <li>무료로 이용 가능한 서비스</li>
+                <li>비밀번호를 통한 부고장 수정 기능</li>
+            </ul>
+        </div>
+
+        <div class="guide-section">
+            <h2 class="guide-title">부고장 작성 방법</h2>
+            
+            <div class="guide-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">부고장 디자인 선택</div>
+                    <p class="guide-text">다양한 부고장 디자인 중 원하는 템플릿을 선택합니다. 미리보기를 통해 템플릿의 느낌을 확인할 수 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">기본 정보 입력</div>
+                    <p class="guide-text">고인과 상주에 대한 기본 정보를 입력합니다. 영정 사진을 추가할 수도 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">장례 정보 입력</div>
+                    <p class="guide-text">장례식장, 빈소, 발인 일정 등의 정보를 입력합니다. 장례식장은 검색 기능을 통해 쉽게 찾을 수 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">부의금 계좌 및 추가 안내사항 입력</div>
+                    <p class="guide-text">필요한 경우 부의금 계좌 정보와 추가 안내사항을 입력할 수 있습니다.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <div class="step-title">비밀번호 설정 및 작성 완료</div>
+                    <p class="guide-text">부고장 수정을 위한 비밀번호를 설정하고 작성을 완료합니다. 작성된 부고장은 생성된 URL을 통해 확인할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2 class="guide-title">부고장 공유 방법</h2>
+            <p class="guide-text">작성된 부고장은 다양한 방법으로 공유할 수 있습니다.</p>
+            
+            <ul class="guide-list">
+                <li><strong>카카오톡 공유</strong> - 카카오톡 메시지로 부고장 링크를 공유합니다.</li>
+                <li><strong>문자 메시지 공유</strong> - SMS 문자 메시지로 부고장 정보를 공유합니다.</li>
+                <li><strong>링크 복사</strong> - 부고장 링크를 복사하여 원하는 곳에 붙여넣기 할 수 있습니다.</li>
+            </ul>
+            
+            <div class="guide-notice">
+                <strong>참고사항</strong>
+                <p>더 많은 사람들에게 부고장을 공유하기 위해서는 카카오톡이나 문자 메시지를 통한 공유를 권장합니다.</p>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2 class="guide-title">부고장 관리</h2>
+            <p class="guide-text">작성한 부고장은 비밀번호를 통해 수정하거나 관리할 수 있습니다.</p>
+            
+            <h3 class="guide-subtitle">부고장 수정 방법</h3>
+            <ol class="guide-list">
+                <li>작성된 부고장 페이지에서 '수정하기' 버튼을 클릭합니다.</li>
+                <li>부고장 작성 시 설정한 비밀번호를 입력합니다.</li>
+                <li>원하는 정보를 수정한 후 저장합니다.</li>
+            </ol>
+            
+            <h3 class="guide-subtitle">주요 관리 기능</h3>
+            <ul class="guide-list">
+                <li>발인일시 수정</li>
+                <li>계좌번호 수정</li>
+                <li>부고장 전체 수정</li>
+                <li>감사장 작성</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- 사이트 푸터 -->
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+    
+    <script src="scripts.js" type="module"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

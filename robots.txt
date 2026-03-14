@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 관리 페이지 크롤링 제외
+Disallow: /manage.html
+Disallow: /admin*
+
+# 사이트맵
+Sitemap: https://무료부고장.com/sitemap.xml
