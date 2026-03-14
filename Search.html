@@ -19,6 +19,14 @@
     <!-- 관리자 인증용 (admin.config.sample.js 참고하여 admin.config.js 생성 후 .gitignore 추가) -->
     <script src="admin.config.js"></script>
     <!-- 공통 서비스·유틸 (scripts.js가 모듈로 로드하며 appServices, showLoading/hideLoading 설정) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "bcryptjs": "./node_modules/bcryptjs/index.js",
+            "crypto": "./src/common/crypto-shim.js"
+        }
+    }
+    </script>
     <script src="scripts.js" type="module"></script>
     <script src="src/pages/search-module.js" type="module"></script>
     <!-- 레거시 인라인 스크립트용 window.obituaryDB (scripts.js 로드 후 실행되도록 defer) -->

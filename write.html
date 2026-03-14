@@ -21,6 +21,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 
     <!-- 공통 서비스·유틸 (scripts.js가 모듈로 로드, write-module에서 template-selector 사용) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "bcryptjs": "./node_modules/bcryptjs/index.js",
+            "crypto": "./src/common/crypto-shim.js"
+        }
+    }
+    </script>
     <script src="scripts.js" type="module"></script>
     
     <!-- 페이지 특정 스타일 -->
