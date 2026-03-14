@@ -2168,7 +2168,7 @@
             <p style="font-size: 0.9em; color: #555; margin-bottom: 12px;">대표 상주 한 분만 입력하셔도 작성 가능합니다. 필요시 상주를 추가하세요.</p>
             <div id="bereaveds-list">
                 <div class="bereaved-entry">
-                    <select name="relationship[]" class="relationship-select" required>
+                    <select name="relationship[]" class="relationship-select" required aria-label="상주 관계">
                         <option value="" disabled selected>상주</option>
                         <option value="배우자">배우자</option>
                         <option value="아들">아들</option>
@@ -2182,7 +2182,7 @@
                         <option value="기타">기타</option>
                         <option value="직접기재">직접기재</option>
                     </select>
-                    <select class="secondary-relation-select" name="secondaryRelation[]" style="display:none; margin-top:5px;">
+                    <select class="secondary-relation-select" name="secondaryRelation[]" aria-label="기타 관계 선택" style="display:none; margin-top:5px;">
                         <option value="" disabled selected>기타 선택</option>
                         <option value="아버지">아버지</option>
                         <option value="어머니">어머니</option>
@@ -2338,25 +2338,25 @@
                     <div class="modal-form">
                         <div class="form-group">
                             <label for="relationship-select">상주 선택</label>
-                            <select id="relationship-select">
+                            <select id="relationship-select" name="relationship-select">
                                 <option value="" disabled selected>상주를 선택해주세요</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="name-select">이름 선택</label>
-                            <select id="name-select" disabled>
+                            <select id="name-select" name="name-select" disabled>
                                 <option value="" disabled selected>이름을 선택해주세요</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="bank-select">은행 선택</label>
-                            <select id="bank-select">
+                            <select id="bank-select" name="bank-select">
                                 <option value="" disabled selected>은행을 선택해주세요</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="account-number">계좌번호</label>
-                            <input type="text" id="account-number" placeholder="'-' 포함 계좌번호 입력">
+                            <input type="text" id="account-number" name="account-number" placeholder="'-' 포함 계좌번호 입력">
                         </div>
                         <button type="button" class="save-account-btn">저장</button>
                     </div>

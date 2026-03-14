@@ -56,7 +56,7 @@ function addEntry() {
     
     // 기본 HTML 구조 - 2차 옵션(기타 선택) 확장
     newEntry.innerHTML = `
-        <select name="relationship[]" class="relationship-select" required>
+        <select name="relationship[]" class="relationship-select" required aria-label="상주 관계">
             <option value="" disabled selected>상주</option>
             <option value="배우자">배우자</option>
             <option value="아들">아들</option>
@@ -70,7 +70,7 @@ function addEntry() {
             <option value="기타">기타</option>
             <option value="직접기재">직접기재</option>
         </select>
-        <select class="secondary-relation-select" name="secondaryRelation[]" style="display:none !important; margin-top:5px;">
+        <select class="secondary-relation-select" name="secondaryRelation[]" aria-label="기타 관계 선택" style="display:none !important; margin-top:5px;">
             <option value="" disabled selected>기타 선택</option>
             
             <!-- 가족/친척 관계 -->
