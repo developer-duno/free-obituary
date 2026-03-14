@@ -471,11 +471,11 @@ function openTimePickerModal(inputId) {
     }
     
     // 시간 옵션 생성 (필드별 범위 적용)
-    const hoursColumn = modal.querySelector('.hours');
+    const hoursColumn = modal.querySelector('#hoursScroll');
     hoursColumn.innerHTML = generateHourOptions(currentHour, hoursMin, hoursMax);
     
     // 분 옵션 생성 (필드별 간격 적용)
-    const minutesColumn = modal.querySelector('.minutes');
+    const minutesColumn = modal.querySelector('#minutesScroll');
     minutesColumn.innerHTML = generateMinuteOptions(currentMinute, minutesInterval);
     
     // 현재 선택된 시간/분 강조
@@ -592,8 +592,8 @@ function setupTimePickerModalEvents() {
  * 선택된 시간으로 스크롤
  */
 function scrollToSelectedTime(modal) {
-    const hoursColumn = modal.querySelector('.hours');
-    const minutesColumn = modal.querySelector('.minutes');
+    const hoursColumn = modal.querySelector('#hoursScroll');
+    const minutesColumn = modal.querySelector('#minutesScroll');
     
     const selectedHour = hoursColumn.querySelector('.time-value.selected');
     const selectedMinute = minutesColumn.querySelector('.time-value.selected');
@@ -612,7 +612,7 @@ function scrollToSelectedTime(modal) {
  */
 function highlightSelectedTime(modal, hour, minute) {
     // 시간 강조
-    const hourOptions = modal.querySelectorAll('.hours .time-value');
+    const hourOptions = modal.querySelectorAll('#hoursScroll .time-value');
     hourOptions.forEach(option => {
         if (option.dataset.value === hour) {
             option.classList.add('selected');
@@ -622,7 +622,7 @@ function highlightSelectedTime(modal, hour, minute) {
     });
     
     // 분 강조
-    const minuteOptions = modal.querySelectorAll('.minutes .time-value');
+    const minuteOptions = modal.querySelectorAll('#minutesScroll .time-value');
     minuteOptions.forEach(option => {
         if (option.dataset.value === minute) {
             option.classList.add('selected');
@@ -644,8 +644,8 @@ function applySelectedTime(modal) {
         return;
     }
     
-    const selectedHour = modal.querySelector('.hours .time-value.selected');
-    const selectedMinute = modal.querySelector('.minutes .time-value.selected');
+    const selectedHour = modal.querySelector('#hoursScroll .time-value.selected');
+    const selectedMinute = modal.querySelector('#minutesScroll .time-value.selected');
     
     if (selectedHour && selectedMinute) {
         const hour = selectedHour.dataset.value;
