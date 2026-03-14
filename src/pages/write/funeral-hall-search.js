@@ -388,7 +388,7 @@ function selectSearchItem(items, index) {
  * 검색 실행 함수
  * @param {Object} elements - DOM 요소 객체
  */
-function performSearch(elements) {
+async function performSearch(elements) {
     const { searchInput, searchResults } = elements;
     const query = searchInput.value.trim();
     
@@ -401,7 +401,7 @@ function performSearch(elements) {
     
     try {
         // 검색 수행
-        const results = searchFuneralHalls(query);
+        const results = await searchFuneralHalls(query);
         
         // 검색 결과 표시
         displaySearchResults(results, elements);
@@ -416,12 +416,12 @@ function performSearch(elements) {
  * @param {string} query - 검색어
  * @returns {Array} - 검색 결과 배열
  */
-function searchFuneralHalls(query) {
+async function searchFuneralHalls(query) {
     if (!funeralHallServiceInstance) {
         console.error('[FuneralHallSearch] FuneralHallService가 초기화되지 않았습니다.');
         return [];
     }
-    return funeralHallServiceInstance.searchHalls(query);
+    return await funeralHallServiceInstance.searchHalls(query);
 }
 
 /**

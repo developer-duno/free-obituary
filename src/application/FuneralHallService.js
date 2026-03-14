@@ -1,27 +1,41 @@
-import { FuneralHallRepository } from '../infrastructure/FuneralHallRepository.js';
-
 export class FuneralHallService {
-    #repository;
+    #apiUrl;
+    #cache;
 
     constructor() {
-        this.#repository = new FuneralHallRepository();
+        this.#apiUrl = '/api/funeral-halls';
+        this.#cache = new Map();
     }
 
-    searchHalls(query) {
-        // 여기서 검색어 길이, 형식 등 추가 비즈니스 로직 적용 가능
-        if (!query || query.trim().length < 2) { // 예: 최소 2글자 이상일 때만 검색
-            // AppUtils.showToast('검색어는 2글자 이상 입력해주세요.', 'warning'); // AppUtils 직접 사용은 서비스 레이어에서 부적절할 수 있음
-            console.warn('[FuneralHallService] 검색어는 2글자 이상이어야 합니다.');
+    async searchHalls(query) {
+        if (!query || query.trim().length < 2) {
             return [];
         }
-        return this.#repository.search(query);
-    }
+        const key = query.trim().toLowerCase();
+        if (this.#cache.has(key)) {
+            return this.#cache.get(key);
+        }
 
-    getHallById(id) {
-        return this.#repository.getById(id);
-    }
+        try {
+            const params = new URLSearchParams({ query: query.trim(), page: '1' });
+            const response = await fetch(this.#apiUrl + '?' + params);
+            if (!response.ok) {
+                console.error('[FuneralHallService] API error:', response.status);
+                return [];
+            }
+            const data = await response.json();
+            const results = data.results || [];
 
-    getAllHalls() {
-        return this.#repository.getAll();
+            // cache (max 20)
+            if (this.#cache.size >= 20) {
+                const oldest = this.#cache.keys().next().value;
+                this.#cache.delete(oldest);
+            }
+            this.#cache.set(key, results);
+            return results;
+        } catch (error) {
+            console.error('[FuneralHallService] fetch error:', error);
+            return [];
+        }
     }
-} 
+}
