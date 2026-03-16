@@ -2034,8 +2034,6 @@
         <form id="obituaryForm">
             <p class="form-description" style="color: #ff0000; font-weight: bold;">*는 필수 입력 항목</p>
 
-            <!-- STEP 1. 부고 디자인 선택 -->
-            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 20px 0 8px 0;">STEP 1. 부고 디자인 선택</p>
             <h2>부고장 디자인*</h2>
             <div class="selected-template-preview">
                 <img id="selected-template-image" src="image/1.jpg" alt="선택된 템플릿" style="max-width: 100%; height: auto; border-radius: 8px; display: block;">
@@ -2046,8 +2044,6 @@
             </button>
             <input type="hidden" id="selected-template-hidden" name="selectedTemplate" value="">
 
-            <!-- STEP 2. 고인 정보 -->
-            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 2. 고인 정보</p>
             <h2>고인 정보*</h2>
             <div class="form-group deceased-info-row">
                 <input type="text" id="deceased-name" aria-label="고인 성함" name="deceased-name" placeholder="고인 성함 (예: 홍길동)" required tabindex="1" enterkeyhint="next" style="flex: 1.5;">
@@ -2085,8 +2081,6 @@
                 <input type="text" id="deceased-title" aria-label="고인 호칭" name="deceased-title" placeholder="직함 예)전 OO고등학교 교장 (선택)" tabindex="5" enterkeyhint="next" style="width: 100%;">
             </div>
 
-            <!-- STEP 3. 영정 사진 -->
-            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 3. 영정 사진 (선택)</p>
             <h2>영정 사진</h2>
             <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">사진이 없어도 부고장 작성은 가능합니다.</p>
             <div class="photo-option-container">
@@ -2116,8 +2110,6 @@
                 </div>
             </div>
 
-            <!-- STEP 4. 임종/입관/발인 일시 -->
-            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 4. 장례 일정</p>
             <h2>임종/입관/발인</h2>
             <p style="font-size: 0.85em; color: #666; margin: -4px 0 12px 0;">의료진/장례식장 안내를 기준으로 입력해 주세요. 발인일시는 부고에 핵심으로 표시됩니다.</p>
             <div class="date-time-vertical-group">
@@ -2144,8 +2136,6 @@
                 </div>
             </div>
 
-            <!-- STEP 5. 장례식장 정보 -->
-            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 5. 장례식장 정보</p>
             <h2>장례식장*</h2>
             <div class="search-container input-row-labeled">
                 <label class="field-label" style="font-size: 14px; color: #555;">장례식장 검색</label>
@@ -2179,14 +2169,11 @@
                 </div>
             </div>
 
-            <!-- STEP 6. 장지 정보 -->
             <h2>장지 장소</h2>
             <div class="form-group">
                 <input type="text" id="cemetery" aria-label="장지 장소" name="cemetery" placeholder="장지 정보 입력 예) 1차: 추모화장장 2차: 납골당 (선택)" tabindex="8" enterkeyhint="next">
             </div>
 
-            <!-- STEP 7. 상주 정보 -->
-            <p class="step-header" style="font-size: 1.1em; font-weight: 700; color: #333; margin: 24px 0 8px 0;">STEP 6. 상주 및 인사말</p>
             <h2>상주 정보*</h2>
             <p style="font-size: 0.9em; color: #555; margin-bottom: 12px;">대표 상주 한 분만 입력하셔도 작성 가능합니다. 필요시 상주를 추가하세요.</p>
             <div id="bereaveds-list">
@@ -2292,7 +2279,6 @@
                 </button>
             </div>
 
-            <!-- STEP 8. 상주 말씀 -->
             <h2>상주 말씀</h2>
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
                 <p style="font-size: 0.9em; color: #555; margin: 0;">상황에 맞는 버튼을 누르면 예문이 채워집니다.</p>
@@ -2340,7 +2326,6 @@
                 <textarea id="additional-info" aria-label="추가 안내사항" name="additional-info" placeholder="추가 안내사항이 있으면 입력해 주세요. (선택)" rows="3" style="width: 100%; resize: vertical;"></textarea>
             </div>
 
-            <!-- STEP 9. 부의금 계좌 -->
             <div class="account-section" id="account-section-wrap">
                 <h2 style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;" id="account-section-toggle" aria-expanded="false">
                     <span>부의금 계좌 <span style="font-size: 0.75em; font-weight: normal; color: #666;">(선택)</span></span>
@@ -2386,8 +2371,6 @@
                 </div>
             </div>
 
-            <!-- STEP 10. 비밀번호 + 약관 -->
-            <p class="step-header" style="font-size: 1em; font-weight: 600; color: #555; margin: 24px 0 8px 0;">마무리</p>
             <h2>비밀번호 설정*</h2>
             <div class="form-group" style="width: 66.7%; margin: 0 auto;">  
                 <input type="password" id="password" aria-label="비밀번호" name="password" placeholder="숫자 4자리 (수정/삭제 시 필요)" maxlength="4" pattern="[0-9]{4}" required inputmode="numeric" tabindex="10" enterkeyhint="done">
