@@ -467,7 +467,7 @@ import { appConfig } from '../config/app.config.js';
         }
 
         // 기존 JSON-LD 제거 후 새로 삽입
-        const existing = document.querySelector('script[type=application/ld+json]');
+        const existing = document.querySelector('script[type="application/ld+json"]');
         if (existing) existing.remove();
 
         const script = document.createElement('script');
