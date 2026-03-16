@@ -169,7 +169,8 @@ import { appConfig } from '../config/app.config.js';
         
         let deceasedAgeText = deceasedInfo.age ? `향년 ${deceasedInfo.age}세` : '';
         if (deceasedInfo.gender) {
-            deceasedAgeText += deceasedAgeText ? ` (${deceasedInfo.gender})` : `(${deceasedInfo.gender})`;
+            const genderText = deceasedInfo.gender === 'male' ? '남' : deceasedInfo.gender === 'female' ? '여' : deceasedInfo.gender;
+            deceasedAgeText += deceasedAgeText ? ` (${genderText})` : `(${genderText})`;
         }
         AppUtils.setText('deceased-age', deceasedAgeText);
 
@@ -224,7 +225,7 @@ import { appConfig } from '../config/app.config.js';
         }
         AppUtils.setText('departure-date-time', AppUtils.formatDateTimeDetailed(funeralInfo.departureDate, funeralInfo.departureTime, true, !!funeralInfo.departureTime) || '-');
         AppUtils.setText('cemetery-info', funeralInfo.cemetery || '-');
-        AppUtils.setText('additional-guidance', obituaryEntity.additionalInfo || '-'); // 추가 안내는 additionalInfo 문자열 직접 사용
+        AppUtils.setText('additional-guidance', obituaryEntity.messageContent || '-');
 
         // 계좌 정보 표시 (manage-module과 동일한 로직 가정)
         const accountInfoContainer = document.getElementById('account-info-display');
