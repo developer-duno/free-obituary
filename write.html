@@ -2034,7 +2034,7 @@
         <form id="obituaryForm">
             <p class="form-description" style="color: #ff0000; font-weight: bold;">*는 필수 입력 항목</p>
 
-            <h2>부고장 디자인*</h2>
+            <h2>부고장 디자인<span style="color:#ff0000">*</span></h2>
             <div class="selected-template-preview">
                 <img id="selected-template-image" src="image/1.jpg" alt="선택된 템플릿" style="max-width: 100%; height: auto; border-radius: 8px; display: block;">
             </div>
@@ -2044,7 +2044,7 @@
             </button>
             <input type="hidden" id="selected-template-hidden" name="selectedTemplate" value="">
 
-            <h2>고인 정보*</h2>
+            <h2>고인 정보<span style="color:#ff0000">*</span></h2>
             <div class="form-group deceased-info-row">
                 <input type="text" id="deceased-name" aria-label="고인 성함" name="deceased-name" placeholder="고인 성함 (예: 홍길동)" required tabindex="1" enterkeyhint="next" style="flex: 1.5;">
                 <input type="number" id="deceased-age" aria-label="향년" name="deceased-age" placeholder="향년" required tabindex="2" inputmode="numeric" min="0" max="150" enterkeyhint="next" style="flex: 0.5;">
@@ -2136,7 +2136,7 @@
                 </div>
             </div>
 
-            <h2>장례식장*</h2>
+            <h2>장례식장<span style="color:#ff0000">*</span></h2>
             <div class="search-container input-row-labeled">
                 <label class="field-label" style="font-size: 14px; color: #555;">장례식장 검색</label>
                 <div class="field-input" style="display: flex; align-items: center;">
@@ -2174,7 +2174,7 @@
                 <input type="text" id="cemetery" aria-label="장지 장소" name="cemetery" placeholder="장지 정보 입력 예) 1차: 추모화장장 2차: 납골당 (선택)" tabindex="8" enterkeyhint="next">
             </div>
 
-            <h2>상주 정보*</h2>
+            <h2>상주 정보<span style="color:#ff0000">*</span></h2>
             <p style="font-size: 0.9em; color: #555; margin-bottom: 12px;">대표 상주 한 분만 입력하셔도 작성 가능합니다. 필요시 상주를 추가하세요.</p>
             <div id="bereaveds-list">
                 <div class="bereaved-entry">
@@ -2371,13 +2371,13 @@
                 </div>
             </div>
 
-            <h2>비밀번호 설정*</h2>
+            <h2>비밀번호 설정<span style="color:#ff0000">*</span></h2>
             <div class="form-group" style="width: 66.7%; margin: 0 auto;">  
                 <input type="password" id="password" aria-label="비밀번호" name="password" placeholder="숫자 4자리 (수정/삭제 시 필요)" maxlength="4" pattern="[0-9]{4}" required inputmode="numeric" tabindex="10" enterkeyhint="done">
             </div>
             <p style="font-size: 0.85em; color: #666; text-align: center; margin: -6px 0 16px 0;">나중에 부고장 수정/삭제할 때 꼭 필요합니다. 안전한 곳에 메모해 두세요.</p>
 
-            <h2>서비스 이용약관 동의*</h2>  
+            <h2>서비스 이용약관 동의<span style="color:#ff0000">*</span></h2>  
             <div class="form-group terms-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px auto;">  
                 <div style="margin: 0 0 15px 0; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left;">
                     <span style="padding-left: 20px; flex: 1;">신청 및 수정 과정 중 본인식별 및 부정이용방지를 위해 개인정보를 수집 이용합니다.</span>
@@ -2416,7 +2416,7 @@
     <div id="toast-message" style="display: none;"></div>
 
     <!-- 시간 선택기 모달 (date-time-picker.js) -->
-    <div id="timePickerModal" class="time-picker-modal">
+    <div id="timePickerModal" class="time-picker-modal time-picker-custom">
         <div class="time-picker-header">
             <span class="time-picker-title">시간 선택</span>
             <button type="button" class="cancel-btn">×</button>

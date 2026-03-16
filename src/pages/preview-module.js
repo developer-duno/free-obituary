@@ -8,9 +8,6 @@ import { appConfig } from '../config/app.config.js';
     "use strict";
 
 
-    /** URL ID 파라미터 검증 (인젝션 방지) */
-    $/.test(id);
-    }
 
 
     /** S6: 안전한 JSON 파싱 (스키마 검증 포함) */
