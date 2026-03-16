@@ -563,8 +563,7 @@ import { appConfig } from '../config/app.config.js';
     }
 
     function fallbackKakaoShare(shareUrl, deceasedName) {
-        const text = encodeURIComponent('부고 - 故 ' + deceasedName + '님
-' + shareUrl);
+        const text = encodeURIComponent('부고 - 故 ' + deceasedName + '님\n' + shareUrl);
         // 모바일이면 카카오톡 스킴, 아니면 클립보드 복사
         if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
             window.location.href = 'kakaotalk://msg?text=' + text;
@@ -584,11 +583,8 @@ import { appConfig } from '../config/app.config.js';
         const funeralHall = obituaryEntity.funeralInfo?.funeralHallName || '';
         
         let body = '부고 - 故 ' + deceasedName + '님';
-        if (funeralHall) body += '
-장례식장: ' + funeralHall;
-        body += '
-
-' + shareUrl;
+        if (funeralHall) body += '\n장례식장: ' + funeralHall;
+        body += '\n\n' + shareUrl;
 
         // SMS URI 스킴 (iOS: sms:&body=, Android: sms:?body=)
         const separator = /iPhone|iPad/i.test(navigator.userAgent) ? '&' : '?';
