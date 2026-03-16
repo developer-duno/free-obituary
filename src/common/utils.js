@@ -286,6 +286,21 @@ export function formatDateTimeDetailed(dateStr, timeStr, includeDay = true, incl
         if (dateStr instanceof Date) {
             date = dateStr;
         } else if (typeof dateStr === 'string') {
+            // 이미 한국어 포맷인 경우 그대로 반환
+            if (/^\d{4}년/.test(dateStr)) {
+                if (includeTime && timeStr) {
+                    const timeParts = String(timeStr).split(':');
+                    let hours = parseInt(timeParts[0], 10);
+                    const minutes = timeParts[1] ? parseInt(timeParts[1], 10) : 0;
+                    if (!isNaN(hours) && !isNaN(minutes)) {
+                        const ampm = hours < 12 || hours === 24 ? '오전' : '오후';
+                        hours = hours % 12 || 12;
+                        const formattedTime = ampm + ' ' + hours + '시' + (minutes > 0 ? ' ' + String(minutes).padStart(2, '0') + '분' : '');
+                        return dateStr + ' ' + formattedTime;
+                    }
+                }
+                return dateStr;
+            }
             date = new Date(dateStr.replace(/[-.]/g, '/')); 
         } else {
             return dateStr; // 알 수 없는 타입은 그대로 반환
