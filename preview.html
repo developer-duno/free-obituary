@@ -1230,27 +1230,27 @@
 
     <!-- 공유 모달 -->
     <div class="modal-overlay" id="share-modal-overlay"></div>
-    <div class="modal-container modal-preview" role="dialog" aria-modal="true" id="share-options-modal" role="dialog" aria-modal="true">
-        <div class="modal-close close-modal-button" role="button" aria-label="닫기">×</div>
+    <div class="modal-container modal-preview" role="dialog" aria-modal="true" id="share-options-modal">
+        <div class="modal-close close-modal-button" role="button" tabindex="0" aria-label="닫기">×</div>
         <div class="modal-title">부고를 보내실 수단을 선택해 주세요.</div>
         <div class="share-options">
-            <div class="share-button" id="share-kakao-button">
+            <div class="share-button" id="share-kakao-button" role="button" tabindex="0" aria-label="카카오톡으로 공유">
                 <div class="share-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48cGF0aCBmaWxsPSIjRkZFODEyIiBkPSJNMCA0OFY0OGg0OFYwSDB6Ii8+PHBhdGggZmlsbD0iIzNDMUUxRSIgZD0iTTI0IDExYy04Ljg0IDAtMTYgNS41NC0xNiAxMi4zOCAwIDQuNCAyLjk0IDguMjcgNy4zNiAxMC40NGwtMS44OCA2LjY4YTEgMSAwIDAgMCAxLjUzIDEuMTNsNy43NC00LjQ4Yy43NC4wOCAxLjQ5LjEyIDIuMjUuMTIgOC44NCAwIDE2LTUuNTQgMTYtMTIuMzhTMzIuODQgMTEgMjQgMTF6Ii8+PC9zdmc+" alt="카카오톡"></div>
                 <div class="share-name">카카오톡</div>
             </div>
-            <div class="share-button" id="share-sms-button">
+            <div class="share-button" id="share-sms-button" role="button" tabindex="0" aria-label="문자로 공유">
                 <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%2356B847%27/%3E%3Cpath d=%27M14 14h20c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-6l-4 4-4-4h-6c-1.1 0-2-.9-2-2V16c0-1.1.9-2 2-2z%27 fill=%27white%27/%3E%3C/svg%3E" alt="문자"></div>
                 <div class="share-name">문자</div>
             </div>
-            <div class="share-button" id="copy-link-button">
+            <div class="share-button" id="copy-link-button" role="button" tabindex="0" aria-label="링크 복사">
                 <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%236E6E6E%27/%3E%3Cpath d=%27M20 28a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M28 20a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3C/svg%3E" alt="링크"></div>
                 <div class="share-name">링크</div>
             </div>
-            <div class="share-button" id="share-band-button">
+            <div class="share-button" id="share-band-button" role="button" tabindex="0" aria-label="밴드로 공유">
                 <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%2306CF9C%27/%3E%3Ctext x=%2724%27 y=%2733%27 font-family=%27Arial%27 font-size=%2726%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EB%3C/text%3E%3C/svg%3E" alt="밴드"></div>
                 <div class="share-name">밴드</div>
             </div>
-            <div class="share-button" id="share-qr-button">
+            <div class="share-button" id="share-qr-button" role="button" tabindex="0" aria-label="QR코드 생성">
                 <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%23555%27/%3E%3Crect x=%2712%27 y=%2712%27 width=%278%27 height=%278%27 fill=%27white%27/%3E%3Crect x=%2728%27 y=%2712%27 width=%278%27 height=%278%27 fill=%27white%27/%3E%3Crect x=%2712%27 y=%2728%27 width=%278%27 height=%278%27 fill=%27white%27/%3E%3Crect x=%2728%27 y=%2728%27 width=%274%27 height=%274%27 fill=%27white%27/%3E%3Crect x=%2732%27 y=%2732%27 width=%274%27 height=%274%27 fill=%27white%27/%3E%3Crect x=%2722%27 y=%2722%27 width=%274%27 height=%274%27 fill=%27white%27/%3E%3C/svg%3E" alt="QR코드"></div>
                 <div class="share-name">QR코드</div>
             </div>
@@ -1261,7 +1261,7 @@
     <!-- QR코드 모달 -->
     <div class="modal-overlay" id="qr-modal-overlay"></div>
     <div class="modal-container modal-preview" role="dialog" aria-modal="true" id="qr-code-modal" style="display:none;">
-        <div class="modal-close close-modal-button" role="button" aria-label="닫기">&times;</div>
+        <div class="modal-close close-modal-button" role="button" tabindex="0" aria-label="닫기">&times;</div>
         <div class="modal-title">QR코드</div>
         <div class="qr-code-container">
             <canvas id="qr-canvas"></canvas>
@@ -1273,7 +1273,7 @@
     <!-- 비밀번호 입력 모달 -->
     <div id="edit-password-modal" class="edit-modal modal-preview" role="dialog" aria-modal="true">
         <div class="edit-modal-content">
-            <span class="modal-close close-modal-button">&times;</span>
+            <span class="modal-close close-modal-button" role="button" tabindex="0" aria-label="닫기">&times;</span>
             <div class="edit-modal-title">부고장 수정을 위해 비밀번호를 입력하세요</div>
             <input type="password" class="edit-modal-input" id="edit-password-input" placeholder="비밀번호 4자리" maxlength="4">
             <div class="edit-modal-buttons">

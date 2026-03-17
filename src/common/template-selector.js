@@ -168,6 +168,12 @@ export class TemplateSelector {
                 e.preventDefault();
                 this._selectTemplate(i, templateItem);
             });
+            templateItem.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this._selectTemplate(i, templateItem);
+                }
+            });
             this.elements.templateGrid.appendChild(templateItem);
         }
     }

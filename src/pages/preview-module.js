@@ -417,11 +417,27 @@ import { appConfig } from '../config/app.config.js';
         document.getElementById('order-wreath-button')?.addEventListener('click', () => handleOrderWreath(obituaryEntity));
         document.getElementById('guestbook-submit-btn')?.addEventListener('click', () => handleAddGuestbookEntry(obituaryEntity));
         
+        // 키보드 접근성: role="button" 요소에 Enter/Space 활성화
+        function addKeyboardActivation(el) {
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    el.click();
+                }
+            });
+        }
+
+        // 공유 버튼 키보드 지원
+        document.querySelectorAll('.share-button[role="button"]').forEach(addKeyboardActivation);
+
         const closeButtons = document.querySelectorAll('.close-modal-button');
-        closeButtons.forEach(btn => btn.addEventListener('click', () => {
-            const modalToClose = btn.closest('.modal-preview');
-            if (modalToClose && modalToClose.id) closeModalById(modalToClose.id);
-        }));
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalToClose = btn.closest('.modal-preview');
+                if (modalToClose && modalToClose.id) closeModalById(modalToClose.id);
+            });
+            addKeyboardActivation(btn);
+        });
         
         const modalOverlays = document.querySelectorAll('.modal-overlay');
         modalOverlays.forEach(overlay => {
