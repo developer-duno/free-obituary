@@ -719,7 +719,7 @@ function handleError(message, error) {
     }
     
     // 없으면 기본 알림 표시
-    alert(`${message}: ${error.message}`);
+    if (window.AppUtils) AppUtils.showToast(`${message}: ${error.message}`, "error"); else alert(`${message}: ${error.message}`);
 }
 
 

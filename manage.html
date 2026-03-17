@@ -258,7 +258,54 @@
             }
         }
 
-        @media screen and (max-width: 360px) {
+        
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--very-light-brown, #faf6f0);
+            border: 1px solid #E5D6C1;
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark-brown, #5a4a3a);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .stat-card.expiry-warning .stat-value {
+            color: #e74c3c;
+        }
+
+        .stat-card.expired .stat-value {
+            color: #999;
+        }
+
+        .stats-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+@media screen and (max-width: 360px) {
             .manage-container {
                 padding: 15px;
             }
@@ -667,7 +714,32 @@
             </div>
         </div>
 
-        <section class="info-section">
+        
+        <!-- 통계 카드 -->
+        <div class="stats-grid" id="stats-grid" style="display:none;">
+            <div class="stat-card">
+                <div class="stat-value" id="stat-views">0</div>
+                <div class="stat-label">조회수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-guestbook">0</div>
+                <div class="stat-label">조문 메시지</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-wreath">0</div>
+                <div class="stat-label">근조화환</div>
+            </div>
+            <div class="stat-card" id="stat-expiry-card">
+                <div class="stat-value" id="stat-expiry">-</div>
+                <div class="stat-label" id="stat-expiry-label">만료까지</div>
+            </div>
+        </div>
+        <div class="stats-meta" id="stats-meta" style="display:none;">
+            <span id="stat-created"></span>
+            <span id="stat-updated"></span>
+        </div>
+
+<section class="info-section">
             <h2 class="info-title">부고 정보</h2>
             <div class="info-container">
                 <div class="info-row">

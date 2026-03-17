@@ -123,6 +123,72 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
 
         displayChiefMourners(obituaryEntity.bereaved);
         displayAccountInfo(obituaryEntity);
+        displayStats(obituaryEntity);
+    }
+
+
+    function displayStats(obituaryEntity) {
+        const statsGrid = document.getElementById('stats-grid');
+        const statsMeta = document.getElementById('stats-meta');
+        if (!statsGrid) return;
+
+        // View count
+        AppUtils.setText('stat-views', String(obituaryEntity.viewCount || 0));
+
+        // Guestbook count
+        const gbCount = obituaryEntity.guestbookEntries ? obituaryEntity.guestbookEntries.length : 0;
+        AppUtils.setText('stat-guestbook', String(gbCount));
+
+        // Wreath count
+        const wreathCount = obituaryEntity.wreathOrders ? obituaryEntity.wreathOrders.length : 0;
+        AppUtils.setText('stat-wreath', String(wreathCount));
+
+        // Expiry calculation
+        const appConfig = window.__APP_CONFIG__ || {};
+        const expiryDays = appConfig.OBITUARY_EXPIRY_DAYS || 7;
+        const depDate = obituaryEntity.funeralInfo?.departureDate;
+        const expiryCard = document.getElementById('stat-expiry-card');
+
+        if (depDate) {
+            const departure = typeof depDate === 'string' ? new Date(depDate.replace(/[-.]/g, '/')) : new Date(depDate);
+            const expiryDate = new Date(departure.getTime() + expiryDays * 24 * 60 * 60 * 1000);
+            const now = new Date();
+            const diffMs = expiryDate.getTime() - now.getTime();
+            const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 0) {
+                AppUtils.setText('stat-expiry', '만료');
+                AppUtils.setText('stat-expiry-label', '비공개 처리됨');
+                if (expiryCard) expiryCard.classList.add('expired');
+            } else if (diffDays <= 2) {
+                AppUtils.setText('stat-expiry', diffDays + '일');
+                AppUtils.setText('stat-expiry-label', '만료까지');
+                if (expiryCard) expiryCard.classList.add('expiry-warning');
+            } else {
+                AppUtils.setText('stat-expiry', diffDays + '일');
+                AppUtils.setText('stat-expiry-label', '만료까지');
+            }
+        } else {
+            AppUtils.setText('stat-expiry', '-');
+            AppUtils.setText('stat-expiry-label', '발인일 미설정');
+        }
+
+        // Meta: created & updated dates
+        if (statsMeta) {
+            const createdAt = obituaryEntity.createdAt;
+            const updatedAt = obituaryEntity.updatedAt;
+            if (createdAt) {
+                const d = new Date(createdAt);
+                AppUtils.setText('stat-created', '작성: ' + d.toLocaleDateString('ko-KR'));
+            }
+            if (updatedAt) {
+                const d = new Date(updatedAt);
+                AppUtils.setText('stat-updated', '수정: ' + d.toLocaleDateString('ko-KR'));
+            }
+            statsMeta.style.display = 'flex';
+        }
+
+        statsGrid.style.display = 'grid';
     }
 
     function displayAccountInfo(obituaryEntity) {
