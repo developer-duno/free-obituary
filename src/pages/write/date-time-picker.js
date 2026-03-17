@@ -363,11 +363,7 @@ function formatKoreanDate(date) {
  * 오류 메시지 표시
  */
 function showError(message) {
-    if (typeof window.showToast === 'function') {
-        window.showToast(message);
-    } else {
-        if (window.AppUtils) AppUtils.showToast(message, "warning"); else console.warn(message);
-    }
+    AppUtils.showToast(message, "warning");
 }
 
 /**

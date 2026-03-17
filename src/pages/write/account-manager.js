@@ -405,10 +405,10 @@ function renderAccountList() {
             accountItem.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
             
             const formattedNumber = formatAccountNumber(account.accountNumber);
-            const esc = (AppUtils && AppUtils.escapeHTML) ? AppUtils.escapeHTML.bind(AppUtils) : (s => String(s));
+            const esc = AppUtils.escapeHTML.bind(AppUtils);
             
             accountItem.innerHTML = `
-                <button class="account-delete-btn" data-index="${index}">×</button>
+                <button class="account-delete-btn" data-index="${index}" aria-label="계좌 삭제">×</button>
                 <div class="account-item-content">
                     <div class="account-item-name">
                         ${esc(account.mourner.name)} ${esc(account.mourner.relationship)}
@@ -579,7 +579,7 @@ function copyToClipboard(text) {
         }
     } catch (e) {
         console.error('클립보드 복사 오류:', e);
-        if (window.AppUtils) AppUtils.showToast("클립보드 복사에 실패했습니다.", "error"); else console.error("클립보드 복사 실패");
+        AppUtils.showToast("클립보드 복사에 실패했습니다.", "error");
     }
 }
 
@@ -605,7 +605,7 @@ function fallbackCopyToClipboard(text) {
     } catch (e) {
         document.body.removeChild(textarea);
         console.error('클립보드 대체 복사 오류:', e);
-        if (window.AppUtils) AppUtils.showToast("클립보드 복사에 실패했습니다.", "error"); else console.error("클립보드 복사 실패");
+        AppUtils.showToast("클립보드 복사에 실패했습니다.", "error");
     }
 }
 

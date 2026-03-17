@@ -56,6 +56,8 @@ src/
 - **Repository**: 인터페이스 → 구현체 패턴 (DI)
 - **서비스**: 생성자에서 repository 주입
 - **사용자 알림**: `AppUtils.showToast()` 사용 (alert() 사용 금지)
+- **사용자 확인**: `AppUtils.showConfirm()` 사용 (confirm() 사용 금지, Promise 반환)
+- **AppUtils 보장**: scripts.js가 AppUtils를 전역 등록하므로 `window.AppUtils` null 체크 불필요
 - **사용자 입력 출력**: `AppUtils.escapeHTML()`로 XSS 방지 필수
 
 ### CSS 디자인 토큰
@@ -75,6 +77,7 @@ styles.css `:root`에 통합 토큰 정의:
 - 템플릿 이미지: `image/1.jpg` ~ `image/33.jpg`
 - localStorage 키: `'obituaryDB'`
 - 모든 JS 파일은 UTF-8 인코딩 필수
+- 배포 도메인: https://무료부고장.com (Vercel, canonical/og:url 에 사용)
 
 ### 근조화환 기능
 - `appConfig.WREATH_ENABLED`: 기능 플래그
@@ -98,6 +101,8 @@ styles.css `:root`에 통합 토큰 정의:
 - 모든 페이지 뒤로가기/메뉴/닫기 버튼에 aria-label 적용
 - 동적 콘텐츠(방명록, 조회수)에 aria-live="polite" 적용
 - 토스트 알림에 role="status", aria-live="polite" 적용
+- 동적 생성 버튼(계좌 삭제 등)에 aria-label 필수
+- 템플릿 선택 아이템에 role="button", tabindex="0" 적용
 
 ## 빌드 / 테스트
 - 빌드 도구 없음 (vanilla HTML/JS)

@@ -141,6 +141,9 @@ export class TemplateSelector {
             const templateItem = document.createElement('div');
             templateItem.className = 'template-item';
             templateItem.setAttribute('data-template', i.toString());
+            templateItem.setAttribute('role', 'button');
+            templateItem.setAttribute('tabindex', '0');
+            templateItem.setAttribute('aria-label', `템플릿 ${i} 선택`);
 
             if (currentTemplateId && parseInt(currentTemplateId) === i) {
                 templateItem.classList.add('selected');
