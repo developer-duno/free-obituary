@@ -16,9 +16,28 @@ export class DeceasedInfo {
         }
 
         this.name = name;
-        this.age = age;
+        
+        // age 타입/범위 검증
+        if (age !== undefined && age !== null && age !== '') {
+            const numAge = Number(age);
+            if (isNaN(numAge) || numAge < 0 || numAge > 200) {
+                throw new Error('나이(DeceasedInfo.age)는 0~200 사이의 숫자여야 합니다.');
+            }
+            this.age = numAge;
+        } else {
+            this.age = age;
+        }
+        
         this.title = title;
-        this.gender = gender;
+        
+        // gender 검증
+        const VALID_GENDERS = ['male', 'female', ''];
+        if (gender && !VALID_GENDERS.includes(gender)) {
+            console.warn(`알 수 없는 gender 값: ${gender}, 빈 값으로 대체`);
+            this.gender = '';
+        } else {
+            this.gender = gender || '';
+        }
         this.deathDate = deathDate; // Date 객체로 변환하거나 유효성 검사 강화 가능
         this.deathTime = deathTime;
         this.deathExpression = deathExpression;

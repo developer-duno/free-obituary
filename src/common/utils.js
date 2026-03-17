@@ -328,7 +328,7 @@ export function formatDateTimeDetailed(dateStr, timeStr, includeDay = true, incl
                 const formattedTime = `${ampm} ${hours}시${minutes > 0 ? ` ${String(minutes).padStart(2, '0')}분` : ''}`;
                 formattedString += ` ${formattedTime}`;
             }
-        } else if (includeTime && date.getHours() !== 0 || date.getMinutes() !== 0) {
+        } else if (includeTime && (date.getHours() !== 0 || date.getMinutes() !== 0)) {
             // timeStr이 제공되지 않았지만 Date 객체에 시간 정보가 있을 경우
             let hours = date.getHours();
             const minutes = date.getMinutes();
@@ -509,14 +509,10 @@ export function initModalOutsideClick() {
 
 export function navigateToManagePage(obituaryId = null) {
     const idToNavigate = obituaryId || sessionStorage.getItem('currentObituaryId');
-    if (idToNavigate) {
-        window.location.href = `manage.html?id=${idToNavigate}`;
+    if (idToNavigate && isValidObituaryId(idToNavigate)) {
+        window.location.href = `manage.html?id=${encodeURIComponent(idToNavigate)}`;
     } else {
-        // ID가 없는 경우, 그냥 manage.html로 보내거나 오류 메시지를 표시할 수 있습니다.
-        // 여기서는 ID 없이 manage.html로 보내는 것으로 가정합니다.
-        // 또는 AppUtils.showToast("부고 ID가 없어 관리 페이지로 이동할 수 없습니다."); 등으로 처리 가능
-        window.location.href = 'manage.html'; 
-        console.warn('navigateToManagePage: Obituary ID not provided and not found in session storage. Navigating to manage.html without ID.');
+        window.location.href = 'manage.html';
     }
 }
 

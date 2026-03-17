@@ -20,15 +20,8 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
             AppUtils.showToast("페이지 로딩 심각한 오류 [S00_Srv]"); return;
         }
 
-        try {
-            if (!AppUtils || !EditModeManager) {
-                console.error("AppUtils 또는 EditModeManager 모듈을 찾을 수 없습니다. (search-module)");
-                AppUtils.showToast("페이지 로딩 오류 [S00_Lib]", "error"); return;
-            }
-        } catch (error) {
-            console.error("필수 라이브러리 접근 중 오류 발생 (search-module):", error);
-            if(AppUtils) AppUtils.showToast("페이지 초기화 오류 [S01_Lib]", 'error', 5000);
-            else AppUtils.showToast("페이지 초기화 오류 [S01_Lib]", "error");
+        if (!AppUtils || !EditModeManager) {
+            console.error("AppUtils 또는 EditModeManager 모듈을 찾을 수 없습니다. (search-module)");
             return;
         }
 
@@ -42,8 +35,7 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
 
     async function handleSearchObituary() {
         if (!obituaryServiceInstance || !AppUtils) {
-            if(AppUtils) AppUtils.showToast("서비스가 준비되지 않았습니다. [S02]", 'error');
-            else AppUtils.showToast("서비스가 준비되지 않았습니다. [S02]", "error");
+            console.error("서비스가 준비되지 않았습니다. [S02]");
             return;
         }
 
@@ -107,10 +99,10 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
     }
 
     function handleGoToPreview(obituaryId) {
-        if (!obituaryId) {
-            AppUtils.showToast("미리보기할 부고 ID가 없습니다. [S08]"); return;
+        if (!obituaryId || !AppUtils.isValidObituaryId(obituaryId)) {
+            AppUtils.showToast("유효하지 않은 부고 ID입니다. [S08]"); return;
         }
-        window.location.href = `preview.html?id=${obituaryId}`;
+        window.location.href = `preview.html?id=${encodeURIComponent(obituaryId)}`;
     }
 
     async function handleGoToManage(event) { // event 객체에서 ID 추출

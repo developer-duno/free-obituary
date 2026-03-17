@@ -74,15 +74,8 @@ import { appConfig } from '../config/app.config.js';
             AppUtils.showToast("페이지 로딩 심각한 오류 [P00_Srv]"); return;
         }
 
-        try {
-            if (!AppUtils) { // EditModeManager는 미리보기에서 직접 사용 빈도 낮음
-                console.error("AppUtils 모듈을 찾을 수 없습니다. (preview-module)");
-                AppUtils.showToast("페이지 로딩 오류 [P00_Lib]", "error"); return;
-            }
-        } catch (error) {
-            console.error("필수 라이브러리(AppUtils) 접근 중 오류 발생 (preview-module):", error);
-            if (AppUtils) AppUtils.showToast("페이지 초기화 오류 [P01_Lib]", 'error');
-            else AppUtils.showToast("페이지 초기화 오류 [P01_Lib]", "error");
+        if (!AppUtils) {
+            console.error("AppUtils 모듈을 찾을 수 없습니다. (preview-module)");
             return;
         }
 
@@ -258,7 +251,7 @@ import { appConfig } from '../config/app.config.js';
                 const accountNumberSpan = accDiv.querySelector('.account-number-preview');
                 if (accountNumberSpan) {
                     accountNumberSpan.addEventListener('click', () => {
-                        AppUtils.copyToClipboard(`${AppUtils.escapeHTML(accountData.bankName)} ${AppUtils.escapeHTML(accountData.accountNumber)} ${AppUtils.escapeHTML(accountData.holder)}`);
+                        AppUtils.copyToClipboard(`${accountData.bankName} ${accountData.accountNumber} ${accountData.holder}`);
                     });
                      accountNumberSpan.style.cursor = 'pointer';
                 }
