@@ -10,6 +10,7 @@
     <meta property="og:image" content="thumbnail.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://free-obituary.vercel.app/thanks.html">
+    <link rel="canonical" href="https://free-obituary.vercel.app/thanks.html">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="감사장 | 무료 부고장">
     <meta name="twitter:description" content="장례를 마치고 감사의 인사를 전하는 감사장 작성 안내입니다.">
@@ -127,7 +128,7 @@
                     var dt = document.getElementById("date").value;
 
                     if (!name || !msg || !family) {
-                        if (window.AppUtils) AppUtils.showToast("모든 필드를 입력해주세요.", "warning"); else alert("모든 필드를 입력해주세요.");
+                        AppUtils.showToast("모든 필드를 입력해주세요.", "warning");
                         return;
                     }
 
@@ -135,10 +136,10 @@
 
                     if (navigator.clipboard) {
                         navigator.clipboard.writeText(result).then(function() {
-                            alert("감사장이 클립보드에 복사되었습니다.\n카카오톡이나 문자로 보내실 수 있습니다.");
+                            AppUtils.showToast("감사장이 클립보드에 복사되었습니다. 카카오톡이나 문자로 보내실 수 있습니다.", "success");
                         });
                     } else {
-                        prompt("아래 텍스트를 복사해주세요:", result);
+                        if (window.AppUtils) AppUtils.showToast("자동 복사가 지원되지 않습니다. 직접 복사해주세요.", "warning"); else { var ta = document.createElement("textarea"); ta.value = result; ta.style.cssText="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;height:200px;z-index:9999"; document.body.appendChild(ta); ta.select(); }
                     }
                 });
             }

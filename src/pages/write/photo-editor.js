@@ -82,14 +82,14 @@ export function initPhotoEditor() {
             
             // 파일 크기 검사 (2MB 제한 - localStorage 용량 보호)
             if (file.size > 2 * 1024 * 1024) {
-                if(window.AppUtils) AppUtils.showToast("파일 크기는 2MB를 초과할 수 없습니다. 사진을 줄여주세요.", "error"); else alert("파일 크기 초과 (최대 2MB)");
+                AppUtils.showToast("파일 크기는 2MB를 초과할 수 없습니다. 사진을 줄여주세요.", "error");
                 this.value = '';
                 return;
             }
             
             // 이미지 파일인지 검사
             if (!file.type.startsWith('image/')) {
-                if(window.AppUtils) AppUtils.showToast("이미지 파일만 업로드 가능합니다.", "error"); else alert("이미지 파일만");
+                AppUtils.showToast("이미지 파일만 업로드 가능합니다.", "error");
                 this.value = '';
                 return;
             }
@@ -173,11 +173,11 @@ export function initPhotoEditor() {
                             });
                         } else {
                             console.error('Cropper 라이브러리를 찾을 수 없습니다.');
-                            if(window.AppUtils) AppUtils.showToast("이미지 편집기 로드 실패. 새로고침해주세요.", "error"); else alert("편집기 오류");
+                            AppUtils.showToast("이미지 편집기 로드 실패. 새로고침해주세요.", "error");
                         }
                     } catch (error) {
                         console.error('Cropper 초기화 오류:', error);
-                        if(window.AppUtils) AppUtils.showToast("이미지 편집기 로드 오류", "error"); else alert("편집기 오류");
+                        AppUtils.showToast("이미지 편집기 로드 오류", "error");
                     }
                 }, 100);
             }
@@ -267,7 +267,7 @@ export function initPhotoEditor() {
                 }
             } catch (error) {
                 console.error('이미지 크롭 오류:', error);
-                if(window.AppUtils) AppUtils.showToast("이미지 편집 중 오류가 발생했습니다.", "error"); else alert("편집 오류");
+                AppUtils.showToast("이미지 편집 중 오류가 발생했습니다.", "error");
             }
         });
     }

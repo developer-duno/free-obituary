@@ -183,7 +183,6 @@ import { appConfig } from '../config/app.config.js';
                     bereavedContainer.appendChild(item);
                 });
             } else {
-                // AppUtils.setText('bereaved-list', '유가족 정보가 없습니다.', true); // textContent로 직접 설정하거나 innerHTML 사용
                 bereavedContainer.innerHTML = '<p>유가족 정보가 없습니다.</p>';
             }
         }

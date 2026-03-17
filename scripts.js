@@ -47,8 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // console.log('Application services initialized and common UI scripts executed.');
-    // console.log('Obituary Service is available on window.appServices.obituaryService');
 });
 
 /**

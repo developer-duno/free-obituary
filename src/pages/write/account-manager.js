@@ -455,12 +455,12 @@ function renderAccountList() {
 }
 
 // 계좌 항목 제거
-function removeAccountItem(index) {
+async function removeAccountItem(index) {
     if (index < 0 || index >= accountList.length) return;
     
     try {
         // 확인 메시지
-        if (confirm('이 계좌 정보를 삭제하시겠습니까?')) {
+        if (await AppUtils.showConfirm('이 계좌 정보를 삭제하시겠습니까?')) {
             accountList.splice(index, 1);
             renderAccountList();
             updateAccountFormFields();

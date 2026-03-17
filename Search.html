@@ -9,7 +9,9 @@
     <meta property="og:title" content="무료 부고장 검색">
     <meta property="og:description" content="작성된 부고장을 검색하세요.">
     <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://free-obituary.vercel.app/Search.html">
+    <link rel="canonical" href="https://free-obituary.vercel.app/Search.html">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="무료 부고장 검색">
     <meta name="twitter:description" content="작성된 부고장을 검색하세요.">
@@ -385,7 +387,7 @@
             const password = document.getElementById('searchPassword').value;
             
             if (!deceasedName || !password) {
-                if (window.AppUtils) AppUtils.showToast('고인명과 비밀번호를 모두 입력해주세요.', 'warning'); else alert('고인명과 비밀번호를 모두 입력해주세요.');
+                AppUtils.showToast('고인명과 비밀번호를 모두 입력해주세요.', 'warning');
                 return;
             }
             
@@ -393,7 +395,7 @@
             
             try {
                 if (!window.obituaryDB) {
-                    if (window.AppUtils) AppUtils.showToast('부고 검색 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.', 'warning'); else alert('부고 검색 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+                    AppUtils.showToast('부고 검색 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.', 'warning');
                     if (typeof hideLoading === 'function') hideLoading();
                     return;
                 }
@@ -401,14 +403,14 @@
                 if (typeof hideLoading === 'function') hideLoading();
                 
                 if (!obituaries || obituaries.length === 0) {
-                    if (window.AppUtils) AppUtils.showToast('해당하는 부고장을 찾을 수 없습니다.', 'warning'); else alert('해당하는 부고장을 찾을 수 없습니다.');
+                    AppUtils.showToast('해당하는 부고장을 찾을 수 없습니다.', 'warning');
                     return;
                 }
 
                 const obituary = obituaries[0];
                 const isValid = await window.obituaryDB.verifyPassword(obituary.id, password);
                 if (!isValid) {
-                    if (window.AppUtils) AppUtils.showToast('비밀번호가 일치하지 않습니다.', 'error'); else alert('비밀번호가 일치하지 않습니다.');
+                    AppUtils.showToast('비밀번호가 일치하지 않습니다.', 'error');
                     return;
                 }
                 
@@ -443,7 +445,7 @@
                 }, 100);
             } catch (error) {
                 console.error('부고장 검색 오류:', error);
-                if (window.AppUtils) AppUtils.showToast('검색 중 오류가 발생했습니다.', 'error'); else alert('검색 중 오류가 발생했습니다.');
+                AppUtils.showToast('검색 중 오류가 발생했습니다.', 'error');
                 if (typeof hideLoading === 'function') hideLoading();
             }
         }
@@ -486,7 +488,7 @@
             const password = passwordInput.value;
             
             if (!password) {
-                if (window.AppUtils) AppUtils.showToast('비밀번호를 입력해주세요.', 'warning'); else alert('비밀번호를 입력해주세요.');
+                AppUtils.showToast('비밀번호를 입력해주세요.', 'warning');
                 passwordInput.focus();
                 return;
             }
@@ -512,12 +514,12 @@
                     window.location.href = 'write.html';
                 } else {
                     passwordInput.value = '';
-                    if (window.AppUtils) AppUtils.showToast('비밀번호가 일치하지 않습니다.', 'error'); else alert('비밀번호가 일치하지 않습니다.');
+                    AppUtils.showToast('비밀번호가 일치하지 않습니다.', 'error');
                     passwordInput.focus();
                 }
             } else {
                 passwordInput.value = '';
-                if (window.AppUtils) AppUtils.showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error'); else alert('오류가 발생했습니다. 다시 시도해주세요.');
+                AppUtils.showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error');
             }
         }
         
@@ -528,7 +530,7 @@
             const password = passwordInput.value;
             
             if (!password) {
-                if (window.AppUtils) AppUtils.showToast('비밀번호를 입력해주세요.', 'warning'); else alert('비밀번호를 입력해주세요.');
+                AppUtils.showToast('비밀번호를 입력해주세요.', 'warning');
                 passwordInput.focus();
                 return;
             }
@@ -543,23 +545,23 @@
                             passwordInput.value = '';
                             closeObituaryModal();
                             if (result.success) {
-                                if (window.AppUtils) AppUtils.showToast('부고장이 삭제되었습니다.', 'success'); else alert('부고장이 삭제되었습니다.');
+                                AppUtils.showToast('부고장이 삭제되었습니다.', 'success');
                             } else {
-                                if (window.AppUtils) AppUtils.showToast(result.message || '부고장 삭제 중 오류가 발생했습니다.', 'error'); else alert(result.message || '부고장 삭제 중 오류가 발생했습니다.');
+                                AppUtils.showToast(result.message || '부고장 삭제 중 오류가 발생했습니다.', 'error');
                             }
                         } catch (error) {
-                            if (window.AppUtils) AppUtils.showToast('부고장 삭제 중 오류가 발생했습니다.', 'error'); else alert('부고장 삭제 중 오류가 발생했습니다.');
+                            AppUtils.showToast('부고장 삭제 중 오류가 발생했습니다.', 'error');
                             console.error('삭제 오류:', error);
                         }
                     }
                 } else {
                     passwordInput.value = ''; // 비밀번호 입력값 초기화
-                    if (window.AppUtils) AppUtils.showToast('비밀번호가 일치하지 않습니다.', 'error'); else alert('비밀번호가 일치하지 않습니다.');
+                    AppUtils.showToast('비밀번호가 일치하지 않습니다.', 'error');
                     passwordInput.focus();
                 }
             } else {
                 passwordInput.value = ''; // 비밀번호 입력값 초기화
-                if (window.AppUtils) AppUtils.showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error'); else alert('오류가 발생했습니다. 다시 시도해주세요.');
+                AppUtils.showToast('오류가 발생했습니다. 다시 시도해주세요.', 'error');
             }
         }
         
@@ -643,7 +645,7 @@
             const adminPassword = config.password || '';
             
             if (!adminUsername || !adminPassword) {
-                if (window.AppUtils) AppUtils.showToast('관리자 설정이 없습니다. window.__ADMIN_CONFIG__ 또는 admin.config.js를 설정해주세요.\n실무 배포 시 서버 인증 API를 연동하세요.', 'error'); else alert('관리자 설정이 없습니다. window.__ADMIN_CONFIG__ 또는 admin.config.js를 설정해주세요.\n실무 배포 시 서버 인증 API를 연동하세요.');
+                AppUtils.showToast('관리자 설정이 없습니다. window.__ADMIN_CONFIG__ 또는 admin.config.js를 설정해주세요.\n실무 배포 시 서버 인증 API를 연동하세요.', 'error');
                 document.getElementById('adminUsername').value = '';
                 document.getElementById('adminPassword').value = '';
                 return;
@@ -655,7 +657,7 @@
                 closeModal();
                 openAdminDashboard();
             } else {
-                if (window.AppUtils) AppUtils.showToast('관리자 계정 정보가 일치하지 않습니다.', 'error'); else alert('관리자 계정 정보가 일치하지 않습니다.');
+                AppUtils.showToast('관리자 계정 정보가 일치하지 않습니다.', 'error');
             }
             
             document.getElementById('adminUsername').value = '';
@@ -666,7 +668,7 @@
         async function openAdminDashboard() {
             // 관리자 권한 확인
             if (!_verifyAdminToken()) {
-                if (window.AppUtils) AppUtils.showToast('관리자 권한이 필요합니다.', 'error'); else alert('관리자 권한이 필요합니다.');
+                AppUtils.showToast('관리자 권한이 필요합니다.', 'error');
                 return;
             }
             
@@ -686,7 +688,7 @@
         async function loadAllObituaries() {
             try {
                 if (!window.obituaryDB) {
-                    if (window.AppUtils) AppUtils.showToast('데이터베이스 모듈을 찾을 수 없습니다.', 'error'); else alert('데이터베이스 모듈을 찾을 수 없습니다.');
+                    AppUtils.showToast('데이터베이스 모듈을 찾을 수 없습니다.', 'error');
                     return;
                 }
                 const obituaries = await window.obituaryDB.getAllObituaries();
@@ -695,7 +697,7 @@
                 displayObituariesTable(obituaries);
             } catch (error) {
                 console.error('부고장 데이터 로드 오류:', error);
-                if (window.AppUtils) AppUtils.showToast('부고장 데이터를 불러오는 중 오류가 발생했습니다.', 'error'); else alert('부고장 데이터를 불러오는 중 오류가 발생했습니다.');
+                AppUtils.showToast('부고장 데이터를 불러오는 중 오류가 발생했습니다.', 'error');
             }
         }
         
@@ -827,7 +829,7 @@
                 if (totalEl) totalEl.textContent = results.length + ' (검색결과)';
             } catch (error) {
                 console.error('검색 오류:', error);
-                if (window.AppUtils) AppUtils.showToast('검색 중 오류가 발생했습니다.', 'error'); else alert('검색 중 오류가 발생했습니다.');
+                AppUtils.showToast('검색 중 오류가 발생했습니다.', 'error');
             }
         }
         
@@ -849,7 +851,7 @@
                 window.location.href = 'write.html';
             } catch (error) {
                 console.error('수정 모드 설정 오류:', error);
-                if (window.AppUtils) AppUtils.showToast('수정 모드로 전환 중 오류가 발생했습니다.', 'error'); else alert('수정 모드로 전환 중 오류가 발생했습니다.');
+                AppUtils.showToast('수정 모드로 전환 중 오류가 발생했습니다.', 'error');
             }
         }
         
@@ -859,14 +861,14 @@
                 try {
                     const result = await window.obituaryDB.deleteObituary(id);
                     if (result.success) {
-                        if (window.AppUtils) AppUtils.showToast('부고장이 삭제되었습니다.', 'success'); else alert('부고장이 삭제되었습니다.');
+                        AppUtils.showToast('부고장이 삭제되었습니다.', 'success');
                         loadAllObituaries();
                     } else {
-                        if (window.AppUtils) AppUtils.showToast(result.message || '부고장 삭제 중 오류가 발생했습니다.', 'error'); else alert(result.message || '부고장 삭제 중 오류가 발생했습니다.');
+                        AppUtils.showToast(result.message || '부고장 삭제 중 오류가 발생했습니다.', 'error');
                     }
                 } catch (error) {
                     console.error('삭제 오류:', error);
-                    if (window.AppUtils) AppUtils.showToast('부고장 삭제 중 오류가 발생했습니다.', 'error'); else alert('부고장 삭제 중 오류가 발생했습니다.');
+                    AppUtils.showToast('부고장 삭제 중 오류가 발생했습니다.', 'error');
                 }
             }
         }
@@ -877,14 +879,14 @@
                 try {
                     const result = await window.obituaryDB.clearDatabase();
                     if (result) {
-                        if (window.AppUtils) AppUtils.showToast('모든 부고장 데이터가 초기화되었습니다.', 'success'); else alert('모든 부고장 데이터가 초기화되었습니다.');
+                        AppUtils.showToast('모든 부고장 데이터가 초기화되었습니다.', 'success');
                         loadAllObituaries();
                     } else {
-                        if (window.AppUtils) AppUtils.showToast('데이터 초기화 중 오류가 발생했습니다.', 'error'); else alert('데이터 초기화 중 오류가 발생했습니다.');
+                        AppUtils.showToast('데이터 초기화 중 오류가 발생했습니다.', 'error');
                     }
                 } catch (error) {
                     console.error('데이터 초기화 오류:', error);
-                    if (window.AppUtils) AppUtils.showToast('데이터 초기화 중 오류가 발생했습니다.', 'error'); else alert('데이터 초기화 중 오류가 발생했습니다.');
+                    AppUtils.showToast('데이터 초기화 중 오류가 발생했습니다.', 'error');
                 }
             }
         }
@@ -916,7 +918,7 @@
             try {
                 const obituary = await window.obituaryDB.getObituaryById(id);
                 if (!obituary) {
-                    if (window.AppUtils) AppUtils.showToast('부고장 정보를 찾을 수 없습니다.', 'warning'); else alert('부고장 정보를 찾을 수 없습니다.');
+                    AppUtils.showToast('부고장 정보를 찾을 수 없습니다.', 'warning');
                     return;
                 }
                 
@@ -1186,7 +1188,7 @@
                 
             } catch (error) {
                 console.error('부고장 상세 정보 표시 오류:', error);
-                if (window.AppUtils) AppUtils.showToast('부고장 상세 정보를 불러오는 중 오류가 발생했습니다.', 'error'); else alert('부고장 상세 정보를 불러오는 중 오류가 발생했습니다.');
+                AppUtils.showToast('부고장 상세 정보를 불러오는 중 오류가 발생했습니다.', 'error');
             }
         }
         

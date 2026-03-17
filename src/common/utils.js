@@ -43,6 +43,51 @@ export function showToast(message, type = 'info', duration = 3000) {
 }
 
 /**
+ * 커스텀 확인 대화상자를 표시합니다. (confirm() 대체)
+ * @param {string} message - 확인 메시지
+ * @returns {Promise<boolean>} 확인이면 true, 취소이면 false
+ */
+export function showConfirm(message) {
+    return new Promise((resolve) => {
+        const existing = document.getElementById('custom-confirm-modal');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'custom-confirm-modal';
+        overlay.className = 'confirm-modal-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-label', '확인 대화상자');
+        overlay.innerHTML = `
+            <div class="confirm-modal-content">
+                <p class="confirm-modal-message">${escapeHTML(message)}</p>
+                <div class="confirm-modal-buttons">
+                    <button type="button" class="confirm-modal-cancel">취소</button>
+                    <button type="button" class="confirm-modal-ok">확인</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const okBtn = overlay.querySelector('.confirm-modal-ok');
+        const cancelBtn = overlay.querySelector('.confirm-modal-cancel');
+
+        function cleanup(result) {
+            overlay.remove();
+            resolve(result);
+        }
+
+        okBtn.addEventListener('click', () => cleanup(true));
+        cancelBtn.addEventListener('click', () => cleanup(false));
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) cleanup(false);
+        });
+
+        okBtn.focus();
+    });
+}
+
+/**
  * 로딩 인디케이터를 화면에 표시합니다.
  */
 export function showLoading() {
@@ -560,6 +605,7 @@ export function isValidObituaryId(id) {
 
 export const AppUtils = {
     showToast,
+    showConfirm,
     showLoading,
     hideLoading,
     copyToClipboard,

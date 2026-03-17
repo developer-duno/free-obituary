@@ -116,8 +116,8 @@ import { TemplateSelector } from '../../common/template-selector.js';
                 cancelButton.textContent = '수정 취소';
                 cancelButton.style.marginRight = '10px';
                 DOMElements.submitButton.parentNode.insertBefore(cancelButton, DOMElements.submitButton);
-                cancelButton.addEventListener('click', function() {
-                    if (confirm('수정을 취소하시겠습니까?')) {
+                cancelButton.addEventListener('click', async function() {
+                    if (await AppUtils.showConfirm('수정을 취소하시겠습니까?')) {
                         EditModeManager.clearEditMode();
                         window.location.href = 'manage.html?id=' + currentObituaryId; 
                     }

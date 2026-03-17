@@ -7,7 +7,6 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
     "use strict";
 
     let obituaryServiceInstance; // 전역 서비스 인스턴스
-    // let currentFoundObituary = null; // Entity 인스턴스를 직접 사용
 
     document.addEventListener('DOMContentLoaded', function() {
 
