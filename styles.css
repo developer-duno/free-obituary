@@ -2583,3 +2583,85 @@ section.info-section #addressInfo {
     font-weight: 700;
     white-space: nowrap;
 }
+
+
+/* ========== 인쇄용 스타일 ========== */
+@media print {
+    /* 불필요한 UI 요소 숨김 */
+    .header,
+    .sidebar,
+    .fixed-bottom-buttons,
+    .share-options,
+    .modal-overlay,
+    .modal-container,
+    .modal-preview,
+    .site-footer,
+    .guestbook-form,
+    .wreath-section,
+    #toast-container,
+    .back-button,
+    .menu-button,
+    .send-thanks-button,
+    .print-button {
+        display: none !important;
+    }
+
+    /* 페이지 설정 */
+    body {
+        background: #fff !important;
+        margin: 0;
+        padding: 0;
+        font-size: 12pt;
+        color: #000 !important;
+    }
+
+    /* 미리보기 컨테이너 최적화 */
+    .page-main,
+    .preview-container,
+    .obituary-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 15mm !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: #fff !important;
+    }
+
+    /* 텍스트 색상 보정 */
+    h1, h2, h3, p, span, div {
+        color: #000 !important;
+    }
+
+    /* 링크 URL 표시 안 함 */
+    a[href]::after {
+        content: none !important;
+    }
+
+    /* 이미지 최적화 */
+    img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+    }
+
+    /* 방명록 메시지 목록은 출력 */
+    .guestbook-list {
+        display: block !important;
+    }
+
+    .guestbook-entry {
+        page-break-inside: avoid;
+        border-color: #ccc !important;
+    }
+
+    /* 페이지 나눔 */
+    .section-divider {
+        page-break-after: auto;
+    }
+
+    /* QR 모달 숨김 */
+    .qr-modal,
+    #qr-code-modal {
+        display: none !important;
+    }
+}
