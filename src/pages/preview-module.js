@@ -454,10 +454,15 @@ import { appConfig } from '../config/app.config.js';
 
     function findAddressOnMap(address) { if (address && address !== '-') window.open(`https://map.naver.com/v5/search/${encodeURIComponent(address)}`, '_blank'); }
     function toggleAccountDisplay() { const accInfo = document.getElementById('account-info-display'); if(accInfo) accInfo.style.display = accInfo.style.display === 'none' ? 'block' : 'none'; }
-    function openModalById(modalId) { const modal = document.getElementById(modalId); if(modal) { modal.style.display='flex'; trapFocusInModal(modal); } }
+    let _lastModalTrigger = null;
+    function openModalById(modalId) { const modal = document.getElementById(modalId); if(modal) { _lastModalTrigger = document.activeElement; modal.style.display='flex'; trapFocusInModal(modal); } }
     function closeModalById(modalId) {
         const modal = document.getElementById(modalId);
         if(modal) { modal.style.display='none'; releaseFocusTrap(modal); }
+        if (_lastModalTrigger && typeof _lastModalTrigger.focus === 'function') {
+            _lastModalTrigger.focus();
+            _lastModalTrigger = null;
+        }
         if (modalId === 'qr-code-modal') {
             const overlay = document.getElementById('qr-modal-overlay');
             if (overlay) overlay.style.display = 'none';

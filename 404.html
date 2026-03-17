@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페이지를 찾을 수 없습니다 - 무료부고장</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: var(--space-lg);
+        }
+        .error-code {
+            font-size: 72px;
+            font-weight: bold;
+            color: var(--primary-brown);
+            margin-bottom: var(--space-sm);
+        }
+        .error-message {
+            font-size: var(--text-lg);
+            color: var(--text-brown);
+            margin-bottom: var(--space-lg);
+        }
+        .error-links {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        .error-links a {
+            color: var(--primary-brown);
+            text-decoration: underline;
+            font-size: var(--text-base);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <p class="error-message">요청하신 페이지를 찾을 수 없습니다.</p>
+        <div class="error-links">
+            <a href="index.html">홈으로 돌아가기</a>
+            <a href="Search.html">부고장 검색하기</a>
+            <a href="write.html">부고장 작성하기</a>
+        </div>
+    </div>
+</body>
+</html>

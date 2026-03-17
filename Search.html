@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; base-uri 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="무료 부고장 생성기 - 쉽고 빠르게 부고장을 생성하세요.">
@@ -391,16 +392,16 @@
                 return;
             }
             
-            if (typeof showLoading === 'function') showLoading();
+            AppUtils.showLoading();
             
             try {
                 if (!window.obituaryDB) {
                     AppUtils.showToast('부고 검색 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.', 'warning');
-                    if (typeof hideLoading === 'function') hideLoading();
+                    AppUtils.hideLoading();
                     return;
                 }
                 const obituaries = await window.obituaryDB.searchByDeceasedName(deceasedName);
-                if (typeof hideLoading === 'function') hideLoading();
+                AppUtils.hideLoading();
                 
                 if (!obituaries || obituaries.length === 0) {
                     AppUtils.showToast('해당하는 부고장을 찾을 수 없습니다.', 'warning');
@@ -446,7 +447,7 @@
             } catch (error) {
                 console.error('부고장 검색 오류:', error);
                 AppUtils.showToast('검색 중 오류가 발생했습니다.', 'error');
-                if (typeof hideLoading === 'function') hideLoading();
+                AppUtils.hideLoading();
             }
         }
 
