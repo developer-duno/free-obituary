@@ -1,0 +1,2 @@
+// 고인 정보(DeceasedInfo) Value Object 단위 테스트
+// test
