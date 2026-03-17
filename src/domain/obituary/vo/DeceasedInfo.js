@@ -6,7 +6,8 @@ export class DeceasedInfo {
         gender,     // 성별 (예: 'male', 'female', 'other')
         deathDate,  // 별세일 (YYYY-MM-DD 형식 권장, 필수)
         deathTime,  // 별세시간 (HH:MM 형식 권장)
-        deathExpression = '' // 별세표현 (별세/영면/서거 등)
+        deathExpression = '', // 별세표현 (별세/영면/서거 등)
+        nameHanja = '' // 한자 이름
     }) {
         if (!name || name.trim() === '') {
             throw new Error('고인명(DeceasedInfo.name)은 필수입니다.');
@@ -41,6 +42,7 @@ export class DeceasedInfo {
         this.deathDate = deathDate; // Date 객체로 변환하거나 유효성 검사 강화 가능
         this.deathTime = deathTime;
         this.deathExpression = deathExpression;
+        this.nameHanja = nameHanja || '';
 
         // 불변성을 위해 Object.freeze 사용 (얕은 불변성)
         Object.freeze(this);

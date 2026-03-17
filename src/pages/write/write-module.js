@@ -135,6 +135,7 @@ import { TemplateSelector } from '../../common/template-selector.js';
                         if (form) {
                             if (obituaryEntity.deceasedInfo) {
                                 form.elements['deceased-name'].value = obituaryEntity.deceasedInfo.name || '';
+                                if (form.elements['deceased-name-hanja']) form.elements['deceased-name-hanja'].value = obituaryEntity.deceasedInfo.nameHanja || '';
                                 form.elements['deceased-age'].value = obituaryEntity.deceasedInfo.age || '';
                                 form.elements['gender'].value = obituaryEntity.deceasedInfo.gender || '';
                                 form.elements['deceased-title'].value = obituaryEntity.deceasedInfo.title || '';
@@ -269,7 +270,8 @@ import { TemplateSelector } from '../../common/template-selector.js';
             gender: form.elements['gender']?.value,
             deathDate: form.elements['death-date']?.value,
             deathTime: form.elements['death-time']?.value,
-            deathExpression: form.elements['death-expression']?.value || ''
+            deathExpression: form.elements['death-expression']?.value || '',
+            nameHanja: form.elements['deceased-name-hanja']?.value || ''
         };
 
         const funeralInfoData = {

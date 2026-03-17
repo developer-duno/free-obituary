@@ -164,7 +164,8 @@ import { appConfig } from '../config/app.config.js';
 
         let deceasedTitleText = deceasedInfo.title || '';
         if (deceasedTitleText && !deceasedTitleText.endsWith('님')) deceasedTitleText += ' ';
-        AppUtils.setText('deceased-name', `故 ${deceasedTitleText}${deceasedInfo.name || ''}`);
+        const hanjaText = deceasedInfo.nameHanja ? '(' + AppUtils.escapeHTML(deceasedInfo.nameHanja) + ')' : '';
+        AppUtils.setText('deceased-name', `故 ${deceasedTitleText}${deceasedInfo.name || ''}${hanjaText}`);
         
         let deceasedAgeText = deceasedInfo.age ? `향년 ${deceasedInfo.age}세` : '';
         if (deceasedInfo.gender) {
@@ -240,40 +241,47 @@ import { appConfig } from '../config/app.config.js';
         AppUtils.setText('cemetery-info', funeralInfo.cemetery || '-');
         AppUtils.setText('additional-guidance', obituaryEntity.messageContent || '-');
 
-        // 계좌 정보 표시 (manage-module과 동일한 로직 가정)
+        // 계좌 정보 표시 (단일 객체 + 배열 모두 지원)
         const accountInfoContainer = document.getElementById('account-info-display');
         const accountListDiv = document.getElementById('account-list-display');
         if (accountInfoContainer && accountListDiv) {
             accountListDiv.innerHTML = '';
-            let accountData = null;
+            let accountList = [];
             try {
-                // accountInfo 필드 우선 확인, 없으면 additionalInfo에서 JSON 파싱 시도
-                if (obituaryEntity.accountInfo && typeof obituaryEntity.accountInfo === 'object') {
-                    accountData = obituaryEntity.accountInfo; 
+                const rawAccount = obituaryEntity.accountInfo;
+                if (Array.isArray(rawAccount)) {
+                    accountList = rawAccount;
+                } else if (rawAccount && typeof rawAccount === 'object' && rawAccount.bankName) {
+                    accountList = [rawAccount];
                 } else if (typeof obituaryEntity.additionalInfo === 'string' && obituaryEntity.additionalInfo.trim().startsWith('{')) {
                     const parsedAdditional = safeParseJSON(obituaryEntity.additionalInfo);
                     if (parsedAdditional && parsedAdditional.accountInfo) {
-                        accountData = parsedAdditional.accountInfo;
+                        accountList = Array.isArray(parsedAdditional.accountInfo)
+                            ? parsedAdditional.accountInfo
+                            : [parsedAdditional.accountInfo];
                     }
                 }
             } catch (e) { console.warn('계좌 정보 파싱 오류 (preview)', e); }
 
-            if (accountData && accountData.bankName && accountData.accountNumber && accountData.holder) {
-                const accDiv = document.createElement('div');
-                accDiv.className = 'account-item-preview';
-                accDiv.innerHTML = `
-                    <span class="account-bank-preview">${AppUtils.escapeHTML(accountData.bankName)}</span>
-                    <span class="account-number-preview">${AppUtils.escapeHTML(accountData.accountNumber)}</span>
-                    <span class="account-holder-preview">(${AppUtils.escapeHTML(accountData.holder)})</span>
-                    <button class="account-copy-btn" type="button" aria-label="계좌번호 복사">복사</button>`;
-                
-                const copyBtn = accDiv.querySelector('.account-copy-btn');
-                if (copyBtn) {
-                    copyBtn.addEventListener('click', () => {
-                        AppUtils.copyToClipboard(`${accountData.bankName} ${accountData.accountNumber} (${accountData.holder})`);
-                    });
-                }
-                accountListDiv.appendChild(accDiv);
+            const validAccounts = accountList.filter(a => a && a.bankName && a.accountNumber && a.holder);
+            if (validAccounts.length > 0) {
+                validAccounts.forEach(acc => {
+                    const accDiv = document.createElement('div');
+                    accDiv.className = 'account-item-preview';
+                    const labelHtml = acc.label ? `<span class="account-label-preview">${AppUtils.escapeHTML(acc.label)}</span> ` : '';
+                    accDiv.innerHTML = `
+                        ${labelHtml}<span class="account-bank-preview">${AppUtils.escapeHTML(acc.bankName)}</span>
+                        <span class="account-number-preview">${AppUtils.escapeHTML(acc.accountNumber)}</span>
+                        <span class="account-holder-preview">(${AppUtils.escapeHTML(acc.holder)})</span>
+                        <button class="account-copy-btn" type="button" aria-label="계좌번호 복사">복사</button>`;
+                    const copyBtn = accDiv.querySelector('.account-copy-btn');
+                    if (copyBtn) {
+                        copyBtn.addEventListener('click', () => {
+                            AppUtils.copyToClipboard(`${acc.bankName} ${acc.accountNumber} (${acc.holder})`);
+                        });
+                    }
+                    accountListDiv.appendChild(accDiv);
+                });
                 accountInfoContainer.style.display = 'block';
             } else {
                 accountInfoContainer.style.display = 'none';
