@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
     API_BASE_URL: '',
     /** 근조화환 기능 설정 */
     WREATH_ENABLED: true,
-    WREATH_VENDOR_URL: '',
+    WREATH_VENDOR_URL: 'https://flowerpartners.co.kr/products?cat=%EA%B7%BC%EC%A1%B0%ED%99%94%ED%99%98',
     WREATH_VENDOR_PARAM_KEY: 'obituaryId',
     WREATH_TYPES: ['근조화환 3단', '근조화환 2단', '근조바구니', '근조란'],
     MAX_WREATH_DISPLAY: 50,
