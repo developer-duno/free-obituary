@@ -18,6 +18,9 @@ export class FuneralInfo {
         this.room = room;
         this.departureDate = departureDate;
         this.departureTime = departureTime;
+        if (cemetery && cemetery.length > 100) {
+            throw new Error('장지는 100자 이내로 입력해주세요.');
+        }
         this.cemetery = cemetery;
         this.coffinDate = coffinDate;
         this.coffinTime = coffinTime;

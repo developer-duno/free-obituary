@@ -9,6 +9,12 @@ export class GuestbookEntry {
         if (!authorName || authorName.trim() === '') {
             throw new Error('작성자 이름(GuestbookEntry.authorName)은 필수입니다.');
         }
+        if (authorName.trim().length > 20) {
+            throw new Error('작성자 이름은 20자 이내로 입력해주세요.');
+        }
+        if (relationship && relationship.trim().length > 10) {
+            throw new Error('관계는 10자 이내로 입력해주세요.');
+        }
         if (!message || message.trim() === '') {
             throw new Error('메시지(GuestbookEntry.message)는 필수입니다.');
         }

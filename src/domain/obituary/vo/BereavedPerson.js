@@ -3,8 +3,14 @@ export class BereavedPerson {
         if (!relationship || relationship.trim() === '') {
             throw new Error('유가족 관계(BereavedPerson.relationship)는 필수입니다.');
         }
+        if (relationship.trim().length > 20) {
+            throw new Error('유가족 관계는 20자 이내로 입력해주세요.');
+        }
         if (!name || name.trim() === '') {
             throw new Error('유가족 이름(BereavedPerson.name)은 필수입니다.');
+        }
+        if (name.trim().length > 50) {
+            throw new Error('유가족 이름은 50자 이내로 입력해주세요.');
         }
 
         this.relationship = relationship;

@@ -2050,8 +2050,8 @@
 
             <h2>고인 정보<span style="color:#ff0000">*</span></h2>
             <div class="form-group deceased-info-row">
-                <input type="text" id="deceased-name" aria-label="고인 성함" name="deceased-name" placeholder="고인 성함 (예: 홍길동)" required tabindex="1" enterkeyhint="next" style="flex: 1.2;">
-                <input type="text" id="deceased-name-hanja" aria-label="한자 이름" name="deceased-name-hanja" placeholder="한자 (선택)" tabindex="1" enterkeyhint="next" style="flex: 0.8;">
+                <input type="text" id="deceased-name" aria-label="고인 성함" maxlength="50" name="deceased-name" placeholder="고인 성함 (예: 홍길동)" required tabindex="1" enterkeyhint="next" style="flex: 1.2;">
+                <input type="text" id="deceased-name-hanja" aria-label="한자 이름" maxlength="50" name="deceased-name-hanja" placeholder="한자 (선택)" tabindex="1" enterkeyhint="next" style="flex: 0.8;">
                 <input type="number" id="deceased-age" aria-label="향년" name="deceased-age" placeholder="향년" required tabindex="2" inputmode="numeric" min="0" max="150" enterkeyhint="next" style="flex: 0.5;">
                 <select id="gender" name="gender" required style="flex: 0.4;" tabindex="3" aria-label="성별">
                     <option value="male" selected>남성</option>
@@ -2083,7 +2083,7 @@
             </div>
             <p style="font-size: 0.85em; color: #666; margin: -4px 0 8px 0;">종교/상황에 맞는 표현을 선택하시면 부고 문구에 반영됩니다.</p>
             <div class="form-group">
-                <input type="text" id="deceased-title" aria-label="고인 호칭" name="deceased-title" placeholder="직함 예)전 OO고등학교 교장 (선택)" tabindex="5" enterkeyhint="next" style="width: 100%;">
+                <input type="text" id="deceased-title" aria-label="고인 호칭" maxlength="20" name="deceased-title" placeholder="직함 예)전 OO고등학교 교장 (선택)" tabindex="5" enterkeyhint="next" style="width: 100%;">
             </div>
 
             <h2>영정 사진</h2>
@@ -2176,7 +2176,7 @@
 
             <h2>장지 장소</h2>
             <div class="form-group">
-                <input type="text" id="cemetery" aria-label="장지 장소" name="cemetery" placeholder="장지 정보 입력 예) 1차: 추모화장장 2차: 납골당 (선택)" tabindex="8" enterkeyhint="next">
+                <input type="text" id="cemetery" aria-label="장지 장소" maxlength="100" name="cemetery" placeholder="장지 정보 입력 예) 1차: 추모화장장 2차: 납골당 (선택)" tabindex="8" enterkeyhint="next">
             </div>
 
             <h2>상주 정보<span style="color:#ff0000">*</span></h2>
@@ -2272,7 +2272,7 @@
                         <option value="교회신도">교회신도</option>
                     </select>
                     <input type="text" class="custom-relationship-input" name="customRelationship[]" placeholder="관계 직접 입력" style="display:none; margin-top:5px;">
-                    <input type="text" name="bereavedName[]" placeholder="이름 (필수)" required tabindex="9" enterkeyhint="next">
+                    <input type="text" name="bereavedName[]" placeholder="이름 (필수)" maxlength="50" required tabindex="9" enterkeyhint="next">
                 </div>
             </div>
             <div class="button-container">
@@ -2309,7 +2309,7 @@
             <div id="selected-message" class="selected-message">부고 소식을 전하게 되어 마음이 무겁습니다.
 개별적으로 연락드리지 못한 점 너그러이 양해 부탁드리며,
 아래와 같이 장례 일정을 안내드립니다.</div>
-            <textarea id="custom-message" aria-label="직접 입력 메시지" class="custom-message" placeholder="직접 작성할 말씀을 입력해주세요.">부고 소식을 전하게 되어 마음이 무겁습니다.
+            <textarea id="custom-message" aria-label="직접 입력 메시지" maxlength="500" class="custom-message" placeholder="직접 작성할 말씀을 입력해주세요.">부고 소식을 전하게 되어 마음이 무겁습니다.
 개별적으로 연락드리지 못한 점 너그러이 양해 부탁드리며,
 아래와 같이 장례 일정을 안내드립니다.</textarea>
 

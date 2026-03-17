@@ -12,8 +12,17 @@ export class DeceasedInfo {
         if (!name || name.trim() === '') {
             throw new Error('고인명(DeceasedInfo.name)은 필수입니다.');
         }
+        if (name.trim().length > 50) {
+            throw new Error('고인명은 50자 이내로 입력해주세요.');
+        }
         if (!deathDate) {
             throw new Error('별세일(DeceasedInfo.deathDate)은 필수입니다.');
+        }
+        if (nameHanja && nameHanja.length > 50) {
+            throw new Error('한자 이름은 50자 이내로 입력해주세요.');
+        }
+        if (title && title.length > 20) {
+            throw new Error('직함은 20자 이내로 입력해주세요.');
         }
 
         this.name = name;
