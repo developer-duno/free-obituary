@@ -239,7 +239,6 @@ export function initPhotoEditor() {
                             // 여기서는 croppedCanvas에서 이미 적절한 크기와 품질로 생성되었다고 가정하고,
                             // AppUtils.compressImage를 중복 호출하지 않거나, 필요성을 재검토합니다.
                             // 예시: imageData = await AppUtils.compressImage(imageData, 1000, 1000, 'image/jpeg', 0.8); 
-                            console.log('Cropped image data URL length:', imageData.length);
                         } catch (error) {
                             console.error('크롭 후 이미지 추가 압축 오류:', error);
                             // AppUtils.showToast('이미지 저장 중 오류가 발생했습니다.', 'error');

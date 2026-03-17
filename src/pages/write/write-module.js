@@ -28,7 +28,6 @@ import { TemplateSelector } from '../../common/template-selector.js';
     };
 
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("write-module.js init start");
 
         if (window.appServices && window.appServices.obituaryService) {
             obituaryServiceInstance = window.appServices.obituaryService;
@@ -68,7 +67,6 @@ import { TemplateSelector } from '../../common/template-selector.js';
         setupBeforeUnloadWarning();
         initializePageComponents();
         
-        console.log("write-module.js init complete");
     });
 
     function initDOMElements() {
@@ -334,7 +332,6 @@ import { TemplateSelector } from '../../common/template-selector.js';
     }
 
     function handleTemplateSelection(templateNumber) {
-        console.log("Template selected:", templateNumber);
         if (DOMElements.selectedTemplateHidden) {
             DOMElements.selectedTemplateHidden.value = templateNumber;
         }

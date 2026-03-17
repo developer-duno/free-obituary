@@ -64,7 +64,6 @@ import { appConfig } from '../config/app.config.js';
     // let currentObituaryData = null; // Entity 직접 사용
 
     document.addEventListener('DOMContentLoaded', async function() {
-        console.log("부고 미리보기 페이지 초기화 시작 (preview-module)");
 
         // 서비스 인스턴스 가져오기
         if (window.appServices && window.appServices.obituaryService) {
@@ -118,7 +117,6 @@ import { appConfig } from '../config/app.config.js';
         if (!obituaryServiceInstance) return;
         try {
             await obituaryServiceInstance.incrementViewCount(obituaryId);
-            console.log("조회수 업데이트 완료:", obituaryId);
         } catch (error) {
             console.error('조회수 업데이트 오류 (preview-module):', error);
         }

@@ -38,12 +38,10 @@ const bankList = [
 export function initAccountManager() { // export 추가
     // 이미 초기화된 경우 중복 실행 방지
     if (isInitialized) {
-        console.log("계좌 관리 모듈이 이미 초기화되어 있습니다");
         return;
     }
     
     try {
-        console.log("계좌 관리 모듈 초기화 중...");
         
         // DOM 요소 레퍼런스 가져오기
         const modal = document.getElementById('account-modal');
@@ -132,7 +130,6 @@ export function initAccountManager() { // export 추가
         
         // 초기화 완료 표시
         isInitialized = true;
-        console.log("계좌 관리 모듈 초기화 완료");
     } catch (error) {
         console.error('계좌 관리 모듈 초기화 오류:', error);
     }

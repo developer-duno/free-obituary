@@ -113,11 +113,9 @@ let areMessageEventsBound = false; // window.messageEventsInitialized 대체
 // 메시지 템플릿 초기화 함수
 export function initMessageTemplates() { // export 추가
     if (isModuleInitialized) {
-        console.log("메시지 템플릿 모듈이 이미 초기화되어 있습니다");
         return;
     }
     try {
-        console.log("메시지 템플릿 초기화 중...");
         activateDirectInput(); // 초기 모드 설정
         
         if (!areMessageEventsBound) { // 이벤트 중복 방지
@@ -148,7 +146,6 @@ export function initMessageTemplates() { // export 추가
         }
         addMessageStyles(); // 스타일 동적 추가
         isModuleInitialized = true;
-        console.log("메시지 템플릿 초기화 완료");
     } catch (error) {
         console.error("메시지 템플릿 초기화 중 오류 발생:", error);
     }
@@ -197,7 +194,6 @@ function handleCustomMessageInput() {
 
 // 외부에서 메시지 설정하는 함수
 export function setMessageData(type, content) { // export 추가
-    console.log(`[MessageTemplates] setMessageData 호출됨: type=${type}, content=${content}`);
     const customMessageEl = document.getElementById('custom-message');
     const selectedMessageEl = document.getElementById('selected-message');
 
@@ -234,7 +230,6 @@ export function setMessageData(type, content) { // export 추가
 // 직접 입력 모드 활성화 (초기 호출용)
 function activateDirectInput() {
     try {
-        console.log("직접 입력 모드 활성화 중...");
         
         // 모든 버튼 비활성화
         document.querySelectorAll('.msg-btn').forEach(b => b.classList.remove('active'));
@@ -243,7 +238,6 @@ function activateDirectInput() {
         const directButton = document.querySelector('.msg-btn[data-type="직접"]');
         if (directButton) {
             directButton.classList.add('active');
-            console.log("직접 버튼 활성화됨");
         } else {
             console.warn("직접 버튼을 찾을 수 없음");
         }
@@ -265,7 +259,6 @@ function activateDirectInput() {
             
             // 폼 제출 시 사용할 히든 필드에도 값 저장
             updateHiddenFields('직접', defaultMessage);
-            console.log("직접 입력 필드 초기화 완료");
         } else {
             console.warn("메시지 필드를 찾을 수 없음");
         }

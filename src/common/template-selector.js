@@ -69,7 +69,6 @@ export class TemplateSelector {
         this._setupEventListeners();
         this.isInitialized = true;
         // setTimeout(() => this._preloadTemplateImages(), 500); // 필요시 미리 로딩
-        console.log('TemplateSelector 초기화 완료');
     }
 
     _setupEventListeners() {

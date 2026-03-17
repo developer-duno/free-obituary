@@ -11,7 +11,6 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
     document.addEventListener('DOMContentLoaded', initManagePage);
 
     function initManagePage() {
-        console.log("부고 관리 페이지 초기화 시작 (manage-module)");
         if (window.appServices && window.appServices.obituaryService) {
             obituaryServiceInstance = window.appServices.obituaryService;
         } else {
@@ -274,9 +273,8 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
         document.getElementById('add-account-btn')?.addEventListener('click', addAccountEntry);
         document.getElementById('saveAccountBtn')?.addEventListener('click', saveAccountChanges);
 
-        // 감사장/이동
+        // 감사장
         document.getElementById('edit-thanks-button')?.addEventListener('click', handleEditThanks);
-        document.getElementById('move-obituary-button')?.addEventListener('click', handleMoveObituary);
 
         // 삭제 모달
         document.getElementById('confirm-delete-button')?.addEventListener('click', handleDeleteObituaryWithPassword);
@@ -342,10 +340,6 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
             return;
         }
         window.location.href = `thanks.html?id=${currentObituaryId}`;
-    }
-
-    function handleMoveObituary() {
-        AppUtils.showToast('부고장 이동 기능은 준비 중입니다.');
     }
 
     // === 날짜 모달 핸들러 ===

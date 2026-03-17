@@ -390,7 +390,6 @@ export function applyTemplateFromSessionOrParam(templateParam = null) {
         default:
             break;
     }
-    console.log(`Template style applied: ${templateToApply}`);
 }
 
 export function initTemplateSelectionLogic() {
@@ -526,7 +525,6 @@ export function optimizeTouchEvents() {
             // el.click(); // 실제 클릭 트리거는 주석 처리 유지 (부작용 가능성)
         });
     });
-    console.log("터치 이벤트 최적화 적용됨.");
 }
 
 export function optimizeInputFormats() {
@@ -546,14 +544,11 @@ export function optimizeInputFormats() {
             }
         });
     });
-    console.log("입력 필드 포맷 최적화 적용됨.");
 }
 
 export function initExtendedCommonFeatures() {
-    console.log("확장 공통 기능 초기화 시작...");
     if (typeof optimizeTouchEvents === 'function') optimizeTouchEvents(); // AppUtils 내부 함수 호출
     if (typeof optimizeInputFormats === 'function') optimizeInputFormats(); // AppUtils 내부 함수 호출
-    console.log("확장 공통 기능 초기화 완료.");
 }
 
 

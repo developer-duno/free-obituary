@@ -34,7 +34,6 @@ export class LocalStorageObituaryRepository extends ObituaryRepositoryInterface 
             });
             if (filtered.length < obituaries.length) {
                 this._saveAllRawData(filtered);
-                console.log('자동 정리: ' + (obituaries.length - filtered.length) + '건 삭제');
             }
         } catch (e) { console.warn('자동 정리 실패:', e); }
     }

@@ -10,7 +10,6 @@ import { AppUtils, EditModeManager } from '../common/utils.js';
     // let currentFoundObituary = null; // Entity 인스턴스를 직접 사용
 
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("부고 검색 페이지 초기화 시작 (search-module)");
 
         // 서비스 인스턴스 가져오기
         if (window.appServices && window.appServices.obituaryService) {

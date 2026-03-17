@@ -19,7 +19,6 @@ export function initBereavedManager() { // init을 initBereavedManager로 변경
         setupEventListeners();
         
         state.initialized = true;
-        console.log("✅ 상주 정보 관리 모듈 초기화 완료");
     } catch (error) {
         console.error("상주 정보 관리 모듈 초기화 실패:", error);
     }

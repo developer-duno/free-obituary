@@ -12,7 +12,6 @@ const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 // 모듈 초기화 함수 - export하여 외부에서 사용
 export function initDateTimePickers() { // 전역 호출되던 이름 initDateTimePickers로 변경
     if (isInitialized) {
-        console.log("날짜 시간 선택 모듈이 이미 초기화되어 있습니다");
         return;
     }
     if (typeof flatpickr === 'undefined') {
@@ -20,7 +19,6 @@ export function initDateTimePickers() { // 전역 호출되던 이름 initDateTi
         return;
     }
     try {
-        console.log("날짜 시간 선택 모듈 초기화 중...");
         initializeDatePickers();
         initializeTimePickers();
         setInitialDateValues();
@@ -28,7 +26,6 @@ export function initDateTimePickers() { // 전역 호출되던 이름 initDateTi
         setupValidation();
         updateSectionTitle();
         isInitialized = true;
-        console.log("날짜 시간 선택 모듈 초기화 완료");
     } catch (error) {
         console.error("날짜 시간 선택 모듈 초기화 중 오류 발생:", error);
     }

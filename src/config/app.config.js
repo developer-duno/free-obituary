@@ -34,6 +34,5 @@ function getConfig() {
     return { ...DEFAULT_CONFIG, ...overrides };
 }
 
-// TODO: Object.freeze(appConfig) 적용하여 런타임 변조 방지
-export const appConfig = getConfig();
+export const appConfig = Object.freeze(getConfig());
 export default appConfig;
