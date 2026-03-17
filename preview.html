@@ -1122,6 +1122,13 @@
 
         <div class="divider"></div>
 
+        <!-- Phase 1: 발인일시 강조 표시 -->
+        <div class="departure-highlight" id="departure-highlight" style="display:none;">
+            <div class="departure-highlight-label">발인</div>
+            <div class="departure-highlight-datetime" id="departure-highlight-datetime"></div>
+            <div class="departure-highlight-place" id="departure-highlight-place"></div>
+        </div>
+
         <div class="section">
             <div class="section-title">부고정보</div>
             <div class="info-row info-row-preview">
@@ -1180,6 +1187,9 @@
             <span id="view-count-number">0</span>명이 조문하셨습니다
         </div>
 
+        <!-- Phase 1: 감사장 보내기 버튼 (발인일 경과 시 표시) -->
+        <button class="thanks-button" id="send-thanks-button" style="display:none;">감사장 보내기</button>
+
         <!-- 방명록(조문 메시지) 섹션 -->
         <div class="divider" id="guestbookDivider" style="display: none;"></div>
         <div class="section guestbook-section" id="guestbook-section">
@@ -1230,6 +1240,10 @@
             <div class="share-button" id="copy-link-button">
                 <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%236E6E6E%27/%3E%3Cpath d=%27M20 28a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M28 20a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3C/svg%3E" alt="링크"></div>
                 <div class="share-name">링크</div>
+            </div>
+            <div class="share-button" id="share-band-button">
+                <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%2306CF9C%27/%3E%3Ctext x=%2724%27 y=%2733%27 font-family=%27Arial%27 font-size=%2726%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EB%3C/text%3E%3C/svg%3E" alt="밴드"></div>
+                <div class="share-name">밴드</div>
             </div>
         </div>
     </div>

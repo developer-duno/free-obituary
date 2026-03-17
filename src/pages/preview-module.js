@@ -217,6 +217,20 @@ import { appConfig } from '../config/app.config.js';
             if(coffinRow) coffinRow.style.display = 'none';
         }
         AppUtils.setText('departure-date-time', AppUtils.formatDateTimeDetailed(funeralInfo.departureDate, funeralInfo.departureTime, true, !!funeralInfo.departureTime) || '-');
+
+        // Phase 1: 발인일시 강조 표시
+        const highlightEl = document.getElementById('departure-highlight');
+        if (highlightEl && funeralInfo.departureDate) {
+            const dtText = AppUtils.formatDateTimeDetailed(
+                funeralInfo.departureDate, funeralInfo.departureTime, true, !!funeralInfo.departureTime
+            );
+            AppUtils.setText('departure-highlight-datetime', dtText);
+            const placeText = funeralInfo.funeralHallName
+                ? funeralInfo.funeralHallName + (funeralInfo.room ? ' ' + funeralInfo.room : '')
+                : '';
+            if (placeText) AppUtils.setText('departure-highlight-place', placeText);
+            highlightEl.style.display = 'block';
+        }
         AppUtils.setText('cemetery-info', funeralInfo.cemetery || '-');
         AppUtils.setText('additional-guidance', obituaryEntity.messageContent || '-');
 
@@ -243,17 +257,15 @@ import { appConfig } from '../config/app.config.js';
                 accDiv.className = 'account-item-preview';
                 accDiv.innerHTML = `
                     <span class="account-bank-preview">${AppUtils.escapeHTML(accountData.bankName)}</span>
-                    <span class="account-number-preview" title="클릭하여 복사">
-                        ${AppUtils.escapeHTML(accountData.accountNumber)}
-                    </span>
-                    <span class="account-holder-preview">(예금주: ${AppUtils.escapeHTML(accountData.holder)})</span>`;
+                    <span class="account-number-preview">${AppUtils.escapeHTML(accountData.accountNumber)}</span>
+                    <span class="account-holder-preview">(${AppUtils.escapeHTML(accountData.holder)})</span>
+                    <button class="account-copy-btn" type="button" aria-label="계좌번호 복사">복사</button>`;
                 
-                const accountNumberSpan = accDiv.querySelector('.account-number-preview');
-                if (accountNumberSpan) {
-                    accountNumberSpan.addEventListener('click', () => {
-                        AppUtils.copyToClipboard(`${accountData.bankName} ${accountData.accountNumber} ${accountData.holder}`);
+                const copyBtn = accDiv.querySelector('.account-copy-btn');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', () => {
+                        AppUtils.copyToClipboard(`${accountData.bankName} ${accountData.accountNumber} (${accountData.holder})`);
                     });
-                     accountNumberSpan.style.cursor = 'pointer';
                 }
                 accountListDiv.appendChild(accDiv);
                 accountInfoContainer.style.display = 'block';
@@ -296,6 +308,20 @@ import { appConfig } from '../config/app.config.js';
 
         // 조회수 표시
         renderViewCount(obituaryEntity.viewCount || 0);
+
+        // Phase 1: 감사장 보내기 버튼 (발인일 경과 시 표시)
+        const thanksBtn = document.getElementById('send-thanks-button');
+        if (thanksBtn && funeralInfo.departureDate) {
+            try {
+                const depDateStr = typeof funeralInfo.departureDate === 'string'
+                    ? funeralInfo.departureDate.replace(/[-.]/g, '/')
+                    : funeralInfo.departureDate;
+                const depDate = new Date(depDateStr);
+                if (!isNaN(depDate.getTime()) && new Date() > depDate) {
+                    thanksBtn.style.display = 'block';
+                }
+            } catch (e) { /* 날짜 파싱 실패 시 버튼 숨김 유지 */ }
+        }
 
         // 방명록 표시
         renderGuestbookEntries(obituaryEntity);
@@ -368,6 +394,10 @@ import { appConfig } from '../config/app.config.js';
         document.getElementById('share-kakao-button')?.addEventListener('click', () => handleShareKakao(obituaryEntity));
         document.getElementById('share-sms-button')?.addEventListener('click', () => handleShareSms(obituaryEntity));
         document.getElementById('copy-link-button')?.addEventListener('click', handleCopyLink);
+        document.getElementById('share-band-button')?.addEventListener('click', () => handleShareBand(obituaryEntity));
+        document.getElementById('send-thanks-button')?.addEventListener('click', () => {
+            window.location.href = `thanks.html?id=${encodeURIComponent(obituaryEntity.id)}`;
+        });
         
         document.getElementById('toggle-account-button')?.addEventListener('click', toggleAccountDisplay);
         document.getElementById('order-wreath-button')?.addEventListener('click', () => handleOrderWreath(obituaryEntity));
@@ -587,6 +617,16 @@ import { appConfig } from '../config/app.config.js';
         window.location.href = smsUrl;
     }
     function handleCopyLink() { AppUtils.copyToClipboard(getShareLink()); }
+    function handleShareBand(obituaryEntity) {
+        const shareUrl = getShareLink();
+        const deceasedName = obituaryEntity.deceasedInfo?.name || '고인';
+        const body = '부고 - 故 ' + deceasedName + '님';
+        const bandUrl = 'https://band.us/plugin/share?body='
+            + encodeURIComponent(body + '
+' + shareUrl)
+            + '&route=' + encodeURIComponent(shareUrl);
+        window.open(bandUrl, '_blank');
+    }
     function renderGuestbookEntries(obituaryEntity) {
         const guestbookList = document.getElementById('guestbook-list');
         const guestbookEmpty = document.getElementById('guestbook-empty');

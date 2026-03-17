@@ -89,7 +89,27 @@
         var closeBtn = document.getElementById('sidebarCloseBtn');
         if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", async function() {
+            // Phase 1: URL 파라미터에서 부고 데이터 자동 로드
+            try {
+                var urlParams = new URLSearchParams(window.location.search);
+                var obituaryId = urlParams.get('id');
+                if (obituaryId && window.appServices && window.appServices.obituaryService) {
+                    var obituary = await window.appServices.obituaryService.getObituaryById(obituaryId);
+                    if (obituary) {
+                        var nameInput = document.getElementById('deceasedName');
+                        if (nameInput && obituary.deceasedInfo && obituary.deceasedInfo.name) {
+                            nameInput.value = obituary.deceasedInfo.name;
+                        }
+                        var familyInput = document.getElementById('familyName');
+                        if (familyInput && obituary.bereaved && obituary.bereaved.length > 0) {
+                            var rep = obituary.bereaved.find(function(b) { return b.isRepresentative; }) || obituary.bereaved[0];
+                            if (rep && rep.name) familyInput.value = rep.name;
+                        }
+                    }
+                }
+            } catch (e) { console.warn('부고 데이터 자동 로드 실패:', e); }
+
             var form = document.getElementById("thanksForm");
             if (form) {
                 var dateInput = document.getElementById("date");
