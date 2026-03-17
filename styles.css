@@ -2544,3 +2544,34 @@ section.info-section #addressInfo {
 .thanks-button:active {
     opacity: 0.8;
 }
+
+/* === Phase 2: QR코드 모달 === */
+.qr-code-container {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-md) 0;
+}
+.qr-code-container canvas {
+    border-radius: var(--radius-sm);
+}
+.qr-description {
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--accent-brown);
+    margin: 0 0 var(--space-md);
+}
+.qr-download-btn {
+    display: block;
+    width: 100%;
+    padding: var(--space-sm);
+    background: var(--primary-brown);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+}
+.qr-download-btn:active {
+    opacity: 0.8;
+}

@@ -25,6 +25,7 @@
         }
     }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
     <script src="scripts.js" type="module"></script>
     <script src="src/pages/preview-module.js" type="module"></script> 
 
@@ -1245,9 +1246,26 @@
                 <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%2306CF9C%27/%3E%3Ctext x=%2724%27 y=%2733%27 font-family=%27Arial%27 font-size=%2726%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EB%3C/text%3E%3C/svg%3E" alt="밴드"></div>
                 <div class="share-name">밴드</div>
             </div>
+            <div class="share-button" id="share-qr-button">
+                <div class="share-icon"><img src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%23555%27/%3E%3Crect x=%2712%27 y=%2712%27 width=%278%27 height=%278%27 fill=%27white%27/%3E%3Crect x=%2728%27 y=%2712%27 width=%278%27 height=%278%27 fill=%27white%27/%3E%3Crect x=%2712%27 y=%2728%27 width=%278%27 height=%278%27 fill=%27white%27/%3E%3Crect x=%2728%27 y=%2728%27 width=%274%27 height=%274%27 fill=%27white%27/%3E%3Crect x=%2732%27 y=%2732%27 width=%274%27 height=%274%27 fill=%27white%27/%3E%3Crect x=%2722%27 y=%2722%27 width=%274%27 height=%274%27 fill=%27white%27/%3E%3C/svg%3E" alt="QR코드"></div>
+                <div class="share-name">QR코드</div>
+            </div>
         </div>
     </div>
     
+
+    <!-- QR코드 모달 -->
+    <div class="modal-overlay" id="qr-modal-overlay"></div>
+    <div class="modal-container modal-preview" role="dialog" aria-modal="true" id="qr-code-modal" style="display:none;">
+        <div class="modal-close close-modal-button" role="button" aria-label="닫기">&times;</div>
+        <div class="modal-title">QR코드</div>
+        <div class="qr-code-container">
+            <canvas id="qr-canvas"></canvas>
+        </div>
+        <p class="qr-description">장례식장에 출력하여 비치하세요</p>
+        <button class="qr-download-btn" id="qr-download-btn">이미지 저장</button>
+    </div>
+
     <!-- 비밀번호 입력 모달 -->
     <div id="edit-password-modal" class="edit-modal modal-preview" role="dialog" aria-modal="true">
         <div class="edit-modal-content">

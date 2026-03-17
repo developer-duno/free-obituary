@@ -88,6 +88,12 @@ import { appConfig } from '../config/app.config.js';
             try {
                 const obituaryEntity = await obituaryServiceInstance.getObituaryById(currentObituaryId);
                 if (obituaryEntity) {
+                    // Phase 2: 자동 만료 체크
+                    if (obituaryEntity.isExpired && obituaryEntity.isExpired(appConfig.OBITUARY_EXPIRY_DAYS || 7)) {
+                        AppUtils.setText('obituary-content', '이 부고는 발인일로부터 일정 기간이 경과하여 비공개 처리되었습니다.', true);
+                        AppUtils.showToast('만료된 부고입니다.', 'info');
+                        return;
+                    }
                     displayObituaryData(obituaryEntity); // Entity 인스턴스 전달
                     await updateViewCount(currentObituaryId); // 조회수는 별도로 ID로 업데이트
                     setupEventListeners(obituaryEntity); // Entity 데이터 기반으로 이벤트 설정 가능
@@ -395,6 +401,9 @@ import { appConfig } from '../config/app.config.js';
         document.getElementById('share-sms-button')?.addEventListener('click', () => handleShareSms(obituaryEntity));
         document.getElementById('copy-link-button')?.addEventListener('click', handleCopyLink);
         document.getElementById('share-band-button')?.addEventListener('click', () => handleShareBand(obituaryEntity));
+        document.getElementById('share-qr-button')?.addEventListener('click', () => handleShowQR());
+        document.getElementById('qr-download-btn')?.addEventListener('click', handleDownloadQR);
+        document.getElementById('qr-modal-overlay')?.addEventListener('click', () => closeModalById('qr-code-modal'));
         document.getElementById('send-thanks-button')?.addEventListener('click', () => {
             window.location.href = `thanks.html?id=${encodeURIComponent(obituaryEntity.id)}`;
         });
@@ -425,7 +434,14 @@ import { appConfig } from '../config/app.config.js';
     function findAddressOnMap(address) { if (address && address !== '-') window.open(`https://map.naver.com/v5/search/${encodeURIComponent(address)}`, '_blank'); }
     function toggleAccountDisplay() { const accInfo = document.getElementById('account-info-display'); if(accInfo) accInfo.style.display = accInfo.style.display === 'none' ? 'block' : 'none'; }
     function openModalById(modalId) { const modal = document.getElementById(modalId); if(modal) { modal.style.display='flex'; trapFocusInModal(modal); } }
-    function closeModalById(modalId) { const modal = document.getElementById(modalId); if(modal) { modal.style.display='none'; releaseFocusTrap(modal); } }
+    function closeModalById(modalId) {
+        const modal = document.getElementById(modalId);
+        if(modal) { modal.style.display='none'; releaseFocusTrap(modal); }
+        if (modalId === 'qr-code-modal') {
+            const overlay = document.getElementById('qr-modal-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+    }
     function openEditModal() { const modal = document.getElementById('edit-password-modal'); if(modal) { document.getElementById('edit-password-input').value = ''; openModalById('edit-password-modal'); } }
     function openShareModal() { openModalById('share-options-modal'); }
     async function handleVerifyPassword(obituaryId) { /* ObituaryService.verifyAndGetObituary 사용 */ 
@@ -626,6 +642,40 @@ import { appConfig } from '../config/app.config.js';
 ' + shareUrl)
             + '&route=' + encodeURIComponent(shareUrl);
         window.open(bandUrl, '_blank');
+    }
+    function handleShowQR() {
+        const shareUrl = getShareLink();
+        const canvas = document.getElementById('qr-canvas');
+        if (!canvas) return;
+        
+        if (typeof QRCode !== 'undefined') {
+            QRCode.toCanvas(canvas, shareUrl, {
+                width: 240,
+                margin: 2,
+                color: { dark: '#333333', light: '#ffffff' }
+            }, function(error) {
+                if (error) {
+                    console.error('QR코드 생성 오류:', error);
+                    AppUtils.showToast('QR코드 생성에 실패했습니다.', 'error');
+                    return;
+                }
+                closeModalById('share-options-modal');
+                openModalById('qr-code-modal');
+                const overlay = document.getElementById('qr-modal-overlay');
+                if (overlay) overlay.style.display = 'block';
+            });
+        } else {
+            AppUtils.showToast('QR코드 라이브러리를 로드할 수 없습니다.', 'error');
+        }
+    }
+    function handleDownloadQR() {
+        const canvas = document.getElementById('qr-canvas');
+        if (!canvas) return;
+        const link = document.createElement('a');
+        link.download = 'obituary-qrcode.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        AppUtils.showToast('QR코드 이미지가 저장되었습니다.', 'success');
     }
     function renderGuestbookEntries(obituaryEntity) {
         const guestbookList = document.getElementById('guestbook-list');

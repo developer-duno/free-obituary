@@ -14,6 +14,29 @@ export class LocalStorageObituaryRepository extends ObituaryRepositoryInterface 
         if (!localStorage.getItem(OBITUARY_DB_KEY)) {
             localStorage.setItem(OBITUARY_DB_KEY, JSON.stringify([]));
         }
+        this._autoCleanup();
+    }
+
+    /** Phase 2: 발인일 + 30일 경과 데이터 자동 정리 */
+    _autoCleanup() {
+        try {
+            const obituaries = this._getAllRawData();
+            const cleanupDays = 30;
+            const now = Date.now();
+            const filtered = obituaries.filter(o => {
+                const depDate = o.funeralInfo?.departureDate || o.departureDate;
+                if (!depDate) return true;
+                try {
+                    const dep = new Date(String(depDate).replace(/[-.]/g, '/'));
+                    if (isNaN(dep.getTime())) return true;
+                    return (now - dep.getTime()) < cleanupDays * 24 * 60 * 60 * 1000;
+                } catch (e) { return true; }
+            });
+            if (filtered.length < obituaries.length) {
+                this._saveAllRawData(filtered);
+                console.log('자동 정리: ' + (obituaries.length - filtered.length) + '건 삭제');
+            }
+        } catch (e) { console.warn('자동 정리 실패:', e); }
     }
 
     /** S2: localStorage 데이터 스키마 검증 */

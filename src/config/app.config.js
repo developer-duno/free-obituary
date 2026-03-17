@@ -24,6 +24,9 @@ const DEFAULT_CONFIG = {
     GUESTBOOK_ENABLED: true,
     MAX_GUESTBOOK_ENTRIES: 100,
     MAX_GUESTBOOK_MESSAGE_LENGTH: 200,
+    /** 부고 자동 만료 설정 (발인일 기준) */
+    OBITUARY_EXPIRY_DAYS: 7,
+    OBITUARY_CLEANUP_DAYS: 30,
 };
 
 function getConfig() {

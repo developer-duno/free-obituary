@@ -234,6 +234,20 @@ export class Obituary {
         return this; 
     }
 
+    /** 부고 만료 여부 확인 (발인일 + expiryDays일 경과) */
+    isExpired(expiryDays = 7) {
+        const depDate = this.funeralInfo?.departureDate;
+        if (!depDate) return false;
+        try {
+            const departure = typeof depDate === 'string'
+                ? new Date(depDate.replace(/[-.]/g, '/'))
+                : depDate instanceof Date ? depDate : null;
+            if (!departure || isNaN(departure.getTime())) return false;
+            const expiryDate = new Date(departure.getTime() + expiryDays * 24 * 60 * 60 * 1000);
+            return new Date() > expiryDate;
+        } catch (e) { return false; }
+    }
+
     // --- Data Transfer Object (DTO) / Plain Object Conversion ---
     // Repository 저장을 위한 순수 데이터 객체 반환
     _toDataObject() {
