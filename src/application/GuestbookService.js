@@ -17,8 +17,8 @@ export class GuestbookService {
         if (!entryData.authorName || typeof entryData.authorName !== 'string' || entryData.authorName.trim().length === 0) {
             throw new Error('이름은 필수입니다.');
         }
-        if (entryData.authorName.length > 50) {
-            throw new Error('이름은 50자 이하여야 합니다.');
+        if (entryData.authorName.length > 20) {
+            throw new Error('이름은 20자 이하여야 합니다.');
         }
         if (!entryData.message || typeof entryData.message !== 'string' || entryData.message.trim().length === 0) {
             throw new Error('메시지는 필수입니다.');
