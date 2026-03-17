@@ -41,6 +41,7 @@ src/
 | guide.html | 이용안내 |
 | faq.html | 자주묻는질문 |
 | thanks.html | 감사 페이지 |
+| procedure.html | 장례 절차 안내 (타임라인, 체크리스트, 비용, 지원제도) |
 
 ## 핵심 규칙
 

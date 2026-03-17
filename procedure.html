@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://developers.kakao.com https://t1.kakaocdn.net https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https:; base-uri 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="장례 절차 안내 - 임종부터 사후 행정까지 단계별 실무 가이드를 제공합니다.">
+    <meta property="og:title" content="장례 절차 안내 | 무료 부고장">
+    <meta property="og:description" content="장례 절차 안내 - 임종부터 사후 행정까지 단계별 실무 가이드를 제공합니다.">
+    <meta property="og:image" content="thumbnail.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="장례 절차 안내 | 무료 부고장">
+    <meta name="twitter:description" content="장례 절차 안내 - 임종부터 사후 행정까지 단계별 실무 가이드를 제공합니다.">
+        <title>장례 절차 안내 | 무료 부고장</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .accordion-section {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #f8f8f8;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: #f0f0f0;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 0 20px;
+        }
+
+        .accordion-content.active {
+            max-height: 2000px;
+            padding: 20px;
+            transition: max-height 0.5s ease-in, padding 0.3s ease-in;
+        }
+
+        .accordion-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .etiquette-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .etiquette-list li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .etiquette-list ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .sub-section {
+            margin-top: 20px;
+        }
+
+        .sub-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        /* 템플릿 모달 스타일 - 인덱스 페이지 스타일로 변경 */
+        .modal-scroll-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .template-item {
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .template-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .template-item.selected {
+            border: 2px solid #5271C2;
+        }
+        
+        .template-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        #loading-indicator {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+        
+        .modal-open {
+            overflow: hidden;
+        }
+        
+        @media screen and (max-width: 480px) {
+            .template-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    
+        .step-timeline { position: relative; padding-left: 30px; margin: 20px 0; }
+        .step-timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: var(--light-brown, #d4c5a9); }
+        .step-item { position: relative; margin-bottom: 24px; }
+        .step-item::before { content: ''; position: absolute; left: -24px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--primary-brown, #8B7355); border: 2px solid var(--bg-brown, #faf6f0); }
+        .step-label { display: inline-block; background: var(--primary-brown, #8B7355); color: #fff; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 12px; margin-bottom: 6px; }
+        .step-title { font-size: 16px; font-weight: 700; color: var(--dark-brown, #5a4a3a); margin-bottom: 6px; }
+        .step-desc { font-size: 14px; color: #555; line-height: 1.6; }
+        .step-desc ul { margin: 6px 0 0 16px; padding: 0; }
+        .step-desc li { margin-bottom: 4px; }
+        .checklist-box { background: var(--bg-brown, #faf6f0); border-radius: var(--radius-md, 8px); padding: 16px 20px; margin: 12px 0; }
+        .checklist-box h3 { font-size: 15px; font-weight: 700; color: var(--dark-brown, #5a4a3a); margin-bottom: 10px; }
+        .checklist-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 14px; line-height: 1.5; color: #444; }
+        .checklist-item::before { content: '☐'; flex-shrink: 0; font-size: 16px; }
+        .cost-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+        .cost-table th, .cost-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5ddd0; }
+        .cost-table th { background: var(--bg-brown, #faf6f0); font-weight: 700; color: var(--dark-brown, #5a4a3a); }
+        .cost-table td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+        .cost-total { font-weight: 800; color: var(--primary-brown, #8B7355); }
+        .info-callout { background: #fff8e7; border-left: 3px solid #f0c040; padding: 12px 16px; margin: 12px 0; border-radius: 0 var(--radius-sm, 4px) var(--radius-sm, 4px) 0; font-size: 13px; line-height: 1.6; color: #555; }
+</style>
+</head>
+<body>
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="header-container">
+            <button class="nav-button back-button" aria-label="뒤로 가기" onclick="history.back()">뒤로</button>
+            <div class="logo" onclick="location.href='index.html';">무료부고장</div>
+            <button class="nav-button menu-button" id="menuButton" aria-label="메뉴 열기">메뉴</button>
+        </div>
+    </header>
+
+    <!-- 사이드바 -->
+    <nav class="sidebar" id="sidebar">
+        <span class="close-btn" id="sidebarCloseBtn" role="button" aria-label="메뉴 닫기">×</span>
+        <a href="write.html">부고장 작성</a>
+        <a href="Search.html">부고장 검색</a>
+        <a href="guide.html">이용안내</a>
+        <a href="faq.html">자주묻는질문</a>
+        <a href="etiquette.html">조문예절</a>
+        <a href="procedure.html">장례절차</a>
+    </nav>
+
+    <main class="page-main">
+        <h1>장례 절차 안내</h1>
+
+        <!-- 장례 진행 타임라인 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>장례 진행 타임라인</h2>
+                <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-content">
+                <div class="step-timeline">
+                    <div class="step-item">
+                        <span class="step-label">임종 직후</span>
+                        <div class="step-title">사망 확인 및 장례식장 연락</div>
+                        <div class="step-desc"><ul>
+                            <li>의사의 사망 확인 및 사망진단서 발급</li>
+                            <li>장례식장 선택 및 연락 (장례식장에서 운구 진행)</li>
+                            <li>가까운 가족에게 연락</li>
+                            <li>장례 형식(3일장/5일장) 및 종교 의식 결정</li>
+                        </ul></div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">1일차</span>
+                        <div class="step-title">빈소 설치 및 부고 발송</div>
+                        <div class="step-desc"><ul>
+                            <li>빈소 설치 및 영정 사진 준비</li>
+                            <li>장례지도사와 일정 협의</li>
+                            <li>부고장 작성 및 발송</li>
+                            <li>상복(완장) 착용</li>
+                            <li>조문객 접수 및 부의금 관리 담당 지정</li>
+                        </ul></div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">2일차</span>
+                        <div class="step-title">염습(입관) 및 조문</div>
+                        <div class="step-desc"><ul>
+                            <li>염습(시신을 깨끗이 씻기고 수의 입힘)</li>
+                            <li>입관식 진행 (유족 참석)</li>
+                            <li>조문객 응대</li>
+                            <li>장지 및 화장/매장 최종 결정</li>
+                            <li>발인 시간 및 차량 수배 확인</li>
+                        </ul></div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">3일차 (발인일)</span>
+                        <div class="step-title">발인 및 장지 이동</div>
+                        <div class="step-desc"><ul>
+                            <li>발인제(영결식) 진행</li>
+                            <li>운구 및 장지로 이동</li>
+                            <li>화장 또는 매장 진행</li>
+                            <li>납골당 안치 또는 자연장(수목장)</li>
+                            <li>장례식장 정산</li>
+                        </ul></div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">장례 후</span>
+                        <div class="step-title">사후 정리</div>
+                        <div class="step-desc"><ul>
+                            <li>49재, 탈상 등 추모 의식</li>
+                            <li>감사장 발송</li>
+                            <li>부의금 정산 및 답례</li>
+                            <li>행정 신고 처리</li>
+                        </ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 준비물 체크리스트 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>준비물 체크리스트</h2>
+                <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-content">
+                <div class="checklist-box">
+                    <h3>임종 직후 준비물</h3>
+                    <div class="checklist-item">사망진단서 (병원 발급, 2부 이상)</div>
+                    <div class="checklist-item">고인 신분증</div>
+                    <div class="checklist-item">영정 사진 (반명함 이상 크기)</div>
+                    <div class="checklist-item">고인 기본 정보 (생년월일, 본적 등)</div>
+                </div>
+                <div class="checklist-box">
+                    <h3>장례식장에서 필요한 것</h3>
+                    <div class="checklist-item">상주 신분증</div>
+                    <div class="checklist-item">상복 또는 검은색 정장</div>
+                    <div class="checklist-item">부의금 접수 장부</div>
+                    <div class="checklist-item">방명록</div>
+                    <div class="checklist-item">답례품 (선택)</div>
+                </div>
+                <div class="checklist-box">
+                    <h3>발인 시 필요한 것</h3>
+                    <div class="checklist-item">화장 예약 확인증 (화장 시)</div>
+                    <div class="checklist-item">매장 허가증 (매장 시)</div>
+                    <div class="checklist-item">납골당 계약서 (해당 시)</div>
+                    <div class="checklist-item">장지 이동 차량 확인</div>
+                </div>
+                <div class="checklist-box">
+                    <h3>사후 행정 서류</h3>
+                    <div class="checklist-item">사망신고서 (주민센터 제출, 1개월 이내)</div>
+                    <div class="checklist-item">가족관계등록부</div>
+                    <div class="checklist-item">상속인 금융거래 조회 신청서</div>
+                    <div class="checklist-item">안심상속 원스톱 서비스 신청서</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 사후 행정 절차 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>사후 행정 절차</h2>
+                <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-content">
+                <div class="step-timeline">
+                    <div class="step-item">
+                        <span class="step-label">1개월 이내</span>
+                        <div class="step-title">사망신고</div>
+                        <div class="step-desc">주민센터에 사망진단서와 신고인 신분증을 지참하여 신고합니다. 사망신고와 동시에 주민등록이 말소됩니다.</div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">사망신고 후</span>
+                        <div class="step-title">안심상속 원스톱 서비스</div>
+                        <div class="step-desc">정부24 또는 주민센터에서 신청 가능합니다. 고인의 금융자산, 부동산, 자동차, 세금, 연금 등을 한 번에 조회할 수 있습니다.</div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">3개월 이내</span>
+                        <div class="step-title">상속 포기 또는 한정승인</div>
+                        <div class="step-desc">고인의 채무가 재산보다 많을 경우 가정법원에 신청합니다. 기한 내 미신청 시 단순승인으로 간주됩니다.
+                            <div class="info-callout">채무가 많을 수 있으면 반드시 기한 내 상속포기 또는 한정승인을 검토하세요.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">6개월 이내</span>
+                        <div class="step-title">상속세 신고</div>
+                        <div class="step-desc">상속재산이 기초공제(5억원)를 초과하는 경우 관할 세무서에 신고합니다. 배우자 공제, 금융재산 공제 등 다양한 공제 항목이 있으므로 세무 전문가 상담을 권장합니다.</div>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-label">수시</span>
+                        <div class="step-title">명의 변경 및 해지</div>
+                        <div class="step-desc"><ul>
+                            <li>금융기관: 예금 해지/이전, 대출 처리</li>
+                            <li>부동산: 소유권 이전등기</li>
+                            <li>자동차: 이전등록 또는 폐차</li>
+                            <li>통신사: 해지 또는 명의변경</li>
+                            <li>건강보험: 피부양자 자격 변경</li>
+                            <li>국민연금: 유족연금 청구</li>
+                        </ul></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 장례 비용 안내 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>장례 비용 안내</h2>
+                <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-content">
+                <div class="info-callout">아래 금액은 2024년 기준 평균 비용이며, 지역 및 장례식장에 따라 크게 달라질 수 있습니다.</div>
+                <table class="cost-table">
+                    <thead><tr><th>항목</th><th>예상 비용</th></tr></thead>
+                    <tbody>
+                        <tr><td>장례식장 사용료 (3일)</td><td>50~150만원</td></tr>
+                        <tr><td>관 및 수의</td><td>30~100만원</td></tr>
+                        <tr><td>염습 비용</td><td>30~50만원</td></tr>
+                        <tr><td>화장 비용</td><td>15~30만원</td></tr>
+                        <tr><td>납골당 (봉안)</td><td>30~200만원</td></tr>
+                        <tr><td>음식 접대</td><td>100~300만원</td></tr>
+                        <tr><td>꽃장식 및 제단</td><td>20~50만원</td></tr>
+                        <tr><td>운구 차량</td><td>20~50만원</td></tr>
+                        <tr><td>기타 (영정, 답례품 등)</td><td>20~50만원</td></tr>
+                        <tr class="cost-total"><td>합계 (평균)</td><td>300~800만원</td></tr>
+                    </tbody>
+                </table>
+                <div class="info-callout">장례 비용 부담이 어려운 경우 긴급복지지원(읍면동 주민센터), 국민기초생활수급자 장제급여, 사회복지공동모금회 등의 지원을 받을 수 있습니다.</div>
+            </div>
+        </div>
+
+        <!-- 화장 vs 매장 비교 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>화장 vs 매장 비교</h2>
+                <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-content">
+                <table class="cost-table">
+                    <thead><tr><th>구분</th><th>화장</th><th>매장</th></tr></thead>
+                    <tbody>
+                        <tr><td>비용</td><td>상대적 저렴</td><td>상대적 고비용</td></tr>
+                        <tr><td>절차</td><td>화장장 예약 필요</td><td>묘지 확보 필요</td></tr>
+                        <tr><td>안치 방법</td><td>납골당, 수목장, 산골</td><td>묘지 매장</td></tr>
+                        <tr><td>관리</td><td>관리 부담 적음</td><td>정기적 벌초 필요</td></tr>
+                        <tr><td>현황</td><td>약 90% 선택</td><td>약 10% 선택</td></tr>
+                    </tbody>
+                </table>
+                <div class="info-callout">화장은 사전 예약이 필수입니다. 특히 수도권 화장장은 예약이 밀릴 수 있으므로 장례식장에서 바로 예약을 진행하는 것이 좋습니다.</div>
+            </div>
+        </div>
+
+        <!-- 장례 지원 제도 -->
+        <div class="accordion-section">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2>장례 지원 제도</h2>
+                <span class="accordion-icon">&#9660;</span>
+            </div>
+            <div class="accordion-content">
+                <div class="checklist-box">
+                    <h3>국민건강보험 장제비</h3>
+                    <div class="step-desc">건강보험 가입자 사망 시 장제를 행한 사람에게 지급됩니다.
+                        <ul>
+                            <li>지급 금액: 80만원 (2024년 기준)</li>
+                            <li>신청처: 국민건강보험공단</li>
+                            <li>기한: 사망일로부터 3년 이내</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="checklist-box">
+                    <h3>국민연금 사망일시금 / 유족연금</h3>
+                    <div class="step-desc">국민연금 가입자(가입이력자) 사망 시 유족에게 지급됩니다.
+                        <ul>
+                            <li>유족연금: 가입기간에 따라 기본연금의 40~60%</li>
+                            <li>사망일시금: 유족연금 미해당 시 반환일시금 상당</li>
+                            <li>신청처: 국민연금공단</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="checklist-box">
+                    <h3>긴급복지지원</h3>
+                    <div class="step-desc">갑작스러운 위기 상황(주 소득자 사망 등)에 처한 가구를 지원합니다.
+                        <ul>
+                            <li>장제비: 80만원 이내</li>
+                            <li>생계비: 가구원 수에 따라 지급</li>
+                            <li>신청처: 읍면동 주민센터 또는 129 콜센터</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="checklist-box">
+                    <h3>기초생활수급자 장제급여</h3>
+                    <div class="step-desc">
+                        <ul>
+                            <li>지급 금액: 80만원 (2024년 기준)</li>
+                            <li>신청처: 읍면동 주민센터</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 무료부고장. All Rights Reserved.</p>
+    </footer>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "bcryptjs": "./src/common/bcryptjs.js",
+            "crypto": "./src/common/crypto-shim.js"
+        }
+    }
+    </script>
+    <script src="scripts.js" type="module"></script>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar) sidebar.classList.toggle('active');
+        }
+        var menuBtn = document.getElementById('menuButton');
+        if (menuBtn) menuBtn.addEventListener('click', toggleSidebar);
+        var closeBtn = document.getElementById('sidebarCloseBtn');
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            // 모든 아코디언 닫기
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.classList.remove('active');
+                if (h.nextElementSibling) { // 다음 요소가 있는지 확인
+                    h.nextElementSibling.classList.remove('active');
+                }
+            });
+            
+            // 클릭된 아코디언 토글
+            if (!isActive) {
+                header.classList.add('active');
+                if (content) { // content 요소가 있는지 확인
+                    content.classList.add('active');
+                }
+            }
+        }
+
+        // 페이지 로드 시 첫 번째 섹션 자동 열기
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstAccordion = document.querySelector('.accordion-header');
+            if (firstAccordion) {
+                // toggleAccordion(firstAccordion); // 자동 열림 기능은 사용자의 의도에 따라 유지하거나 제거할 수 있습니다.
+            }
+            
+            if (templateModal) {
+                templateModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        templateModal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                    }
+                });
+            }
+        });
+        
+    </script></div>
+</body>
+</html> 

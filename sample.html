@@ -1217,25 +1217,25 @@
 
     // 카카오톡 공유
     function shareKakao() {
-        alert('샘플 페이지에서는 카카오톡 공유 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        if (window.AppUtils) AppUtils.showToast('샘플 페이지에서는 카카오톡 공유를 사용할 수 없습니다.', 'warning');
         closeShareModal();
     }
 
     // SMS 공유
     function shareSMS() {
-        alert('샘플 페이지에서는 SMS 공유 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        if (window.AppUtils) AppUtils.showToast('샘플 페이지에서는 SMS 공유를 사용할 수 없습니다.', 'warning');
         closeShareModal();
     }
 
     // 링크 복사
     function copyLink() {
-        alert('샘플 페이지에서는 링크 복사 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        if (window.AppUtils) AppUtils.showToast('샘플 페이지에서는 링크 복사를 사용할 수 없습니다.', 'warning');
         closeShareModal();
     }
 
     // 샘플 페이지 메시지 표시 함수
     function showSampleMessage() {
-        alert('샘플 페이지에서는 부고 보내기 기능을 사용할 수 없습니다.\n실제 부고장 작성 후 이용해 주세요.');
+        if (window.AppUtils) AppUtils.showToast('샘플 페이지에서는 부고 보내기를 사용할 수 없습니다.', 'warning');
     }
 
     /**
@@ -1423,11 +1423,11 @@
         if (navigator.clipboard) {
             navigator.clipboard.writeText(address)
                 .then(() => {
-                    alert('주소가 복사되었습니다.');
+                    if (window.AppUtils) AppUtils.showToast('주소가 복사되었습니다.', 'success'); else alert('주소가 복사되었습니다.');
                 })
                 .catch(err => {
                     console.error('주소 복사 실패:', err);
-                    alert('주소 복사에 실패했습니다.');
+                    if (window.AppUtils) AppUtils.showToast('주소 복사에 실패했습니다.', 'error'); else alert('주소 복사에 실패했습니다.');
                 });
         } else {
             // 레거시 복사 방식
@@ -1438,10 +1438,10 @@
             
             try {
                 document.execCommand('copy');
-                alert('주소가 복사되었습니다.');
+                if (window.AppUtils) AppUtils.showToast('주소가 복사되었습니다.', 'success'); else alert('주소가 복사되었습니다.');
             } catch (err) {
                 console.error('주소 복사 실패:', err);
-                alert('주소 복사에 실패했습니다.');
+                if (window.AppUtils) AppUtils.showToast('주소 복사에 실패했습니다.', 'error'); else alert('주소 복사에 실패했습니다.');
             }
             
             document.body.removeChild(textArea);
