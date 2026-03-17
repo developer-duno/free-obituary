@@ -11,6 +11,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://무료부고장.com/Search.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://무료부고장.com/guide.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -26,13 +31,18 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://무료부고장.com/Search.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <loc>https://무료부고장.com/procedure.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://무료부고장.com/sample.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://무료부고장.com/thanks.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
 </urlset>

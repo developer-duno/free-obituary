@@ -175,8 +175,8 @@ function addEntry() {
             <option value="유가족지인">유가족지인</option>
         </select>
         <input type="text" class="custom-relationship-input" name="customRelationship[]" 
-               placeholder="관계 직접 입력" style="display:none !important; margin-top:5px;">
-        <input type="text" name="bereavedName[]" placeholder="이름 (필수)" required>
+               placeholder="관계 직접 입력" maxlength="20" style="display:none !important; margin-top:5px;">
+        <input type="text" name="bereavedName[]" placeholder="이름 (필수)" required maxlength="50">
     `;
     
     // 이벤트 리스너 추가
